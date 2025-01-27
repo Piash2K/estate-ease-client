@@ -12,7 +12,6 @@ import auth from '../Firebase/firebase.config';
 import 'react-toastify/dist/ReactToastify.css';
 import { RotatingLines } from 'react-loader-spinner';
 
-
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
 
@@ -28,12 +27,12 @@ const AuthProvider = ({ children }) => {
     const signInWithEmail = (email, password) => {
         return signInWithEmailAndPassword(auth, email, password);
     };
+
     const updateUserProfile = (updatedData) => {
         return updateProfile(auth.currentUser, updatedData);
     };
 
     const googleProvider = new GoogleAuthProvider();
-    // console.log(googleProvider)
 
     const logOut = () => {
         setLoading(true);
@@ -49,6 +48,33 @@ const AuthProvider = ({ children }) => {
             });
     };
 
+    // Function to send user data to the backend using fetch
+    const sendUserDataToBackend = async (email, displayName, role) => {
+        const userInfo = {
+            email,
+            displayName,
+            lastLogin: new Date().toISOString(),
+            role
+        };
+
+        try {
+            const response = await fetch('http://localhost:5000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo),
+            });
+
+            if (response.insertedId) {
+                toast.success('User info updated/created successfully in the backend.');
+            }
+        } catch (error) {
+            toast.error('Error connecting to backend.');
+            console.error(error);
+        }
+    };
+
     const authInfo = {
         user,
         setUser,
@@ -62,13 +88,18 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
+            console.log(currentUser)
+            if (currentUser) {
+                setUser(currentUser);
+                sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
+            } else {
+                setUser(null);
+            }
             setLoading(false);
         });
-        return () => {
-            unsubscribe();
-        };
-    }, [user]);
+
+        return () => unsubscribe();
+    }, []);
 
     if (loading) {
         return (

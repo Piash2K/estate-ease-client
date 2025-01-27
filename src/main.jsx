@@ -9,12 +9,20 @@ import HomeLayout from './Components/Layouts/HomeLayout';
 import AuthProvider from './Components/Provider/AuthProvider';
 import Login from './Components/Pages/Login';
 import Register from './Components/Pages/Register';
+import Apartment from './Components/Pages/Apartment';
+import Dashboard from './Components/Dashboard/Layouts/Dashboard';
+import MyProfile from './Components/Pages/MyProfile';
+import MakePayment from './Components/Dashboard/Pages/MakePayment';
+import PaymentHistory from './Components/Dashboard/Pages/PaymentHistory';
+import ManageMembers from './Components/Dashboard/Pages/ManageMembers';
+import MakeAnnouncement from './Components/Dashboard/Pages/MakeAnnouncement';
+import Announcements from './Components/Dashboard/Pages/Announcements';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout></HomeLayout>,
-    children:[
+    children: [
       {
         path: '/login',
         element: <Login></Login>
@@ -23,8 +31,42 @@ const router = createBrowserRouter([
         path: '/register',
         element: <Register></Register>
       },
+      {
+        path: '/appartment',
+        element: <Apartment></Apartment>
+      }
     ]
   },
+  {
+    path: "/dashboard",
+    element: <Dashboard></Dashboard>,
+    children: [
+      {
+        path: 'my-profile',
+        element: <MyProfile></MyProfile>
+      },
+      {
+        path: 'announcements',
+        element: <Announcements></Announcements>
+      },
+      {
+        path: 'make-payment',
+        element: <MakePayment></MakePayment>
+      },
+      {
+        path: 'payment-history',
+        element: <PaymentHistory></PaymentHistory>
+      },
+      {
+        path: 'manage-members',
+        element: <ManageMembers></ManageMembers>
+      },
+      {
+        path: 'make-announcement',
+        element: <MakeAnnouncement></MakeAnnouncement>
+      }
+    ]
+  }
 ]);
 
 createRoot(document.getElementById('root')).render(

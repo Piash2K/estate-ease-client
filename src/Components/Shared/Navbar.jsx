@@ -27,6 +27,14 @@ const Navbar = () => {
       >
         Appartment
       </NavLink>
+     <NavLink to="/dashboard"
+        className={({ isActive }) =>
+          isActive
+            ? "text-white bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 px-4 py-2 rounded-lg font-semibold shadow-md"
+            : "text-gray-200 hover:text-white px-4 py-2 transition-colors duration-300"
+        }>
+      Dashboard
+     </NavLink>
     </>
   );
 
@@ -67,7 +75,7 @@ const Navbar = () => {
             to="/"
             className="text-3xl font-bold hidden lg:block tracking-wide"
           >
-            <span className="text-purple-200">Easte</span>
+            <span className="text-purple-200">Estate</span>
             <span className="text-purple-300">Ease</span>
           </Link>
         </div>
