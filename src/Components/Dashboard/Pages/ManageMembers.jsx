@@ -62,7 +62,7 @@ const ManageMembers = () => {
                         {members.map((member) => (
                             <tr key={member._id}>
                                 <td style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
-                                    {member.displayName || 'N/A'}
+                                    {member.displayName }
                                 </td>
                                 <td style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
                                     {member.email}

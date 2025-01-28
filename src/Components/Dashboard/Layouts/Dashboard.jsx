@@ -72,7 +72,7 @@ const Dashboard = () => {
                         <Link to='/dashboard/admin-profile'>Admin Profile</Link>
                         <Link to='/dashboard/manage-members'>Manage Members</Link>
                         <Link to='/dashboard/make-announcement'>Make Announcement</Link>
-                        <Link to='/dashboard/agreements'>Agreement Requests</Link>
+                        <Link to='/dashboard/agrements-request'>Agreement Requests</Link>
                         <Link to='/dashboard/manage-coupons'>Manage Coupons</Link>
                     </>
                 )}

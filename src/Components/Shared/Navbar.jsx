@@ -1,9 +1,14 @@
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   const links = (
     <>
@@ -25,16 +30,8 @@ const Navbar = () => {
             : "text-gray-200 hover:text-white px-4 py-2 transition-colors duration-300"
         }
       >
-        Appartment
+        Apartment
       </NavLink>
-     <NavLink to="/dashboard"
-        className={({ isActive }) =>
-          isActive
-            ? "text-white bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 px-4 py-2 rounded-lg font-semibold shadow-md"
-            : "text-gray-200 hover:text-white px-4 py-2 transition-colors duration-300"
-        }>
-      Dashboard
-     </NavLink>
     </>
   );
 
@@ -86,25 +83,39 @@ const Navbar = () => {
         {/* Navbar End */}
         <div className="flex items-center space-x-4">
           {user ? (
-            <>
-              <div className="flex items-center space-x-2">
-                {user.photoURL && (
-                  <Link>
-                    <img
-                      src={user.photoURL}
-                      alt="Profile"
-                      className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 shadow-sm"
-                    />
-                  </Link>
-                )}
-              </div>
-              <button
-                onClick={logOut}
-                className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 hover:from-purple-800 hover:via-purple-600 hover:to-purple-900 text-white px-4 py-2 rounded-lg shadow-md transition-all"
-              >
-                Logout
-              </button>
-            </>
+            <div className="relative">
+              <img
+                src={user.photoURL}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover border-2 border-indigo-500 shadow-sm cursor-pointer"
+                onClick={handleDropdownToggle}
+              />
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 bg-gray-800 text-white rounded-lg shadow-lg w-48">
+                  <div className="p-4 border-b border-gray-700">
+                    <p className="text-sm font-semibold">{user.displayName}</p>
+                  </div>
+                  <ul className="space-y-2 py-2">
+                    <li>
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={logOut}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="space-x-3">
               <Link
