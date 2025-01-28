@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../Provider/AuthProvider";
+import { Helmet } from "react-helmet";
 
 const Apartment = () => {
     const [apartments, setApartments] = useState([]);
@@ -79,6 +80,7 @@ const Apartment = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-6">
+            <Helmet><title>Apartment | EstateEase </title></Helmet>
             <h1 className="text-4xl font-bold mb-6 text-center">Apartments</h1>
 
             {/* Rent Range Filters */}

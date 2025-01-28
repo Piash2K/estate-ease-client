@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 const AdminProfile = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -63,6 +64,7 @@ const AdminProfile = () => {
 
   return (
     <div className="p-4 flex flex-col items-center gap-6">
+        <Helmet><title>Admin Profile | EstateEase </title></Helmet>
       {/* Admin Profile Card */}
       <div className="card w-full sm:w-3/4 lg:w-1/2 bg-base-100 shadow-xl">
         <figure className="px-10 pt-10">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 
 const AgreementRequests = () => {
     const [requests, setRequests] = useState([]);
@@ -65,6 +66,7 @@ const AgreementRequests = () => {
 
     return (
         <div>
+            <Helmet><title>Agreement Requests | EstateEase </title></Helmet>
             <h2>Agreement Requests</h2>
             {requests.length === 0 ? (
                 <p>No agreement requests available.</p>

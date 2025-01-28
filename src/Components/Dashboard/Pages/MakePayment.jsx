@@ -5,6 +5,7 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 // Load Stripe outside of a component to prevent recreating the object on each render.
 const stripePromise = loadStripe("pk_test_51QmDiTFRZePTg8h6jyQVxOBc4lWNS2fD5bGwX0jNqKHIKPeNE3uKyikKsGziYRVCc5hn8wolnIaBRhTEfMH4UzEr002JXooCIS");
@@ -76,6 +77,7 @@ const MakePayment = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded">
+        <Helmet><title>Make Payment| EstateEase </title></Helmet>
       <h2 className="text-2xl font-bold mb-4">Make Payment</h2>
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="mb-4">

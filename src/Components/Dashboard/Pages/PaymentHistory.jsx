@@ -1,5 +1,6 @@
 import  { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider';
+import { Helmet } from 'react-helmet';
 
 
 const PaymentHistory = () => {
@@ -23,6 +24,7 @@ const PaymentHistory = () => {
 
     return (
         <div className="payment-history">
+            <Helmet><title>Payment History | EstateEase </title></Helmet>
             <h2>Payment History</h2>
             {payments.length === 0 ? (
                 <p>No payment history available.</p>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 
 const ManageMembers = () => {
     const [members, setMembers] = useState([]);
@@ -46,6 +47,7 @@ const ManageMembers = () => {
     return (
         <div style={{ padding: '20px' }}>
             <h2>Manage Members</h2>
+            <Helmet><title>Manage Members | EstateEase </title></Helmet>
             {members.length === 0 ? (
                 <p>No members available.</p>
             ) : (

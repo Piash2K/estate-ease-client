@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 
 const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -24,6 +25,7 @@ const Announcements = () => {
 
     return (
         <div>
+            <Helmet><title>Announcements | EstateEase </title></Helmet>
             <h2>All Announcements</h2>
             {announcements.length === 0 ? (
                 <p>No announcements available.</p>

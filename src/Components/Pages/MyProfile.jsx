@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 const MyProfile = () => {
     const { user } = useContext(AuthContext);
@@ -20,6 +21,7 @@ const MyProfile = () => {
     }, [user.email]);
     return (
         <div className="max-w-7xl mx-auto px-4 py-6">
+            <Helmet><title>My Profile | EstateEase </title></Helmet>
             <h1 className="text-4xl font-bold mb-6 text-center">My Profile</h1>
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
                 {/* Profile Info */}

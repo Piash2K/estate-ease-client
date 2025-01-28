@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 
 const MakeAnnouncement = () => {
@@ -46,6 +47,7 @@ const MakeAnnouncement = () => {
 
     return (
         <div className="p-4">
+            <Helmet><title>Make Announcement | EstateEase </title></Helmet>
             <h2 className="text-xl mb-4">Make Announcement</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>

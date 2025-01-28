@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 
 const ManageCoupons = () => {
     const [coupons, setCoupons] = useState([]);
@@ -52,6 +53,7 @@ const ManageCoupons = () => {
 
     return (
         <div className="p-4">
+            <Helmet><title>Manage Coupons | EstateEase </title></Helmet>
             <h2 className="text-2xl font-bold mb-4">Manage Coupons</h2>
             
             {/* Coupon Table */}
