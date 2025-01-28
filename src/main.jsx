@@ -19,12 +19,18 @@ import MakeAnnouncement from './Components/Dashboard/Pages/MakeAnnouncement';
 import Announcements from './Components/Dashboard/Pages/Announcements';
 import AgreementRequests from './Components/Dashboard/Pages/AggrementsRequest';
 import ManageCoupons from './Components/Dashboard/Pages/ManageCoupons';
+import Home from './Components/Pages/Home';
+import AdminProfile from './Components/Dashboard/Pages/AdminProfile';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout></HomeLayout>,
     children: [
+      {
+        path: '/',
+        element: <Home></Home>
+      },
       {
         path: '/login',
         element: <Login></Login>
@@ -74,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: 'manage-coupons',
         element: <ManageCoupons></ManageCoupons>
+      },
+      {
+        path: 'admin-profile',
+        element: <AdminProfile></AdminProfile>
       }
     ]
   }

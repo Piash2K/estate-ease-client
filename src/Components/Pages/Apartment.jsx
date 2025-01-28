@@ -30,6 +30,12 @@ const Apartment = () => {
     const currentApartments = filteredApartments.slice(indexOfFirstApartment, indexOfLastApartment);
 
     const handleAgreementClick = (apartment) => {
+        // Check if the user is admin
+        if (user.role === 'admin') {
+            alert('Admins cannot create agreements');
+            return;
+        }
+    
         const agreementData = {
             userName: user.displayName, 
             userEmail: user.email,   
@@ -38,7 +44,7 @@ const Apartment = () => {
             apartmentNo: apartment.apartmentNo,
             rent: apartment.rent
         };
-
+    
         axios.post('http://localhost:5000/agreements', agreementData)
             .then(response => {
                 alert('Agreement created successfully');
@@ -49,6 +55,7 @@ const Apartment = () => {
                 console.error(error);
             });
     };
+    
 
     const handleSearch = () => {
         // Filter apartments by rent range
@@ -126,7 +133,7 @@ const Apartment = () => {
                                 <button
                                     className="mt-4 px-4 py-2 bg-blue-600 text-white font-bold rounded-md w-full hover:bg-blue-700 transition-colors"
                                     onClick={() => handleAgreementClick(apt)} >
-                                    View Agreement
+                                    Agreement
                                 </button>
                             </div>
                         </div>

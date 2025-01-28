@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 const AgreementRequests = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [actionLoading, setActionLoading] = useState(null); // To track individual button loading states
 
     useEffect(() => {
         // Fetch all pending agreements
@@ -20,6 +21,7 @@ const AgreementRequests = () => {
 
     // Handle accepting the agreement
     const handleAccept = (agreementId) => {
+        setActionLoading(agreementId); // Start loading for the action
         fetch(`http://localhost:5000/agreements/${agreementId}/update`, {
             method: 'PUT',
             body: JSON.stringify({ status: 'accepted', role: 'member' }),
@@ -29,12 +31,17 @@ const AgreementRequests = () => {
             .then(() => {
                 // Remove the request from the list
                 setRequests(prevRequests => prevRequests.filter(req => req._id !== agreementId));
+                setActionLoading(null); // Reset loading state
             })
-            .catch(error => console.error("Error accepting agreement:", error));
+            .catch(error => {
+                console.error("Error accepting agreement:", error);
+                setActionLoading(null);
+            });
     };
 
     // Handle rejecting the agreement
     const handleReject = (agreementId) => {
+        setActionLoading(agreementId); // Start loading for the action
         fetch(`http://localhost:5000/agreements/${agreementId}/update`, {
             method: 'PUT',
             body: JSON.stringify({ status: 'rejected' }),
@@ -44,8 +51,12 @@ const AgreementRequests = () => {
             .then(() => {
                 // Remove the request from the list
                 setRequests(prevRequests => prevRequests.filter(req => req._id !== agreementId));
+                setActionLoading(null); // Reset loading state
             })
-            .catch(error => console.error("Error rejecting agreement:", error));
+            .catch(error => {
+                console.error("Error rejecting agreement:", error);
+                setActionLoading(null);
+            });
     };
 
     if (loading) {
@@ -82,8 +93,20 @@ const AgreementRequests = () => {
                                 <td>{request.rent}</td>
                                 <td>{new Date(request.createdAt).toLocaleDateString()}</td>
                                 <td>
-                                    <button onClick={() => handleAccept(request._id, request.userEmail)}>Accept</button>
-                                    <button onClick={() => handleReject(request._id)}>Reject</button>
+                                    <button 
+                                        onClick={() => handleAccept(request._id)} 
+                                        disabled={actionLoading === request._id}
+                                        aria-label={`Accept request for ${request.userName}`}
+                                    >
+                                        {actionLoading === request._id ? "Processing..." : "Accept"}
+                                    </button>
+                                    <button 
+                                        onClick={() => handleReject(request._id)} 
+                                        disabled={actionLoading === request._id}
+                                        aria-label={`Reject request for ${request.userName}`}
+                                    >
+                                        {actionLoading === request._id ? "Processing..." : "Reject"}
+                                    </button>
                                 </td>
                             </tr>
                         ))}

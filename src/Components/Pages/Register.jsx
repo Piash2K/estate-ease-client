@@ -26,10 +26,44 @@ const Register = () => {
         if (!/(?=.*\d)/.test(password)) {
             return "Password must contain at least one number.";
         }
-        if (!/(?=.*[!@#$%^&*(),.?":{}|<>])/.test(password)) {
+        if (!/(?=.[!@#$%^&(),.?":{}|<>])/.test(password)) {
             return "Password must contain at least one special character.";
         }
         return '';
+    };
+
+    // Function to send user data to the backend
+    const sendUserDataToBackend = async (email, displayName, role) => {
+        const userInfo = {
+            email,
+            displayName,
+            lastLogin: new Date().toISOString(),
+            role
+        };
+        try {
+            const response = await fetch('http://localhost:5000/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo),
+            });
+
+            if (response.insertedId) {
+                Swal.fire({
+                    title: 'User Info',
+                    text: 'User info updated/created successfully in the backend.',
+                    icon: 'success'
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Error connecting to backend.',
+                icon: 'error'
+            });
+            console.error(error);
+        }
     };
 
     const handleRegister = (e) => {
@@ -48,20 +82,25 @@ const Register = () => {
         setPasswordError('');
         createNewUser(email, password)
             .then((result) => {
-                setUser(result.user);
+                setUser(result.user); // Set the user immediately after creating the account
                 updateUserProfile({
                     photoURL: photo,
                     displayName: name,
                 })
                     .then(() => {
+                        // Directly update the state to reflect the new displayName and photoURL
                         setUser((prevUser) => ({
                             ...prevUser,
                             displayName: name,
                             photoURL: photo,
                         }));
+
+                        // Send user data to the backend
+                        sendUserDataToBackend(result.user.email, name, 'user');
+
                         Swal.fire({
                             title: 'Registration Successful!',
-                            text: `Welcome, ${name}! Your account has been created successfully.`,
+                            text: `Welcome ${name}! Your account has been created successfully.`,
                             icon: 'success'
                         }).then(() => {
                             navigate('/');
