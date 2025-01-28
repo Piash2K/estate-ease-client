@@ -1,19 +1,18 @@
+/* eslint-disable no-unused-vars */
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
-    // eslint-disable-next-line no-unused-vars
     const [hasAgreement, setHasAgreement] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [isMember, setIsMember] = useState(false); // Added for clarity
+    const [isMember, setIsMember] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (user?.email) {
-            // Check if the user has an agreement
-            fetch(`http://localhost:5000/agreements/${user.email}`)
+            fetch(`https://estate-ease-server.vercel.app/agreements/${user.email}`)
                 .then((response) => {
                     if (!response.ok) {
                         return null;
@@ -22,18 +21,17 @@ const Dashboard = () => {
                 })
                 .then((data) => {
                     if (data) {
-                        setHasAgreement(true); // Agreement exists
+                        setHasAgreement(true);
                     } else {
                         setHasAgreement(false);
-                        navigate("/dashboard"); // Redirect if no agreement
+                        navigate("/dashboard");
                     }
                 })
                 .catch((error) => {
                     console.error("Error fetching agreement:", error);
                 });
 
-            // Check user role dynamically from the backend
-            fetch(`http://localhost:5000/users/${user.email}`)
+            fetch(`https://estate-ease-server.vercel.app/users/${user.email}`)
                 .then((response) => {
                     if (!response.ok) {
                         return null;
@@ -43,9 +41,9 @@ const Dashboard = () => {
                 .then((data) => {
                     if (data) {
                         if (data.role === "admin") {
-                            setIsAdmin(true); // Admin detected
+                            setIsAdmin(true);
                         } else if (data.role === "member") {
-                            setIsMember(true); // Member detected
+                            setIsMember(true);
                         }
                     }
                 })
@@ -56,42 +54,53 @@ const Dashboard = () => {
     }, [user?.email, navigate]);
 
     return (
-        <div className="flex">
-            <div className="flex flex-col bg-amber-300 w-2/12 min-h-screen">
+        <div className="flex flex-col md:flex-row">
+            {/* Sidebar */}
+            <div className="flex flex-col bg-amber-300 w-full md:w-64 min-h-screen p-4 shadow-lg">
+                <div className="flex justify-between items-center mb-4 md:hidden">
+                    <button className="text-white text-xl p-2 bg-amber-500 rounded-lg" onClick={() => { /* Handle sidebar toggle */ }}>
+                        <i className="fas fa-bars"></i>
+                    </button>
+                </div>
+
+                {/* Links for Non-Admin and Non-Member Users */}
                 {!isAdmin && !isMember && (
                     <>
-                        <Link to="/dashboard/my-profile">My Profile</Link>
-                        <Link to="/dashboard/announcements">Announcements</Link>
+                        <Link to="/dashboard/my-profile" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">My Profile</Link>
+                        <Link to="/dashboard/announcements" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Announcements</Link>
                     </>
                 )}
+
                 {/* Links for Member Users */}
                 {isMember && (
                     <>
-                        <Link to="/dashboard/my-profile">My Profile</Link>
-                        <Link to="/dashboard/announcements">Announcements</Link>
-                        <Link to="/dashboard/make-payment">Make Payment</Link>
-                        <Link to="/dashboard/payment-history">Payment History</Link>
+                        <Link to="/dashboard/my-profile" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">My Profile</Link>
+                        <Link to="/dashboard/announcements" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Announcements</Link>
+                        <Link to="/dashboard/make-payment" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Make Payment</Link>
+                        <Link to="/dashboard/payment-history" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Payment History</Link>
                     </>
                 )}
 
                 {/* Links for Admin Users */}
                 {isAdmin && (
                     <>
-                        <Link to="/dashboard/admin-profile">Admin Profile</Link>
-                        <Link to="/dashboard/manage-members">Manage Members</Link>
-                        <Link to="/dashboard/make-announcement">Make Announcement</Link>
-                        <Link to="/dashboard/agrements-request">Agreement Requests</Link>
-                        <Link to="/dashboard/manage-coupons">Manage Coupons</Link>
+                        <Link to="/dashboard/admin-profile" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Admin Profile</Link>
+                        <Link to="/dashboard/manage-members" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Manage Members</Link>
+                        <Link to="/dashboard/make-announcement" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Make Announcement</Link>
+                        <Link to="/dashboard/agrements-request" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Agreement Requests</Link>
+                        <Link to="/dashboard/manage-coupons" className="py-2 px-4 mb-2 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Manage Coupons</Link>
                     </>
                 )}
+
                 <div className="divider"></div>
-                <div>
-                    <Link to="/">Home</Link>
-                </div>
+
+                {/* Home Link */}
+                <Link to="/" className="py-2 px-4 text-lg font-medium rounded hover:bg-amber-400 transition duration-200">Home</Link>
             </div>
 
+            {/* Main Content */}
             <div className="flex-1 p-4">
-                <Outlet></Outlet>
+                <Outlet />
             </div>
         </div>
     );

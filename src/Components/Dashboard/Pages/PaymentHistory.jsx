@@ -9,7 +9,7 @@ const PaymentHistory = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:5000/payments/${user.email}`)
+            fetch(`https://estate-ease-server.vercel.app/payments/${user.email}`)
                 .then(response => response.json())
                 .then(data => {
                     setPayments(data); 

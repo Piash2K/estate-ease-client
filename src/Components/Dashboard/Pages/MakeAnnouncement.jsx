@@ -17,7 +17,7 @@ const MakeAnnouncement = () => {
             createdAt: new Date(),
         };
 
-        fetch('http://localhost:5000/announcements', {
+        fetch('https://estate-ease-server.vercel.app/announcements', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

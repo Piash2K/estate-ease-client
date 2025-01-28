@@ -6,7 +6,7 @@ const ManageMembers = () => {
 
     // Fetch the list of members when the component mounts
     useEffect(() => {
-        fetch('http://localhost:5000/users')
+        fetch('https://estate-ease-server.vercel.app/users')
             .then((response) => response.json())
             .then((data) => {
                 setMembers(data);
@@ -16,7 +16,7 @@ const ManageMembers = () => {
     }, []);
 
     const handleRemoveMember = (userId) => {
-        fetch(`http://localhost:5000/users/${userId}`, {
+        fetch(`https://estate-ease-server.vercel.app/users/${userId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ role: 'user' }),

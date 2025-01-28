@@ -21,13 +21,13 @@ const Home = () => {
     // Fetch data from backend
     useEffect(() => {
         const fetchCoupons = async () => {
-            const res = await fetch('http://localhost:5000/coupons');
+            const res = await fetch('https://estate-ease-server.vercel.app/coupons');
             const data = await res.json();
             setCoupons(data);
         };
 
         const fetchAnnouncements = async () => {
-            const res = await fetch('http://localhost:5000/announcements');
+            const res = await fetch('https://estate-ease-server.vercel.app/announcements');
             const data = await res.json();
             setAnnouncements(data);
         };
@@ -60,7 +60,7 @@ const Home = () => {
                         showThumbs={false}
                     >
                         {bannerImages.map((image, index) => (
-                            <div key={index} className="w-full h-[600px]">
+                            <div key={index} className="w-full h-[300px] sm:h-[450px] lg:h-[600px]">
                                 <img src={image} alt={`banner-${index}`} className="w-full h-full object-cover" />
                             </div>
                         ))}
@@ -80,9 +80,9 @@ const Home = () => {
             {/* Coupons Section */}
             <section className="bg-blue-50 py-16 px-6">
                 <h2 className="text-3xl font-semibold text-gray-800 text-center">Exclusive Coupons</h2>
-                <div className="flex justify-center gap-8 mt-8">
+                <div className="flex flex-wrap justify-center gap-8 mt-8">
                     {coupons.map((coupon, index) => (
-                        <div key={index} className="bg-white p-8 rounded-xl shadow-lg text-center w-64">
+                        <div key={index} className="bg-white p-8 rounded-xl shadow-lg text-center w-64 sm:w-80 md:w-96">
                             <p className="text-2xl font-bold text-green-600">{coupon.discount}% OFF</p>
                             <p className="text-gray-600 mt-4">{coupon.description}</p>
                         </div>

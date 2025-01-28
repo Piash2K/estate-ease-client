@@ -12,7 +12,7 @@ const ManageCoupons = () => {
 
     useEffect(() => {
         // Fetch existing coupons from the database
-        fetch("http://localhost:5000/coupons")
+        fetch("https://estate-ease-server.vercel.app/coupons")
             .then((res) => res.json())
             .then((data) => setCoupons(data))
             .catch((err) => console.error("Error fetching coupons:", err));
@@ -32,7 +32,7 @@ const ManageCoupons = () => {
     
         const newCoupon = { ...formData };
     
-        fetch("http://localhost:5000/coupons", {
+        fetch("https://estate-ease-server.vercel.app/coupons", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

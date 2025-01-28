@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const AdminProfile = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -17,7 +17,7 @@ const AdminProfile = () => {
 
   useEffect(() => {
     const fetchAdminData = async () => {
-      const res = await fetch("http://localhost:5000/users");
+      const res = await fetch("https://estate-ease-server.vercel.app/users");
       const users = await res.json();
 
       const admin = users.find((user) => user.role === "admin");
@@ -32,14 +32,14 @@ const AdminProfile = () => {
     };
 
     const fetchStats = async () => {
-        const roomsRes = await fetch("http://localhost:5000/apartments");
+        const roomsRes = await fetch("https://estate-ease-server.vercel.app/apartments");
         const rooms = await roomsRes.json();
       
-        const agreementsRes = await fetch("http://localhost:5000/agreements");
+        const agreementsRes = await fetch("https://estate-ease-server.vercel.app/agreements");
         const agreements = await agreementsRes.json();
         console.log(agreements);
       
-        const usersRes = await fetch("http://localhost:5000/users");
+        const usersRes = await fetch("https://estate-ease-server.vercel.app/users");
         const users = await usersRes.json();
       
         const totalMembers = users.filter((user) => user.role === "member").length; // Calculate total members
@@ -52,7 +52,6 @@ const AdminProfile = () => {
           totalMembers, // Assign total members
         });
       };
-      
 
     fetchAdminData();
     fetchStats();
@@ -64,7 +63,8 @@ const AdminProfile = () => {
 
   return (
     <div className="p-4 flex flex-col items-center gap-6">
-      <div className="card w-full lg:w-1/2 bg-base-100 shadow-xl">
+      {/* Admin Profile Card */}
+      <div className="card w-full sm:w-3/4 lg:w-1/2 bg-base-100 shadow-xl">
         <figure className="px-10 pt-10">
           <img src={adminInfo.image} alt="Admin Avatar" className="rounded-full w-32 h-32 object-cover" />
         </figure>
@@ -74,7 +74,8 @@ const AdminProfile = () => {
         </div>
       </div>
 
-      <div className="stats stats-vertical lg:stats-horizontal shadow">
+      {/* Stats */}
+      <div className="stats w-full stats-vertical sm:stats-horizontal shadow mt-6">
         <div className="stat">
           <div className="stat-title">Total Rooms</div>
           <div className="stat-value">{stats.totalRooms}</div>

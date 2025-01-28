@@ -7,7 +7,7 @@ const AgreementRequests = () => {
 
     useEffect(() => {
         // Fetch all pending agreements
-        fetch('http://localhost:5000/agreements')
+        fetch('https://estate-ease-server.vercel.app/agreements')
             .then((response) => response.json())
             .then((data) => {
                 setRequests(data);
@@ -22,7 +22,7 @@ const AgreementRequests = () => {
     // Handle accepting the agreement
     const handleAccept = (agreementId) => {
         setActionLoading(agreementId); // Start loading for the action
-        fetch(`http://localhost:5000/agreements/${agreementId}/update`, {
+        fetch(`https://estate-ease-server.vercel.app/agreements/${agreementId}/update`, {
             method: 'PUT',
             body: JSON.stringify({ status: 'accepted', role: 'member' }),
             headers: { 'Content-Type': 'application/json' },
@@ -42,7 +42,7 @@ const AgreementRequests = () => {
     // Handle rejecting the agreement
     const handleReject = (agreementId) => {
         setActionLoading(agreementId); // Start loading for the action
-        fetch(`http://localhost:5000/agreements/${agreementId}/update`, {
+        fetch(`https://estate-ease-server.vercel.app/agreements/${agreementId}/update`, {
             method: 'PUT',
             body: JSON.stringify({ status: 'rejected' }),
             headers: { 'Content-Type': 'application/json' },

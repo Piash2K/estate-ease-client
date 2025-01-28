@@ -21,7 +21,7 @@ const MakePayment = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/agreements/${user.email}`)
+        .get(`https://estate-ease-server.vercel.app/agreements/${user.email}`)
         .then((response) => {
           setAgreement(response.data);
           if (response.data) setFinalRent(response.data.rent);
@@ -31,7 +31,7 @@ const MakePayment = () => {
 
   const handleApplyCoupon = () => {
     axios
-      .get(`http://localhost:5000/coupons/${coupon}`)
+      .get(`https://estate-ease-server.vercel.app/coupons/${coupon}`)
       .then((response) => {
         if (response.data && response.data.discount) {
           const discountAmount = (agreement.rent * response.data.discount) / 100;
@@ -63,7 +63,7 @@ const MakePayment = () => {
     };
 
     axios
-      .post("http://localhost:5000/payments", paymentDetails)
+      .post("https://estate-ease-server.vercel.app/payments", paymentDetails)
       .then(() => {
         alert("Payment successful!");
         navigate("/dashboard/payment-history");
@@ -195,7 +195,7 @@ const CheckoutForm = ({ amount, onSuccess }) => {
 
     // Step 2: Call backend to create a Payment Intent
     axios
-      .post("http://localhost:5000/create-payment-intent", {
+      .post("https://estate-ease-server.vercel.app/create-payment-intent", {
         amount: amount * 100, // Convert the amount to cents
         paymentMethodId: paymentMethod.id,
       })

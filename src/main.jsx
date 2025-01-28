@@ -21,11 +21,14 @@ import AgreementRequests from './Components/Dashboard/Pages/AggrementsRequest';
 import ManageCoupons from './Components/Dashboard/Pages/ManageCoupons';
 import Home from './Components/Pages/Home';
 import AdminProfile from './Components/Dashboard/Pages/AdminProfile';
+import ErrorPage from './Components/Pages/ErrorPage';
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout></HomeLayout>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: '/',
@@ -47,7 +50,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard></Dashboard>,
+    element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: 'my-profile',

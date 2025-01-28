@@ -12,7 +12,7 @@ const Apartment = () => {
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/apartments')
+        axios.get('https://estate-ease-server.vercel.app/apartments')
             .then(response => {
                 setApartments(response.data);
                 setFilteredApartments(response.data); // Initially show all apartments
@@ -45,7 +45,7 @@ const Apartment = () => {
             rent: apartment.rent
         };
     
-        axios.post('http://localhost:5000/agreements', agreementData)
+        axios.post('https://estate-ease-server.vercel.app/agreements', agreementData)
             .then(response => {
                 alert('Agreement created successfully');
                 console.log(response.data);
@@ -82,7 +82,7 @@ const Apartment = () => {
             <h1 className="text-4xl font-bold mb-6 text-center">Apartments</h1>
 
             {/* Rent Range Filters */}
-            <div className="mb-6 flex justify-between items-center">
+            <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="flex items-center">
                     <label className="mr-2 text-lg font-semibold">Min Rent:</label>
                     <input 
@@ -90,7 +90,7 @@ const Apartment = () => {
                         value={minRent} 
                         onChange={(e) => setMinRent(e.target.value)} 
                         placeholder="Min Rent" 
-                        className="p-2 border rounded" 
+                        className="p-2 border rounded w-full sm:w-auto" 
                     />
                 </div>
                 <div className="flex items-center">
@@ -100,12 +100,12 @@ const Apartment = () => {
                         value={maxRent} 
                         onChange={(e) => setMaxRent(e.target.value)} 
                         placeholder="Max Rent" 
-                        className="p-2 border rounded" 
+                        className="p-2 border rounded w-full sm:w-auto" 
                     />
                 </div>
                 {/* Search Button */}
                 <button
-                    className="ml-4 px-4 py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors"
+                    className="mt-4 sm:mt-0 px-4 py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors w-full sm:w-auto"
                     onClick={handleSearch}>
                     Search
                 </button>

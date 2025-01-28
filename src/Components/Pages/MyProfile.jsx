@@ -8,7 +8,7 @@ const MyProfile = () => {
     const [agreement, setAgreement] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/agreements/${user.email}`)
+        axios.get(`https://estate-ease-server.vercel.app/agreements/${user.email}`)
             .then(response => {
                 if (response.data) {
                     setAgreement(response.data);

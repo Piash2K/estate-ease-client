@@ -81,9 +81,9 @@ const Navbar = () => {
         <div className="hidden lg:flex lg:space-x-6">{links}</div>
 
         {/* Navbar End */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 relative">
           {user ? (
-            <div className="relative">
+            <div className="relative z-50">
               <img
                 src={user.photoURL}
                 alt="Profile"
@@ -91,7 +91,7 @@ const Navbar = () => {
                 onClick={handleDropdownToggle}
               />
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 bg-gray-800 text-white rounded-lg shadow-lg w-48">
+                <div className="absolute right-0 mt-2 bg-gray-800 text-white rounded-lg shadow-lg w-48 z-50">
                   <div className="p-4 border-b border-gray-700">
                     <p className="text-sm font-semibold">{user.displayName}</p>
                   </div>

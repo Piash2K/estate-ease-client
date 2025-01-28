@@ -6,7 +6,7 @@ const Announcements = () => {
 
     // Fetch announcements from the backend
     useEffect(() => {
-        fetch('http://localhost:5000/announcements')
+        fetch('https://estate-ease-server.vercel.app/announcements')
             .then((response) => response.json())
             .then((data) => {
                 setAnnouncements(data); // Set fetched announcements
