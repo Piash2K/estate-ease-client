@@ -25,7 +25,7 @@ const Dashboard = () => {
                         setHasAgreement(true); // Agreement exists
                     } else {
                         setHasAgreement(false);
-                        navigate("/dashboard/my-profile"); // Redirect if no agreement
+                        navigate("/dashboard"); // Redirect if no agreement
                     }
                 })
                 .catch((error) => {
