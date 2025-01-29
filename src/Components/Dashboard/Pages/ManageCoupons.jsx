@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import Swal from "sweetalert2";
 
 const ManageCoupons = () => {
     const [coupons, setCoupons] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
+    const [currentCouponId, setCurrentCouponId] = useState(null);
     const [formData, setFormData] = useState({
         code: "",
         discount: "",
         description: "",
-        expiry: "", // New expiration date field
+        expiration: "",
     });
 
     useEffect(() => {
-        // Fetch existing coupons from the database
         fetch("https://estate-ease-server.vercel.app/coupons")
             .then((res) => res.json())
             .then((data) => setCoupons(data))
             .catch((err) => console.error("Error fetching coupons:", err));
     }, []);
 
-    // Handle input change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -27,14 +28,16 @@ const ManageCoupons = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
-        // Log formData to check values
-        console.log("Form Data:", formData);
-    
         const newCoupon = { ...formData };
-    
-        fetch("https://estate-ease-server.vercel.app/coupons", {
-            method: "POST",
+
+        const endpoint = isUpdate
+            ? `https://estate-ease-server.vercel.app/coupons/${currentCouponId}`
+            : "https://estate-ease-server.vercel.app/coupons";
+
+        const method = isUpdate ? "PUT" : "POST";
+
+        fetch(endpoint, {
+            method,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -42,20 +45,66 @@ const ManageCoupons = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                if (data.couponId) {
-                    setCoupons([...coupons, { ...newCoupon, _id: data.couponId }]);
-                    setModalOpen(false); // Close the modal after submission
+                if (data.success || data.couponId) {
+                    const updatedCoupons = isUpdate
+                        ? coupons.map((coupon) =>
+                              coupon._id === currentCouponId
+                                  ? { ...newCoupon, _id: currentCouponId }
+                                  : coupon
+                          )
+                        : [...coupons, { ...newCoupon, _id: data.couponId }];
+                    setCoupons(updatedCoupons);
+                    setModalOpen(false);
                 }
             })
-            .catch((err) => console.error("Error adding coupon:", err));
+            .catch((err) => console.error("Error saving coupon:", err));
     };
-    
+
+    const handleUpdateClick = (coupon) => {
+        setFormData({
+            code: coupon.code,
+            discount: coupon.discount,
+            description: coupon.description,
+            expiration: coupon.expiration,
+        });
+        setCurrentCouponId(coupon._id);
+        setIsUpdate(true);
+        setModalOpen(true);
+    };
+
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`https://estate-ease-server.vercel.app/coupons/${id}`, {
+                    method: "DELETE",
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.success) {
+                            setCoupons(coupons.filter((coupon) => coupon._id !== id));
+                            Swal.fire("Deleted!", "Your coupon has been deleted.", "success");
+                        }
+                    })
+                    .catch((err) => console.error("Error deleting coupon:", err));
+            }
+        });
+    };
 
     return (
         <div className="p-4">
-            <Helmet><title>Manage Coupons | EstateEase </title></Helmet>
+            <Helmet>
+                <title>Manage Coupons | EstateEase</title>
+            </Helmet>
             <h2 className="text-2xl font-bold mb-4">Manage Coupons</h2>
-            
+
             {/* Coupon Table */}
             <div className="overflow-x-auto">
                 <table className="table w-full border">
@@ -64,7 +113,8 @@ const ManageCoupons = () => {
                             <th>Coupon Code</th>
                             <th>Discount (%)</th>
                             <th>Description</th>
-                            <th>Expiration Date</th> {/* Added for expiration */}
+                            <th>Expiration Date</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,34 +123,56 @@ const ManageCoupons = () => {
                                 <td>{coupon.code}</td>
                                 <td>{coupon.discount}</td>
                                 <td>{coupon.description}</td>
-                                <td>{coupon.expiration}</td> {/* Added for expiration */}
+                                <td>{coupon.expiration}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-sm btn-warning mr-2"
+                                        onClick={() => handleUpdateClick(coupon)}
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        className="btn btn-sm btn-error"
+                                        onClick={() => handleDelete(coupon._id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                         {coupons.length === 0 && (
                             <tr>
-                                <td colSpan="4" className="text-center">No coupons available</td>
+                                <td colSpan="5" className="text-center">
+                                    No coupons available
+                                </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
-            
+
             {/* Add Coupon Button */}
             <div className="mt-4">
                 <button
                     className="btn btn-primary"
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => {
+                        setModalOpen(true);
+                        setIsUpdate(false);
+                        setFormData({ code: "", discount: "", description: "", expiration: "" });
+                    }}
                 >
                     Add Coupon
                 </button>
             </div>
-            
-            {/* Add Coupon Modal */}
+
+            {/* Add/Update Coupon Modal */}
             {modalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                        <h3 className="text-xl font-bold mb-4">Add New Coupon</h3>
-                        
+                        <h3 className="text-xl font-bold mb-4">
+                            {isUpdate ? "Update Coupon" : "Add New Coupon"}
+                        </h3>
+
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <label className="block font-semibold mb-2">Coupon Code</label>
@@ -147,7 +219,7 @@ const ManageCoupons = () => {
                                     required
                                 />
                             </div>
-                            
+
                             <div className="flex justify-end">
                                 <button
                                     type="button"

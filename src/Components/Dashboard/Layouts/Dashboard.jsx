@@ -2,6 +2,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import { Helmet } from "react-helmet";
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
@@ -24,7 +25,7 @@ const Dashboard = () => {
                         setHasAgreement(true);
                     } else {
                         setHasAgreement(false);
-                        navigate("/dashboard");
+                        // navigate("/dashboard");
                     }
                 })
                 .catch((error) => {
@@ -55,6 +56,7 @@ const Dashboard = () => {
 
     return (
         <div className="flex flex-col md:flex-row">
+            <Helmet><title>Dashboard | EstateEase </title></Helmet>
             {/* Sidebar */}
             <div className="flex flex-col bg-amber-300 w-full md:w-64 min-h-screen p-4 shadow-lg">
                 <div className="flex justify-between items-center mb-4 md:hidden">

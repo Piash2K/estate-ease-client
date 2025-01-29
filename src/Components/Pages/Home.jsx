@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import Banner1 from './../../assets/Banner1.jpeg'
 import Banner2 from './../../assets/Banner-2.jpg'
 import Banner3 from './../../assets/Banner3.jpeg'
+import { Helmet } from 'react-helmet';
 
 const Home = () => {
     const [coupons, setCoupons] = useState([]);
@@ -47,6 +48,7 @@ const Home = () => {
 
     return (
         <div className="space-y-12">
+            <Helmet><title>Home | EstateEase </title></Helmet>
             {/* Fancy Banner */}
             <section className="relative">
                 <div className="carousel-wrapper">
