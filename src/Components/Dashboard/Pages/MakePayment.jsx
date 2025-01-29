@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
@@ -16,10 +15,8 @@ const MakePayment = () => {
   const [agreement, setAgreement] = useState(null);
   const [month, setMonth] = useState("");
   const [coupon, setCoupon] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [discount, setDiscount] = useState(0);
   const [finalRent, setFinalRent] = useState(0);
-  // eslint-disable-next-line no-unused-vars
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,7 +38,7 @@ const MakePayment = () => {
       alert("Please enter a coupon code.");
       return;
     }
-    
+
     axios
       .get(`https://estate-ease-server.vercel.app/coupons/${coupon}`)
       .then((response) => {
@@ -57,6 +54,19 @@ const MakePayment = () => {
       })
       .catch((error) => console.error("Error applying coupon:", error));
   };
+
+  // Month validation & Payment proceed
+  const handlePayment = () => {
+    if (!month) {
+      alert("Month field is required!");
+      return;
+    }
+    navigate("/payment"); // Change this as per your navigation logic
+  };
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+  ];
 
   if (!agreement) {
     return <p>Loading agreement details...</p>;
@@ -89,11 +99,28 @@ const MakePayment = () => {
         </div>
         <div className="mb-4">
           <label className="block font-semibold">Month:</label>
-          <input type="text" placeholder="Enter month" value={month} onChange={(e) => setMonth(e.target.value)} className="w-full p-2 border rounded" />
+          <select
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="">Select Month</option>
+            {monthNames.map((monthName, index) => (
+              <option key={index} value={monthName}>
+                {monthName}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-4">
           <label className="block font-semibold">Coupon:</label>
-          <input type="text" placeholder="Enter coupon code" value={coupon} onChange={(e) => setCoupon(e.target.value)} className="w-full p-2 border rounded" />
+          <input
+            type="text"
+            placeholder="Enter coupon code"
+            value={coupon}
+            onChange={(e) => setCoupon(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
           <button type="button" onClick={handleApplyCoupon} className="mt-2 p-2 bg-blue-500 text-white rounded">Apply Coupon</button>
         </div>
         <div className="mb-4">
@@ -101,9 +128,15 @@ const MakePayment = () => {
           <input type="text" value={finalRent} readOnly className="w-full p-2 border rounded" />
         </div>
       </form>
-      <Elements stripe={stripePromise}>
-        <CheckoutForm finalRent={finalRent} month={month} agreement={agreement} />
-      </Elements>
+
+      {/* Conditional Rendering based on Month field validation */}
+      {month ? (
+        <Elements stripe={stripePromise}>
+          <CheckoutForm finalRent={finalRent} month={month} agreement={agreement} />
+        </Elements>
+      ) : (
+        <p className="text-red-500">Please fill in the "Month" field to proceed with payment.</p>
+      )}
     </div>
   );
 };
