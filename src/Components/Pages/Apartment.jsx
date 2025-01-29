@@ -2,21 +2,22 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../Provider/AuthProvider";
 import { Helmet } from "react-helmet";
+import Swal from 'sweetalert2'; 
 
 const Apartment = () => {
     const [apartments, setApartments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [apartmentsPerPage] = useState(6); // Show 6 apartments per page
+    const [apartmentsPerPage] = useState(6); 
     const [minRent, setMinRent] = useState('');
     const [maxRent, setMaxRent] = useState('');
-    const [filteredApartments, setFilteredApartments] = useState([]); // Store filtered apartments
+    const [filteredApartments, setFilteredApartments] = useState([]);
     const { user } = useContext(AuthContext);
 
     useEffect(() => {
         axios.get('https://estate-ease-server.vercel.app/apartments')
             .then(response => {
                 setApartments(response.data);
-                setFilteredApartments(response.data); // Initially show all apartments
+                setFilteredApartments(response.data);
             })
             .catch(error => {
                 console.error('Error fetching apartments data:', error);
@@ -33,7 +34,11 @@ const Apartment = () => {
     const handleAgreementClick = (apartment) => {
         // Check if the user is admin
         if (user.role === 'admin') {
-            alert('Admins cannot create agreements');
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Admins cannot create agreements',
+            });
             return;
         }
     
@@ -48,15 +53,22 @@ const Apartment = () => {
     
         axios.post('https://estate-ease-server.vercel.app/agreements', agreementData)
             .then(response => {
-                alert('Agreement created successfully');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Agreement created successfully',
+                });
                 console.log(response.data);
             })
             .catch(error => {
-                alert('There was an error creating the agreement');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error creating the agreement',
+                });
                 console.error(error);
             });
     };
-    
 
     const handleSearch = () => {
         // Filter apartments by rent range
@@ -68,7 +80,7 @@ const Apartment = () => {
         });
         
         setFilteredApartments(filtered);
-        setCurrentPage(1); // Reset to first page when search is performed
+        setCurrentPage(1);
     };
 
     // Change page
