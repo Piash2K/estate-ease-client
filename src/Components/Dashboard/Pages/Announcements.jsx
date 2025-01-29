@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { RotatingLines } from "react-loader-spinner";
 
 const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -20,22 +21,26 @@ const Announcements = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading announcements...</div>;
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <RotatingLines strokeColor="#3b82f6" strokeWidth="5" animationDuration="0.75" width="50" visible={true} />
+            </div>
+        );
     }
 
     return (
-        <div>
-            <Helmet><title>Announcements | EstateEase </title></Helmet>
-            <h2>All Announcements</h2>
+        <div className="max-w-4xl mx-auto p-6">
+            <Helmet><title>Announcements | EstateEase</title></Helmet>
+            <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">All Announcements</h2>
             {announcements.length === 0 ? (
-                <p>No announcements available.</p>
+                <p className="text-center text-lg text-gray-600">No announcements available.</p>
             ) : (
-                <ul>
+                <ul className="space-y-6">
                     {announcements.map((announcement) => (
-                        <li key={announcement._id}>
-                            <h3>{announcement.title}</h3>
-                            <p>{announcement.description}</p>
-                            <small>Posted on: {new Date(announcement.createdAt).toLocaleDateString()}</small>
+                        <li key={announcement._id} className="bg-white shadow-xl rounded-xl p-5 border-l-4 border-blue-500 transition-transform transform hover:scale-105">
+                            <h3 className="text-2xl font-semibold text-gray-800">{announcement.title}</h3>
+                            <p className="text-gray-600 mt-2">{announcement.description}</p>
+                            <small className="text-gray-500 mt-2 block">Posted on: {new Date(announcement.createdAt).toLocaleDateString()}</small>
                         </li>
                     ))}
                 </ul>

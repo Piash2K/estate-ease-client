@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Helmet } from "react-helmet";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 const AdminProfile = () => {
+    const {user} =useContext(AuthContext)
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     name: "",
@@ -68,7 +70,7 @@ const AdminProfile = () => {
       {/* Admin Profile Card */}
       <div className="card w-full sm:w-3/4 lg:w-1/2 bg-base-100 shadow-xl">
         <figure className="px-10 pt-10">
-          <img src={adminInfo.image} alt="Admin Avatar" className="rounded-full w-32 h-32 object-cover" />
+          <img src={user.photoURL} alt="Admin Avatar" className="rounded-full w-32 h-32 object-cover" />
         </figure>
         <div className="card-body items-center text-center">
           <h2 className="card-title text-xl font-bold">{adminInfo.name}</h2>
