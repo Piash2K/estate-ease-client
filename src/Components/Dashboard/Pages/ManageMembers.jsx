@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { Bars } from 'react-loader-spinner'; // Importing the spinner
 
 const ManageMembers = () => {
     const [members, setMembers] = useState([]);
@@ -41,60 +42,60 @@ const ManageMembers = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Bars 
+                    height="80" 
+                    width="80" 
+                    color="#4fa94d" 
+                    ariaLabel="bars-loading" 
+                    wrapperStyle={{}}
+                    visible={true} 
+                />
+            </div>
+        );
     }
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h2>Manage Members</h2>
+        <div className="p-6 md:p-10">
+            <h2 className="text-2xl font-semibold">Manage Members</h2>
             <Helmet><title>Manage Members | EstateEase </title></Helmet>
             {members.length === 0 ? (
                 <p>No members available.</p>
             ) : (
-                <table style={{ borderCollapse: 'collapse', width: '100%', textAlign: 'left' }}>
-                    <thead>
-                        <tr style={{ background: '#f0f0f0', textAlign: 'left' }}>
-                            <th style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>User Name</th>
-                            <th style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>User Email</th>
-                            <th style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>Role</th>
-                            <th style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {members.map((member) => (
-                            <tr key={member._id}>
-                                <td style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
-                                    {member.displayName }
-                                </td>
-                                <td style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
-                                    {member.email}
-                                </td>
-                                <td style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
-                                    {member.role}
-                                </td>
-                                <td style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
-                                    {member.role === 'member' ? (
-                                        <button
-                                            style={{
-                                                padding: '5px 10px',
-                                                backgroundColor: '#ff4d4f',
-                                                color: '#fff',
-                                                border: 'none',
-                                                borderRadius: '5px',
-                                                cursor: 'pointer',
-                                            }}
-                                            onClick={() => handleRemoveMember(member._id)}
-                                        >
-                                            Remove
-                                        </button>
-                                    ) : (
-                                        'N/A'
-                                    )}
-                                </td>
+                <div className="overflow-x-auto mt-4">
+                    <table className="table-auto w-full border-collapse">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th className="px-4 py-2 border-b text-left">User Name</th>
+                                <th className="px-4 py-2 border-b text-left">User Email</th>
+                                <th className="px-4 py-2 border-b text-left">Role</th>
+                                <th className="px-4 py-2 border-b text-left">Action</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {members.map((member) => (
+                                <tr key={member._id} className="border-b">
+                                    <td className="px-4 py-2">{member.displayName}</td>
+                                    <td className="px-4 py-2">{member.email}</td>
+                                    <td className="px-4 py-2">{member.role}</td>
+                                    <td className="px-4 py-2">
+                                        {member.role === 'member' ? (
+                                            <button
+                                                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                                                onClick={() => handleRemoveMember(member._id)}
+                                            >
+                                                Remove
+                                            </button>
+                                        ) : (
+                                            'N/A'
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
     );

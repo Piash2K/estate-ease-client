@@ -23,7 +23,9 @@ import Home from './Components/Pages/Home';
 import AdminProfile from './Components/Dashboard/Pages/AdminProfile';
 import ErrorPage from './Components/Pages/ErrorPage';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
@@ -95,6 +97,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider><RouterProvider router={router} /></AuthProvider>
+       <QueryClientProvider client={queryClient}>
+      <AuthProvider><RouterProvider router={router} /></AuthProvider>
+    </QueryClientProvider>
   </StrictMode>,
 )

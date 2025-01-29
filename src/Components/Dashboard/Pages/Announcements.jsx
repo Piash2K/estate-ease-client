@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { RotatingLines } from "react-loader-spinner";
+import { Bars} from "react-loader-spinner";
 
 const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -22,8 +22,15 @@ const Announcements = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <RotatingLines strokeColor="#3b82f6" strokeWidth="5" animationDuration="0.75" width="50" visible={true} />
+            <div className="flex justify-center items-center h-screen">
+                <Bars 
+                    height="80" 
+                    width="80" 
+                    color="#4fa94d" 
+                    ariaLabel="bars-loading" 
+                    wrapperStyle={{}}
+                    visible={true} 
+                />
             </div>
         );
     }

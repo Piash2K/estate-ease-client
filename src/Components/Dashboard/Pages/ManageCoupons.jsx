@@ -1,9 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+// Fetch all coupons
+const fetchCoupons = async () => {
+    const res = await fetch("https://estate-ease-server.vercel.app/coupons");
+    return res.json();
+};
+const saveCoupon = async (couponData, isUpdate, couponId) => {
+    const endpoint = isUpdate
+        ? `https://estate-ease-server.vercel.app/coupons/${couponId}`
+        : "https://estate-ease-server.vercel.app/coupons";
+    const method = isUpdate ? "PUT" : "POST";
+
+    const res = await fetch(endpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(couponData),
+    });
+    return res.json();
+};
+
+// Delete coupon
+const deleteCoupon = async (id) => {
+    const res = await fetch(`https://estate-ease-server.vercel.app/coupons/${id}`, {
+        method: "DELETE",
+    });
+    return res.json();
+};
 
 const ManageCoupons = () => {
-    const [coupons, setCoupons] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
     const [currentCouponId, setCurrentCouponId] = useState(null);
@@ -14,12 +41,34 @@ const ManageCoupons = () => {
         expiration: "",
     });
 
-    useEffect(() => {
-        fetch("https://estate-ease-server.vercel.app/coupons")
-            .then((res) => res.json())
-            .then((data) => setCoupons(data))
-            .catch((err) => console.error("Error fetching coupons:", err));
-    }, []);
+    const queryClient = useQueryClient();
+
+    const { data: coupons, isLoading, isError } = useQuery({
+        queryKey: ["coupons"],
+        queryFn: fetchCoupons,
+    });
+
+    const saveMutation = useMutation({
+        mutationFn: (couponData) => saveCoupon(couponData, isUpdate, currentCouponId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["coupons"] });
+            setModalOpen(false);
+        },
+        onError: (err) => {
+            console.error("Error saving coupon:", err);
+        },
+    });
+
+    // Mutation to delete coupon
+    const deleteMutation = useMutation({
+        mutationFn: deleteCoupon,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["coupons"] }); // Refetch coupons after successful deletion
+        },
+        onError: (err) => {
+            console.error("Error deleting coupon:", err);
+        },
+    });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -29,35 +78,7 @@ const ManageCoupons = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const newCoupon = { ...formData };
-
-        const endpoint = isUpdate
-            ? `https://estate-ease-server.vercel.app/coupons/${currentCouponId}`
-            : "https://estate-ease-server.vercel.app/coupons";
-
-        const method = isUpdate ? "PUT" : "POST";
-
-        fetch(endpoint, {
-            method,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newCoupon),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success || data.couponId) {
-                    const updatedCoupons = isUpdate
-                        ? coupons.map((coupon) =>
-                              coupon._id === currentCouponId
-                                  ? { ...newCoupon, _id: currentCouponId }
-                                  : coupon
-                          )
-                        : [...coupons, { ...newCoupon, _id: data.couponId }];
-                    setCoupons(updatedCoupons);
-                    setModalOpen(false);
-                }
-            })
-            .catch((err) => console.error("Error saving coupon:", err));
+        saveMutation.mutate(newCoupon);
     };
 
     const handleUpdateClick = (coupon) => {
@@ -83,20 +104,14 @@ const ManageCoupons = () => {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://estate-ease-server.vercel.app/coupons/${id}`, {
-                    method: "DELETE",
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.success) {
-                            setCoupons(coupons.filter((coupon) => coupon._id !== id));
-                            Swal.fire("Deleted!", "Your coupon has been deleted.", "success");
-                        }
-                    })
-                    .catch((err) => console.error("Error deleting coupon:", err));
+                deleteMutation.mutate(id);
+                Swal.fire("Deleted!", "Your coupon has been deleted.", "success");
             }
         });
     };
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error loading coupons</div>;
 
     return (
         <div className="p-4">
