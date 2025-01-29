@@ -48,6 +48,33 @@ const AuthProvider = ({ children }) => {
             });
     };
 
+    // Function to send user data to the backend using fetch
+    const sendUserDataToBackend = async (email, displayName, role) => {
+        const userInfo = {
+            email,
+            displayName,
+            lastLogin: new Date().toISOString(),
+            role
+        };
+        console.log(userInfo)
+        try {
+            const response = await fetch('https://estate-ease-server.vercel.app/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo),
+            });
+
+            if (response.insertedId) {
+                toast.success('User info updated/created successfully in the backend.');
+            }
+        } catch (error) {
+            toast.error('Error connecting to backend.');
+            console.error(error);
+        }
+    };
+
     const authInfo = {
         user,
         setUser,
@@ -61,9 +88,10 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log(currentUser);
+            console.log(currentUser)
             if (currentUser) {
                 setUser(currentUser);
+                sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
             } else {
                 setUser(null);
             }

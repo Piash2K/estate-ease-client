@@ -13,7 +13,7 @@ const CheckoutForm = ({finalRent,month,agreement}) => {
     const elements = useElements();
 
     useEffect(() => {
-        axios.post(' http://localhost:5000/create-payment-intent',{price : finalRent})
+        axios.post('https://estate-ease-server.vercel.app/create-payment-intent',{price : finalRent})
         .then(res=>{
             console.log(res.data.clientSecret);
             setClientSecret(res.data.clientSecret);
