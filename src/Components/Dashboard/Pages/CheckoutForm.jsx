@@ -4,7 +4,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 
-const CheckoutForm = ({finalRent,month,agreement}) => {
+const CheckoutForm = ({finalRent}) => {
     const{user}=useContext(AuthContext)
     const [error, setError] = useState('');
     const [transactionId,setTransactionId]= useState('')
@@ -80,7 +80,7 @@ const CheckoutForm = ({finalRent,month,agreement}) => {
                     },
                 }}
             />
-            <button className="btn-primary my-4" type="submit" disabled={!stripe || !clientSecret}>
+            <button className="btn-primary my-4 w-full bg-indigo-600 py-2 rounded-lg" type="submit" disabled={!stripe || !clientSecret}>
                 Pay
             </button>
             <p className="text-red-600">{error}</p>

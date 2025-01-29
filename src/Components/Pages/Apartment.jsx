@@ -119,7 +119,7 @@ const Apartment = () => {
                         <div key={index} className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow">
                             {/* Apartment Image */}
                             <img 
-                                src={apt.imageUrl} 
+                                src={apt.image} 
                                 alt={`Apartment ${apt.apartmentNo}`} 
                                 className="w-full h-48 object-cover rounded-t-lg"
                             />
