@@ -76,7 +76,7 @@ const Home = () => {
                 {/* About the Building */}
                 <section className="w-full py-20">
                     <div>
-                        <h2 className="text-6xl font-bold  text-center mb-8">
+                        <h2 className="text-4xl font-bold  text-center mb-8">
                             About the Building
                         </h2>
                         <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
@@ -130,7 +130,7 @@ const Home = () => {
                     </div>
                 </section>
                 {/* Coupons Section */}
-                <section className="w-full py-20">
+                <section className="w-full pb-20">
                     <h2 className="text-4xl font-bold text-center mb-12">
                         Exclusive Coupons
                     </h2>
@@ -177,11 +177,9 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
-
-
                 {/* Announcements Section */}
                 <section >
-                    <h2 className="text-3xl font-semibold  text-center">Latest Announcements</h2>
+                    <h2 className="text-4xl font-semibold  text-center">Latest Announcements</h2>
                     <div className="mt-8">
                         {announcements.map((announcement, index) => (
                             <div key={index} className=" p-8 rounded-xl shadow-lg mb-8">
@@ -266,7 +264,7 @@ const Home = () => {
                 {/* Apartment Location Map Section */}
                 <section className="relative ">
                     <div>
-                        <h2 className="text-3xl font-semibold text-center">
+                        <h2 className="text-4xl font-semibold text-center">
                             Apartment Location
                         </h2>
                         <div className="mt-8 relative z-0">

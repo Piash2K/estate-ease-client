@@ -32,7 +32,7 @@ const ReviewsList = () => {
 
     return (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-center">User Reviews</h2>
+            <h2 className="text-4xl font-bold text-center">User Reviews</h2>
             <div className="mt-4">
                 {reviews.length > 0 ? (
                     <Swiper
