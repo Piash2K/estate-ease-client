@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Bars} from "react-loader-spinner";
+import { Bars } from "react-loader-spinner";
 
 const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -36,15 +36,15 @@ const Announcements = () => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="p-6">
             <Helmet><title>Announcements | EstateEase</title></Helmet>
-            <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">All Announcements</h2>
+            <h2 className="text-3xl font-bold mb-6 text-gray-800">All Announcements</h2>
             {announcements.length === 0 ? (
                 <p className="text-center text-lg text-gray-600">No announcements available.</p>
             ) : (
                 <ul className="space-y-6">
                     {announcements.map((announcement) => (
-                        <li key={announcement._id} className="bg-white shadow-xl rounded-xl p-5 border-l-4 border-blue-500 transition-transform transform hover:scale-105">
+                        <li key={announcement._id} className="bg-white shadow-xl rounded-xl p-5 border-l-4 border-teal-600 transition duration-300 ease-in-out hover:bg-teal-50">
                             <h3 className="text-2xl font-semibold text-gray-800">{announcement.title}</h3>
                             <p className="text-gray-600 mt-2">{announcement.description}</p>
                             <small className="text-gray-500 mt-2 block">Posted on: {new Date(announcement.createdAt).toLocaleDateString()}</small>

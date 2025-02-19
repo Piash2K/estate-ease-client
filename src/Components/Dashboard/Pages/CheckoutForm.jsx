@@ -2,6 +2,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import Swal from "sweetalert2";
 
 const CheckoutForm = ({ finalRent, month, agreement }) => {
   const { user } = useContext(AuthContext);
@@ -68,40 +69,62 @@ const CheckoutForm = ({ finalRent, month, agreement }) => {
         };
         axios.post('https://estate-ease-server.vercel.app/payments', paymentDetails)
           .then(response => {
-            alert('Payment recorded successfully!');
+            Swal.fire({
+              title: 'Success!',
+              text: 'Payment recorded successfully!',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
           })
           .catch(error => {
             console.error("Error saving payment info:", error);
-            alert("Failed to record payment.");
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to record payment.',
+              icon: 'error',
+              confirmButtonText: 'Try Again'
+            });
           });
       }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': {
-                color: '#aab7c4',
+    <div className="bg-white shadow-lg p-6 rounded-xl border border-gray-200">
+      <h3 className="text-2xl font-semibold text-gray-800 text-center mb-4">Payment Details</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="p-4 border border-gray-300 rounded-md">
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: '16px',
+                  color: '#333',
+                  fontWeight: '500',
+                  '::placeholder': {
+                    color: '#aab7c4',
+                  },
+                },
+                invalid: {
+                  color: '#ff4d4d',
+                },
               },
-            },
-            invalid: {
-              color: '#9e2146',
-            },
-          },
-        }}
-      />
-      <button className="btn-primary my-4 w-full bg-indigo-600 py-2 rounded-lg" type="submit" disabled={!stripe || !clientSecret}>
-        Pay
-      </button>
-      <p className="text-red-600">{error}</p>
-      {transactionId && <p className="text-green-600">Your transaction id: {transactionId}</p>}
-    </form>
+            }}
+          />
+        </div>
+
+        <button
+          className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 rounded-lg transition-all"
+          type="submit"
+          disabled={!stripe || !clientSecret}
+        >
+          Pay
+        </button>
+
+        {error && <p className="text-red-600 text-center">{error}</p>}
+        {transactionId && <p className="text-green-600 text-center font-medium">Your transaction ID: {transactionId}</p>}
+      </form>
+    </div>
   );
 };
 

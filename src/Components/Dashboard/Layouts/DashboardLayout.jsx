@@ -71,7 +71,7 @@ const DashboardLayout = () => {
         <title>Dashboard | EstateEase </title>
       </Helmet>
       {/* Sidebar */}
-      <div className="flex flex-col bg-[#2C2F36] w-full md:w-72 min-h-screen p-4 shadow-lg">
+      <div className="fixed top-0 flex flex-col bg-[#2C2F36] w-full md:w-72 min-h-screen p-4 shadow-lg">
         <div className="flex justify-between items-center mb-4 md:hidden">
           <button
             className="text-white text-xl p-2 bg-[#4F46E5] rounded-lg"
@@ -177,7 +177,7 @@ const DashboardLayout = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 ml-72 overflow-y-auto">
         <Outlet />
       </div>
     </div>

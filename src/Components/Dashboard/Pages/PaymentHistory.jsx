@@ -1,7 +1,6 @@
-import  { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider';
 import { Helmet } from 'react-helmet';
-
 
 const PaymentHistory = () => {
     const { user } = useContext(AuthContext);
@@ -13,49 +12,88 @@ const PaymentHistory = () => {
             fetch(`https://estate-ease-server.vercel.app/payments/${user.email}`)
                 .then(response => response.json())
                 .then(data => {
-                    setPayments(data); 
+                    setPayments(data);
                 })
-                .finally(() => setLoading(false)); 
+                .finally(() => setLoading(false));
         }
     }, [user?.email]);
+
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+        );
     }
 
     return (
-        <div className="payment-history">
-            <Helmet><title>Payment History | EstateEase </title></Helmet>
-            <h2>Payment History</h2>
-            {payments.length === 0 ? (
-                <p>No payment history available.</p>
-            ) : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Floor No</th>
-                            <th>Block Name</th>
-                            <th>Apartment No</th>
-                            <th>Original Rent</th>
-                            <th>Final Rent</th>
-                            <th>Month</th>
-                            <th>Payment Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {payments.map((payment) => (
-                            <tr key={payment._id}>
-                                <td>{payment.floorNo}</td>
-                                <td>{payment.blockName}</td>
-                                <td>{payment.apartmentNo}</td>
-                                <td>{payment.originalRent}</td>
-                                <td>{payment.finalRent}</td>
-                                <td>{payment.month}</td>
-                                <td>{new Date(payment.paymentDate).toLocaleDateString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+        <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+            <Helmet>
+                <title>Payment History | EstateEase</title>
+            </Helmet>
+            <div>
+                <h2 className="text-3xl font-extrabold text-gray-900 mb-8">Payment History</h2>
+                {payments.length === 0 ? (
+                    <p className="text-gray-600">No payment history available.</p>
+                ) : (
+                    <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Floor No
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Block Name
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Apartment No
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Original Rent
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Final Rent
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Month
+                                    </th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Payment Date
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {payments.map((payment) => (
+                                    <tr key={payment._id}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {payment.floorNo}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {payment.blockName}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {payment.apartmentNo}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {payment.originalRent}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {payment.finalRent}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {payment.month}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {new Date(payment.paymentDate).toLocaleDateString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

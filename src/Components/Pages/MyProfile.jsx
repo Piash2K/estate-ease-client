@@ -1,13 +1,11 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
 const MyProfile = () => {
     const { user } = useContext(AuthContext);
     const [agreement, setAgreement] = useState(null);
-    console.log(user);
 
     useEffect(() => {
         axios.get(`https://estate-ease-server.vercel.app/agreements/${user.email}`)
@@ -22,31 +20,32 @@ const MyProfile = () => {
     }, [user.email]);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 p-6">
             <Helmet><title>My Profile | EstateEase</title></Helmet>
-            <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">My Profile</h1>
-            <div className="bg-white p-6 rounded-2xl shadow-xl max-w-lg mx-auto border border-gray-200">
-                {/* Profile Info */}
-                <div className="flex flex-col items-center mb-6 text-center">
+            
+            <div className=" bg-white p-10 rounded-3xl shadow-2xl border border-gray-200 grid grid-cols-2 gap-8">
+                <div className="flex flex-col items-center text-center bg-gray-50 p-8 rounded-2xl shadow-md">
                     <img
                         src={user.photoURL}
                         alt="Profile"
-                        className="w-32 h-32 rounded-full border-4 border-primary shadow-md"
+                        className="w-40 h-40 rounded-full border-4 border-primary shadow-lg"
                     />
                     <div className="mt-4">
-                        <h2 className="text-2xl font-semibold text-gray-700">{user.name}</h2>
-                        <p className="text-sm text-gray-500">{user.email}</p>
+                        <h2 className="text-4xl font-bold text-gray-700">{user.displayName}</h2>
+                        <p className="text-lg text-gray-500">{user.email}</p>
                     </div>
                 </div>
 
-                <h3 className="text-xl font-semibold mb-4 text-center text-gray-800">Agreement Information</h3>
-                <div className="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-inner">
-                    <p className="text-gray-600"><strong className="text-gray-800">Floor:</strong> {agreement ? agreement.floorNo : "None"}</p>
-                    <p className="text-gray-600"><strong className="text-gray-800">Block:</strong> {agreement ? agreement.blockName : "None"}</p>
-                    <p className="text-gray-600"><strong className="text-gray-800">Apartment Number:</strong> {agreement ? agreement.apartmentNo : "None"}</p>
-                    <p className="text-gray-600"><strong className="text-gray-800">Rent:</strong> {agreement ? `$${agreement.rent}` : "None"}</p>
-                    <p className="text-gray-600"><strong className="text-gray-800">Status:</strong> {agreement ? agreement.status : "None"}</p>
-                    <p className="text-gray-600"><strong className="text-gray-800">Agreement Accepted Date:</strong> {agreement ? agreement.acceptedDate : "None"}</p>
+                <div className="bg-gray-50 p-8 rounded-2xl border border-gray-200 shadow-md">
+                    <h3 className="text-3xl font-semibold mb-6 text-center text-gray-800">Agreement Information</h3>
+                    <div className="grid grid-cols-2 gap-6 text-lg text-gray-600">
+                        <p><strong className="text-gray-800">Floor:</strong> {agreement ? agreement.floorNo : "None"}</p>
+                        <p><strong className="text-gray-800">Block:</strong> {agreement ? agreement.blockName : "None"}</p>
+                        <p><strong className="text-gray-800">Apartment:</strong> {agreement ? agreement.apartmentNo : "None"}</p>
+                        <p><strong className="text-gray-800">Rent:</strong> {agreement ? `$${agreement.rent}` : "None"}</p>
+                        <p><strong className="text-gray-800">Status:</strong> {agreement ? agreement.status : "None"}</p>
+                        <p><strong className="text-gray-800">Accepted Date:</strong> {agreement ? agreement.acceptedDate : "None"}</p>
+                    </div>
                 </div>
             </div>
         </div>
