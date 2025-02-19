@@ -185,6 +185,7 @@ const Home = () => {
                     </div>
                 </section>
 
+
                 {/* Announcements Section */}
                 <section >
                     <h2 className="text-3xl font-semibold text-gray-800 text-center">Latest Announcements</h2>
@@ -196,6 +197,76 @@ const Home = () => {
                                 <p className="text-gray-500 text-sm mt-2">Posted on: {new Date(announcement.createdAt).toLocaleDateString()}</p>
                             </div>
                         ))}
+                    </div>
+                </section>
+                {/* Dynamic Image Gallery Section */}
+                <section className="w-full py-20">
+                    <div>
+                        <h2 className="text-4xl font-bold text-gray-900 text-center mb-12">
+                            Explore Our Spaces
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="relative group overflow-hidden rounded-xl">
+                                <img
+                                    src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/fee32764396391.5ad0ac68a1360.jpg"
+                                    alt="Lobby"
+                                    className="w-full h-64 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <p className="text-white text-2xl font-semibold">Modern Lobby</p>
+                                </div>
+                            </div>
+                            <div className="relative group overflow-hidden rounded-xl">
+                                <img
+                                    src="https://static1.squarespace.com/static/58471a2329687f12c60955a3/t/65dfb6c5b67ebd6a9a88f0a2/1709160133386/fitness-center-design.jpg?format=1500w"
+                                    alt="Fitness Center"
+                                    className="w-full h-64 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <p className="text-white text-2xl font-semibold">Fitness Center</p>
+                                </div>
+                            </div>
+                            <div className="relative group overflow-hidden rounded-xl">
+                                <img
+                                    src="https://assets.simpleviewinc.com/simpleview/image/upload/crm/dublinoh/AC_CMHAC_VasoRooftop0-699662e95056a36_69966607-5056-a36a-078b761588b538ed.jpg"
+                                    alt="Rooftop Lounge"
+                                    className="w-full h-64 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <p className="text-white text-2xl font-semibold">Rooftop Lounge</p>
+                                </div>
+                            </div>
+                            <div className="relative group overflow-hidden rounded-xl">
+                                <img
+                                    src="https://cdn11.bigcommerce.com/s-64cbb/product_images/uploaded_images/tgtechnicalservices-246300-parking-garage-safer-blogbanner1.jpg"
+                                    alt="Parking"
+                                    className="w-full h-64 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <p className="text-white text-2xl font-semibold">Spacious Parking</p>
+                                </div>
+                            </div>
+                            <div className="relative group overflow-hidden rounded-xl">
+                                <img
+                                    src="https://leisurepoolsusa.com/wp-content/uploads/2022/05/best-type-of-swimming-pool-for-my-home.webp"
+                                    alt="Pool"
+                                    className="w-full h-64 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <p className="text-white text-2xl font-semibold">Infinity Pool</p>
+                                </div>
+                            </div>
+                            <div className="relative group overflow-hidden rounded-xl">
+                                <img
+                                    src="https://thumbs.dreamstime.com/b/moscow-region-aug-landscape-design-patio-residential-house-taken-above-beautiful-landscaping-home-garden-summer-169060331.jpg"
+                                    alt="Garden"
+                                    className="w-full h-64 object-cover transform transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <p className="text-white text-2xl font-semibold">Landscaped Garden</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
