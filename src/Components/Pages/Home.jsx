@@ -10,6 +10,7 @@ import Banner3 from './../../assets/Banner3.jpeg'
 import { Helmet } from 'react-helmet';
 import { FaDumbbell, FaParking, FaShieldAlt, FaUmbrellaBeach, FaWifi } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import ReviewsList from './ReviewsList';
 
 const Home = () => {
     const [coupons, setCoupons] = useState([]);
@@ -346,6 +347,9 @@ const Home = () => {
                             </p>
                         </div>
                     </div>
+                </section>
+                <section>
+                    <ReviewsList></ReviewsList>
                 </section>
             </div>
         </div>
