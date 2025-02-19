@@ -301,7 +301,52 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
-
+                <section className="w-full py-20">
+                    <h2 className="text-4xl font-bold text-gray-900 text-center mb-8">
+                        Community Guidelines
+                    </h2>
+                    <p className="text-xl font-medium text-gray-700 leading-relaxed max-w-2xl mx-auto text-center">
+                        To ensure a safe and pleasant living experience for everyone, we kindly ask all residents and guests to adhere to the following community guidelines:
+                    </p>
+                    <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Respect for All</h3>
+                            <p className="text-lg text-gray-600">
+                                Treat all residents and guests with respect and kindness, fostering a positive and inclusive environment.
+                            </p>
+                        </div>
+                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Noise Consideration</h3>
+                            <p className="text-lg text-gray-600">
+                                Maintain a reasonable noise level to ensure that everyone can enjoy their living spaces in peace and comfort.
+                            </p>
+                        </div>
+                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Waste Management</h3>
+                            <p className="text-lg text-gray-600">
+                                Dispose of waste properly and recycle when possible to maintain a clean and sustainable environment.
+                            </p>
+                        </div>
+                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Pets Policy</h3>
+                            <p className="text-lg text-gray-600">
+                                Ensure that pets are kept under control and are not disruptive to other residents or common areas.
+                            </p>
+                        </div>
+                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Safety First</h3>
+                            <p className="text-lg text-gray-600">
+                                Follow all building safety protocols, including fire drills, emergency exits, and reporting any hazards immediately.
+                            </p>
+                        </div>
+                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Respect Common Areas</h3>
+                            <p className="text-lg text-gray-600">
+                                Take care of common spaces and be considerate when using shared amenities, leaving them clean and in good condition.
+                            </p>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     );
