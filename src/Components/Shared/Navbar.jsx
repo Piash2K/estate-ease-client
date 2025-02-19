@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
+import { ThemeToggle } from "../DarkMode/ThemeToggle";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -153,6 +154,7 @@ const Navbar = () => {
               </Link>
             </div>
           )}
+          <ThemeToggle></ThemeToggle>
         </div>
       </div>
     </nav>
