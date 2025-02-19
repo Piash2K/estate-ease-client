@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Bars } from "react-loader-spinner";
 
 // Fetch all coupons
 const fetchCoupons = async () => {
@@ -53,9 +54,19 @@ const ManageCoupons = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["coupons"] });
             setModalOpen(false);
+            // SweetAlert for adding/updating a coupon
+            Swal.fire({
+                title: isUpdate ? "Coupon Updated!" : "Coupon Added!",
+                text: isUpdate
+                    ? "Your coupon has been updated successfully."
+                    : "Your coupon has been added successfully.",
+                icon: "success",
+                confirmButtonText: "Okay",
+            });
         },
         onError: (err) => {
             console.error("Error saving coupon:", err);
+            Swal.fire("Error", "There was an error saving the coupon.", "error");
         },
     });
 
@@ -64,9 +75,12 @@ const ManageCoupons = () => {
         mutationFn: deleteCoupon,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["coupons"] }); // Refetch coupons after successful deletion
+            // SweetAlert for deletion
+            Swal.fire("Deleted!", "Your coupon has been deleted.", "success");
         },
         onError: (err) => {
             console.error("Error deleting coupon:", err);
+            Swal.fire("Error", "There was an error deleting the coupon.", "error");
         },
     });
 
@@ -105,12 +119,24 @@ const ManageCoupons = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 deleteMutation.mutate(id);
-                Swal.fire("Deleted!", "Your coupon has been deleted.", "success");
             }
         });
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) {
+            return (
+                <div className="flex justify-center items-center h-screen">
+                    <Bars 
+                        height="80" 
+                        width="80" 
+                        color="#4fa94d" 
+                        ariaLabel="bars-loading" 
+                        wrapperStyle={{}}
+                        visible={true} 
+                    />
+                </div>
+            );
+        }
     if (isError) return <div>Error loading coupons</div>;
 
     return (

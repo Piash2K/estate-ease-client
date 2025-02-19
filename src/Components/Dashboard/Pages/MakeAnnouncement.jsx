@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const MakeAnnouncement = () => {
     const [title, setTitle] = useState('');
@@ -33,12 +34,21 @@ const MakeAnnouncement = () => {
             })
             .then((data) => {
                 console.log(data);
-                alert('Announcement created successfully!');
-                navigate('/dashboard'); // Redirect to the dashboard after successful creation
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Announcement created successfully!',
+                    confirmButtonText: 'OK'
+                });
+                navigate('/dashboard');
             })
             .catch((error) => {
                 console.error(error);
-                alert('Failed to create announcement');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to create announcement',
+                    text: error.message,
+                    confirmButtonText: 'Try Again'
+                });
             })
             .finally(() => {
                 setLoading(false);

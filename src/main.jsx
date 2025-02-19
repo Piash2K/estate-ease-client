@@ -10,7 +10,6 @@ import AuthProvider from './Components/Provider/AuthProvider';
 import Login from './Components/Pages/Login';
 import Register from './Components/Pages/Register';
 import Apartment from './Components/Pages/Apartment';
-import Dashboard from './Components/Dashboard/Layouts/Dashboard';
 import MyProfile from './Components/Pages/MyProfile';
 import MakePayment from './Components/Dashboard/Pages/MakePayment';
 import PaymentHistory from './Components/Dashboard/Pages/PaymentHistory';
@@ -24,6 +23,8 @@ import AdminProfile from './Components/Dashboard/Pages/AdminProfile';
 import ErrorPage from './Components/Pages/ErrorPage';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import DashboardLayout from './Components/Dashboard/Layouts/DashboardLayout';
+import Dashboard from './Components/Dashboard/Pages/Dashboard';
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -52,9 +53,13 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+    element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
     errorElement: <ErrorPage></ErrorPage>,
     children: [
+      {
+        path: '/dashboard',
+        element: <Dashboard></Dashboard>
+      },
       {
         path: 'my-profile',
         element: <MyProfile></MyProfile>
