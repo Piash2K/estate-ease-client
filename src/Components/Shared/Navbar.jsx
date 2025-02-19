@@ -32,6 +32,27 @@ const Navbar = () => {
       >
         Apartment
       </NavLink>
+      <NavLink
+        to="/contacts"
+        className={({ isActive }) =>
+          isActive
+            ? "text-white bg-[#0E9F9F] px-4 py-2 rounded-lg font-semibold shadow-md"
+            : "text-[#A3A3A3] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-lg transition-colors duration-300"
+        }
+      >
+        Contacts
+      </NavLink>
+      <NavLink
+        to="/FAQ"
+        className={({ isActive }) =>
+          isActive
+            ? "text-white bg-[#0E9F9F] px-4 py-2 rounded-lg font-semibold shadow-md"
+            : "text-[#A3A3A3] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-lg transition-colors duration-300"
+        }
+      >
+        FAQ
+      </NavLink>
+      
     </>
   );
 

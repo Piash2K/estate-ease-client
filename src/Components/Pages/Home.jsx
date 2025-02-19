@@ -271,20 +271,37 @@ const Home = () => {
                 </section>
 
                 {/* Apartment Location Map Section */}
-                <section className="py-16">
-                    <h2 className="text-3xl font-semibold text-gray-800 text-center">Apartment Location</h2>
-                    <div className="mt-8">
-                        <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: "400px", width: "100%" }}>
-                            <TileLayer
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                attribution='&copy; <a href="https://maps.app.goo.gl/AfG7U9F3umxGAGnx6'
-                            />
-                            <Marker position={[51.505, -0.09]} icon={new Icon({ iconUrl: 'path/to/marker-icon.png', iconSize: [25, 41], iconAnchor: [12, 41] })}>
-                                <Popup>Apartment Location</Popup>
-                            </Marker>
-                        </MapContainer>
+                <section className="relative ">
+                    <div>
+                        <h2 className="text-3xl font-semibold text-gray-800 text-center">
+                            Apartment Location
+                        </h2>
+                        <div className="mt-8 relative z-0">
+                            <MapContainer
+                                center={[51.505, -0.09]}
+                                zoom={13}
+                                style={{ height: "400px", width: "100%" }}
+                                className="shadow-lg"
+                            >
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; <a href="https://maps.app.goo.gl/AfG7U9F3umxGAGnx6">Google Maps</a>'
+                                />
+                                <Marker
+                                    position={[51.505, -0.09]}
+                                    icon={new Icon({
+                                        iconUrl: "path/to/marker-icon.png",
+                                        iconSize: [25, 41],
+                                        iconAnchor: [12, 41],
+                                    })}
+                                >
+                                    <Popup>Apartment Location</Popup>
+                                </Marker>
+                            </MapContainer>
+                        </div>
                     </div>
                 </section>
+
             </div>
         </div>
     );
