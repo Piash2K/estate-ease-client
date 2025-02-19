@@ -12,6 +12,7 @@ const Apartment = () => {
     const [maxRent, setMaxRent] = useState('');
     const [filteredApartments, setFilteredApartments] = useState([]);
     const { user } = useContext(AuthContext);
+    const [userRole, setUserRole] = useState(null);
 
     useEffect(() => {
         axios.get('https://estate-ease-server.vercel.app/apartments')
@@ -22,13 +23,22 @@ const Apartment = () => {
             .catch(error => {
                 console.error('Error fetching apartments data:', error);
             });
-    }, []);
 
-    // Logic to paginate apartments
+        if (user) {
+            axios.get(`https://estate-ease-server.vercel.app/users?email=${user.email}`)
+                .then(response => {
+                    const userData = response.data.find(u => u.email === user.email);
+                    if (userData) {
+                        setUserRole(userData.role);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
+        }
+    }, [user]);
     const indexOfLastApartment = currentPage * apartmentsPerPage;
     const indexOfFirstApartment = indexOfLastApartment - apartmentsPerPage;
-
-    // Current apartments for the selected page after filtering
     const currentApartments = filteredApartments.slice(indexOfFirstApartment, indexOfLastApartment);
 
     const handleAgreementClick = (apartment) => {
@@ -40,8 +50,8 @@ const Apartment = () => {
             });
             return;
         }
-        // Check if the user is admin
-        if (user.role === 'admin') {
+
+        if (userRole === 'admin') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -49,7 +59,7 @@ const Apartment = () => {
             });
             return;
         }
-    
+
         const agreementData = {
             userName: user.displayName, 
             userEmail: user.email,   
@@ -58,7 +68,7 @@ const Apartment = () => {
             apartmentNo: apartment.apartmentNo,
             rent: apartment.rent
         };
-    
+
         axios.post('https://estate-ease-server.vercel.app/agreements', agreementData)
             .then(response => {
                 Swal.fire({
@@ -79,7 +89,6 @@ const Apartment = () => {
     };
 
     const handleSearch = () => {
-        // Filter apartments by rent range
         const filtered = apartments.filter(apt => {
             const rent = apt.rent;
             const isMinRentValid = minRent ? rent >= minRent : true;
@@ -90,8 +99,6 @@ const Apartment = () => {
         setFilteredApartments(filtered);
         setCurrentPage(1);
     };
-
-    // Change page
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -102,8 +109,6 @@ const Apartment = () => {
         <div className="w-9/12 mx-auto py-8">
             <Helmet><title>Apartment | EstateEase </title></Helmet>
             <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Apartments</h1>
-
-            {/* Rent Range Filters */}
             <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="flex items-center">
                     <label className="mr-2 text-lg font-semibold text-gray-700">Min Rent:</label>
@@ -125,7 +130,6 @@ const Apartment = () => {
                         className="p-2 border rounded w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500" 
                     />
                 </div>
-                {/* Search Button */}
                 <button
                     className="mt-4 sm:mt-0 px-4 py-2 bg-teal-600 text-white font-bold rounded-md hover:bg-teal-700 transition-colors w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-teal-500"
                     onClick={handleSearch}>
@@ -137,21 +141,16 @@ const Apartment = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {currentApartments.map((apt, index) => (
                         <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow transform hover:scale-105 border border-gray-100">
-                            {/* Apartment Image */}
                             <img 
                                 src={apt.image} 
                                 alt={`Apartment ${apt.apartmentNo}`} 
                                 className="w-full h-48 object-cover rounded-lg"
                             />
-                            
-                            {/* Apartment Details */}
                             <div className="mt-4">
                                 <h3 className="text-xl font-semibold text-gray-800">{apt.apartmentNo}</h3>
                                 <p className="text-sm text-gray-600">Floor: {apt.floorNo}</p>
                                 <p className="text-sm text-gray-600">Block: {apt.blockName}</p>
                                 <p className="text-lg font-semibold text-teal-600 mt-2">Rent: ${apt.rent}</p>
-                                
-                                {/* Agreement Button */}
                                 <button
                                     className="mt-4 px-4 py-2 bg-teal-600 text-white font-bold rounded-md w-full hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
                                     onClick={() => handleAgreementClick(apt)} >
@@ -164,8 +163,6 @@ const Apartment = () => {
             ) : (
                 <p className="text-center text-gray-600">No apartments match the search criteria.</p>
             )}
-
-            {/* Pagination Controls */}
             <div className="mt-6 flex justify-center">
                 <button 
                     onClick={() => handlePageChange(currentPage - 1)} 
