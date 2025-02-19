@@ -1,134 +1,111 @@
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Bars, RotatingLines } from "react-loader-spinner";
+import Swal from "sweetalert2";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Bars } from "react-loader-spinner";
+
+const fetchAgreements = async () => {
+    const res = await fetch("https://estate-ease-server.vercel.app/agreements");
+    return res.json();
+};
+
+const updateAgreement = async (agreementId, status, role = "") => {
+    const res = await fetch(`https://estate-ease-server.vercel.app/agreements/${agreementId}/update`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, role }),
+    });
+    return res.json();
+};
 
 const AgreementRequests = () => {
-    const [requests, setRequests] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [actionLoading, setActionLoading] = useState(null); // To track individual button loading states
+    const queryClient = useQueryClient();
+    const { data: agreements, isLoading, isError } = useQuery({
+        queryKey: ["agreements"],
+        queryFn: fetchAgreements,
+    });
 
-    useEffect(() => {
-        // Fetch all pending agreements
-        fetch('https://estate-ease-server.vercel.app/agreements')
-            .then((response) => response.json())
-            .then((data) => {
-                setRequests(data);
-                setLoading(false); // Set loading to false when data is fetched
-            })
-            .catch((error) => {
-                console.error("Error fetching agreement requests:", error);
-                setLoading(false);
+    const updateMutation = useMutation({
+        mutationFn: ({ agreementId, status, role }) => updateAgreement(agreementId, status, role),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["agreements"] });
+            Swal.fire({
+                title: "Success!",
+                text: "Agreement status updated successfully.",
+                icon: "success",
+                confirmButtonText: "Okay",
             });
-    }, []);
+        },
+        onError: () => {
+            Swal.fire("Error", "Failed to update agreement status.", "error");
+        },
+    });
 
-    // Handle accepting the agreement
-    const handleAccept = (agreementId) => {
-        setActionLoading(agreementId); // Start loading for the action
-        fetch(`https://estate-ease-server.vercel.app/agreements/${agreementId}/update`, {
-            method: 'PUT',
-            body: JSON.stringify({ status: 'accepted', role: 'member' }),
-            headers: { 'Content-Type': 'application/json' },
-        })
-            .then(response => response.json())
-            .then(() => {
-                // Remove the request from the list
-                setRequests(prevRequests => prevRequests.filter(req => req._id !== agreementId));
-                setActionLoading(null); // Reset loading state
-            })
-            .catch(error => {
-                console.error("Error accepting agreement:", error);
-                setActionLoading(null);
-            });
-    };
-
-    // Handle rejecting the agreement
-    const handleReject = (agreementId) => {
-        setActionLoading(agreementId); // Start loading for the action
-        fetch(`https://estate-ease-server.vercel.app/agreements/${agreementId}/update`, {
-            method: 'PUT',
-            body: JSON.stringify({ status: 'rejected' }),
-            headers: { 'Content-Type': 'application/json' },
-        })
-            .then(response => response.json())
-            .then(() => {
-                // Remove the request from the list
-                setRequests(prevRequests => prevRequests.filter(req => req._id !== agreementId));
-                setActionLoading(null); // Reset loading state
-            })
-            .catch(error => {
-                console.error("Error rejecting agreement:", error);
-                setActionLoading(null);
-            });
-    };
-
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <Bars 
-                    height="80" 
-                    width="80" 
-                    color="#4fa94d" 
-                    ariaLabel="bars-loading" 
-                    wrapperStyle={{}}
-                    visible={true} 
-                />
+                <Bars height="80" width="80" color="#4fa94d" ariaLabel="bars-loading" visible={true} />
             </div>
         );
     }
+    if (isError) return <div>Error loading agreements</div>;
 
     return (
-        <div className="max-w-7xl mx-auto p-6">
-            <Helmet><title>Agreement Requests | EstateEase</title></Helmet>
-            <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Agreement Requests</h2>
-            {requests.length === 0 ? (
-                <p className="text-lg text-center text-gray-500">No agreement requests available.</p>
-            ) : (
-                <div className="overflow-x-auto">
-                    <table className="table w-full border border-gray-200 rounded-lg shadow-lg">
-                        <thead>
-                            <tr className="bg-gray-100 text-gray-800">
-                                <th className="p-3">User Name</th>
-                                <th>User Email</th>
-                                <th>Floor No</th>
-                                <th>Block Name</th>
-                                <th>Apartment No</th>
-                                <th>Rent</th>
-                                <th>Request Date</th>
-                                <th>Actions</th>
+        <div className="p-4 w-full">
+            <Helmet>
+                <title>Agreement Requests | EstateEase</title>
+            </Helmet>
+            <h2 className="text-2xl font-bold mb-4">Manage Agreement Requests</h2>
+
+            <div className="overflow-x-auto">
+                <table className="table w-full border">
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Email</th>
+                            <th>Floor No</th>
+                            <th>Block Name</th>
+                            <th>Apartment No</th>
+                            <th>Rent</th>
+                            <th>Request Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {agreements.map((agreement) => (
+                            <tr key={agreement._id}>
+                                <td>{agreement.userName}</td>
+                                <td>{agreement.userEmail}</td>
+                                <td>{agreement.floorNo}</td>
+                                <td>{agreement.blockName}</td>
+                                <td>{agreement.apartmentNo}</td>
+                                <td>${agreement.rent}</td>
+                                <td>{new Date(agreement.createdAt).toLocaleDateString()}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-sm btn-success mr-2"
+                                        onClick={() => updateMutation.mutate({ agreementId: agreement._id, status: "accepted", role: "member" })}
+                                    >
+                                        Accept
+                                    </button>
+                                    <button
+                                        className="btn btn-sm btn-error"
+                                        onClick={() => updateMutation.mutate({ agreementId: agreement._id, status: "rejected" })}
+                                    >
+                                        Reject
+                                    </button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {requests.map(request => (
-                                <tr key={request._id} className="hover:bg-gray-50">
-                                    <td className="p-3">{request.userName}</td>
-                                    <td>{request.userEmail}</td>
-                                    <td>{request.floorNo}</td>
-                                    <td>{request.blockName}</td>
-                                    <td>{request.apartmentNo}</td>
-                                    <td>${request.rent}</td>
-                                    <td>{new Date(request.createdAt).toLocaleDateString()}</td>
-                                    <td className="space-x-2">
-                                        <button 
-                                            onClick={() => handleAccept(request._id)} 
-                                            disabled={actionLoading === request._id}
-                                            className="btn btn-success btn-sm flex items-center gap-2"
-                                        >
-                                            {actionLoading === request._id ? <RotatingLines strokeColor="white" strokeWidth="5" animationDuration="0.75" width="20" visible={true} /> : "Accept"}
-                                        </button>
-                                        <button 
-                                            onClick={() => handleReject(request._id)} 
-                                            disabled={actionLoading === request._id}
-                                            className="btn btn-error btn-sm flex items-center gap-2"
-                                        >
-                                            {actionLoading === request._id ? <RotatingLines strokeColor="white" strokeWidth="5" animationDuration="0.75" width="20" visible={true} /> : "Reject"}
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+                        ))}
+                        {agreements.length === 0 && (
+                            <tr>
+                                <td colSpan="8" className="text-center">
+                                    No agreement requests available
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

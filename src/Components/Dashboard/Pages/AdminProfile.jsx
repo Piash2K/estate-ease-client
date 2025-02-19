@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import { Helmet } from "react-helmet";
 import { AuthContext } from "../../Provider/AuthProvider";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
 
 const AdminProfile = () => {
-    const {user} =useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminInfo, setAdminInfo] = useState({
     name: "",
@@ -35,26 +36,26 @@ const AdminProfile = () => {
     };
 
     const fetchStats = async () => {
-        const roomsRes = await fetch("https://estate-ease-server.vercel.app/apartments");
-        const rooms = await roomsRes.json();
-      
-        const agreementsRes = await fetch("https://estate-ease-server.vercel.app/agreements");
-        const agreements = await agreementsRes.json();
-        console.log(agreements);
-      
-        const usersRes = await fetch("https://estate-ease-server.vercel.app/users");
-        const users = await usersRes.json();
-      
-        const totalMembers = users.filter((user) => user.role === "member").length; // Calculate total members
-      
-        setStats({
-          totalRooms: rooms.length,
-          availableRooms: rooms.length - totalMembers, // Available rooms calculated with totalMembers
-          agreements: totalMembers, // Unavailable rooms (members) assigned to agreements
-          totalUsers: users.length,
-          totalMembers, // Assign total members
-        });
-      };
+      const roomsRes = await fetch("https://estate-ease-server.vercel.app/apartments");
+      const rooms = await roomsRes.json();
+
+      const agreementsRes = await fetch("https://estate-ease-server.vercel.app/agreements");
+      const agreements = await agreementsRes.json();
+      console.log(agreements)
+
+      const usersRes = await fetch("https://estate-ease-server.vercel.app/users");
+      const users = await usersRes.json();
+
+      const totalMembers = users.filter((user) => user.role === "member").length;
+
+      setStats({
+        totalRooms: rooms.length,
+        availableRooms: rooms.length - totalMembers,
+        agreements: totalMembers,
+        totalUsers: users.length,
+        totalMembers,
+      });
+    };
 
     fetchAdminData();
     fetchStats();
@@ -64,47 +65,92 @@ const AdminProfile = () => {
     return <div className="text-center text-red-500">Unauthorized: You must be an admin to view this page.</div>;
   }
 
+  // Data for charts
+  const roomData = [
+    { name: "Total Rooms", value: stats.totalRooms },
+    { name: "Available Rooms", value: stats.availableRooms },
+    { name: "Unavailable Rooms", value: stats.agreements },
+  ];
+
+  const userData = [
+    { name: "Total Users", value: stats.totalUsers },
+    { name: "Total Members", value: stats.totalMembers },
+  ];
+
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
+
   return (
-    <div className="p-4 flex flex-col items-center gap-6">
-        <Helmet><title>Admin Profile | EstateEase </title></Helmet>
-      {/* Admin Profile Card */}
-      <div className="card w-full sm:w-3/4 lg:w-1/2 bg-base-100 shadow-xl">
-        <figure className="px-10 pt-10">
-          <img src={user.photoURL} alt="Admin Avatar" className="rounded-full w-32 h-32 object-cover" />
-        </figure>
-        <div className="card-body items-center text-center">
-          <h2 className="card-title text-xl font-bold">{adminInfo.name}</h2>
-          <p className="text-sm text-gray-500">{adminInfo.email}</p>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <Helmet>
+        <title>Admin Profile | EstateEase</title>
+      </Helmet>
+
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+        <div className="flex items-center space-x-4">
+          <img src={user.photoURL} alt="Admin Avatar" className="w-12 h-12 rounded-full" />
+          <div>
+            <p className="text-lg font-semibold">{adminInfo.name}</p>
+            <p className="text-sm text-gray-500">{adminInfo.email}</p>
+          </div>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="stats w-full stats-vertical sm:stats-horizontal shadow mt-6">
-        <div className="stat">
-          <div className="stat-title">Total Rooms</div>
-          <div className="stat-value">{stats.totalRooms}</div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <p className="text-gray-500">Total Rooms</p>
+          <p className="text-2xl font-bold">{stats.totalRooms}</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <p className="text-gray-500">Available Rooms</p>
+          <p className="text-2xl font-bold">{stats.availableRooms}</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <p className="text-gray-500">Unavailable Rooms</p>
+          <p className="text-2xl font-bold">{stats.agreements}</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <p className="text-gray-500">Total Users</p>
+          <p className="text-2xl font-bold">{stats.totalUsers}</p>
+        </div>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Room Availability Chart */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Room Availability</h2>
+          <BarChart width={500} height={300} data={roomData}>
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="value" fill="#8884d8" />
+          </BarChart>
         </div>
 
-        <div className="stat">
-          <div className="stat-title">Available Rooms</div>
-          <div className="stat-value">
-            {stats.availableRooms > 0 ? stats.availableRooms : 0}
-          </div>
-        </div>
-
-        <div className="stat">
-          <div className="stat-title">Unavailable Rooms (Agreements)</div>
-          <div className="stat-value">{stats.agreements}</div>
-        </div>
-
-        <div className="stat">
-          <div className="stat-title">Total Users</div>
-          <div className="stat-value">{stats.totalUsers}</div>
-        </div>
-
-        <div className="stat">
-          <div className="stat-title">Total Members</div>
-          <div className="stat-value">{stats.totalMembers}</div>
+        {/* User Distribution Chart */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4">User Distribution</h2>
+          <PieChart width={500} height={300}>
+            <Pie
+              data={userData}
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              fill="#8884d8"
+              dataKey="value"
+              label
+            >
+              {userData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
         </div>
       </div>
     </div>

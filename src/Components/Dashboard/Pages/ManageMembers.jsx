@@ -57,7 +57,7 @@ const ManageMembers = () => {
     }
 
     return (
-        <div className="p-6 md:p-10">
+        <div className="p-6">
             <h2 className="text-2xl font-semibold">Manage Members</h2>
             <Helmet><title>Manage Members | EstateEase </title></Helmet>
             {members.length === 0 ? (

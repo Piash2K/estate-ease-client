@@ -7,7 +7,6 @@ import { Helmet } from "react-helmet";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 
-// Load Stripe outside of a component to prevent recreating the object on each render.
 const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK);
 
 const MakePayment = () => {
@@ -54,19 +53,39 @@ const MakePayment = () => {
       })
       .catch((error) => console.error("Error applying coupon:", error));
   };
-
-  // Month validation & Payment proceed
   const handlePayment = () => {
     if (!month) {
       alert("Month field is required!");
       return;
     }
-    navigate("/payment"); // Change this as per your navigation logic
+    navigate("/payment");
   };
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
   ];
+
+  const handlePaymentSuccess = () => {
+    const paymentDetails = {
+      userEmail: agreement.userEmail,
+      floorNo: agreement.floorNo,
+      blockName: agreement.blockName,
+      apartmentNo: agreement.apartmentNo,
+      originalRent: agreement.rent,
+      finalRent: finalRent,
+      discount: discount,
+      month: month,
+    };
+
+    axios.post('https://estate-ease-server.vercel.app/payments', paymentDetails)
+      .then((response) => {
+        alert("Payment recorded successfully!");
+      })
+      .catch((error) => {
+        console.error("Error saving payment info:", error);
+        alert("Failed to record payment.");
+      });
+  };
 
   if (!agreement) {
     return <p>Loading agreement details...</p>;
@@ -128,11 +147,14 @@ const MakePayment = () => {
           <input type="text" value={finalRent} readOnly className="w-full p-2 border rounded" />
         </div>
       </form>
-
-      {/* Conditional Rendering based on Month field validation */}
       {month ? (
         <Elements stripe={stripePromise}>
-          <CheckoutForm finalRent={finalRent} month={month} agreement={agreement} />
+          <CheckoutForm
+            finalRent={finalRent}
+            month={month}
+            agreement={agreement}
+            onPaymentSuccess={handlePaymentSuccess}
+          />
         </Elements>
       ) : (
         <p className="text-red-500">Please fill in the "Month" field to proceed with payment.</p>
