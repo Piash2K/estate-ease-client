@@ -45,7 +45,7 @@ const ReviewsList = () => {
                     >
                         {reviews.map((review) => (
                             <SwiperSlide key={review._id}>
-                                <div className="bg-white p-4 rounded-md shadow-md h-full flex flex-col justify-between">
+                                <div className=" p-4 rounded-md shadow-md h-full flex flex-col justify-between">
                                     <div className="flex items-center space-x-4">
                                         <img
                                             src={review.userImage}
@@ -54,7 +54,7 @@ const ReviewsList = () => {
                                         />
                                         <div>
                                             <h3 className="font-semibold">{review.userName}</h3>
-                                            <p className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</p>
+                                            <p className="text-sm ">{new Date(review.createdAt).toLocaleDateString()}</p>
                                         </div>
                                     </div>
                                     <div className="mt-2 flex-grow">

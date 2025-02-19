@@ -108,10 +108,10 @@ const Apartment = () => {
     return (
         <div className="w-9/12 mx-auto py-8">
             <Helmet><title>Apartment | EstateEase </title></Helmet>
-            <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Apartments</h1>
+            <h1 className="text-4xl font-bold mb-6 text-center ">Apartments</h1>
             <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="flex items-center">
-                    <label className="mr-2 text-lg font-semibold text-gray-700">Min Rent:</label>
+                    <label className="mr-2 text-lg font-semibold ">Min Rent:</label>
                     <input 
                         type="number" 
                         value={minRent} 
@@ -121,7 +121,7 @@ const Apartment = () => {
                     />
                 </div>
                 <div className="flex items-center">
-                    <label className="mr-2 text-lg font-semibold text-gray-700">Max Rent:</label>
+                    <label className="mr-2 text-lg font-semibold ">Max Rent:</label>
                     <input 
                         type="number" 
                         value={maxRent} 

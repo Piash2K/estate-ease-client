@@ -76,58 +76,53 @@ const Home = () => {
                 {/* About the Building */}
                 <section className="w-full py-20">
                     <div>
-                        <h2 className="text-6xl font-bold text-gray-900 text-center mb-8">
+                        <h2 className="text-6xl font-bold  text-center mb-8">
                             About the Building
                         </h2>
-                        <p className="text-xl font-medium text-gray-700 leading-relaxed max-w-2xl mx-auto text-center">
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
                             A premium living experience blending modern luxury with cutting-edge design. Our building offers residents top-tier amenities
                             and spacious, thoughtfully crafted apartments, designed to maximize comfort and style.
                         </p>
-                        <p className="mt-8 text-2xl font-light italic text-gray-600 text-center max-w-2xl mx-auto">
+                        <p className="mt-8 text-2xl font-light italic text-center max-w-2xl mx-auto">
                             “Where modern design meets timeless comfort.”
                         </p>
                         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {/* 24/7 Security */}
-                            <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                                <FaShieldAlt className="text-5xl text-[#0E9F9F] mb-6" /> {/* Teal */}
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">24/7 Security</h3>
-                                <p className="text-lg text-gray-600">
+                            <div className=" p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                                <FaShieldAlt className="text-5xl text-[#0E9F9F] mb-6" />
+                                <h3 className="text-2xl font-bold mb-4">24/7 Security</h3>
+                                <p className="text-lg">
                                     State-of-the-art surveillance and security systems to ensure your safety at all times.
                                 </p>
                             </div>
-
-                            {/* Fitness Center */}
-                            <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
                                 <FaDumbbell className="text-5xl text-[#0E9F9F] mb-6" /> {/* Teal */}
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">Fitness Center</h3>
-                                <p className="text-lg text-gray-600">
+                                <h3 className="text-2xl font-bold mb-4">Fitness Center</h3>
+                                <p className="text-lg ">
                                     A fully-equipped modern gym to help you stay fit and healthy.
                                 </p>
                             </div>
 
                             {/* Rooftop Lounge */}
-                            <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                                <FaUmbrellaBeach className="text-5xl text-[#0E9F9F] mb-6" /> {/* Teal */}
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">Rooftop Lounge</h3>
-                                <p className="text-lg text-gray-600">
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                                <FaUmbrellaBeach className="text-5xl text-[#0E9F9F] mb-6" />
+                                <h3 className="text-2xl font-bold  mb-4">Rooftop Lounge</h3>
+                                <p className="text-lg ">
                                     A serene rooftop space to relax and enjoy stunning views of the city.
                                 </p>
                             </div>
-
-                            {/* High-Speed Internet */}
-                            <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                                <FaWifi className="text-5xl text-[#0E9F9F] mb-6" /> {/* Teal */}
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">High-Speed Internet</h3>
-                                <p className="text-lg text-gray-600">
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                                <FaWifi className="text-5xl text-[#0E9F9F] mb-6" /> 
+                                <h3 className="text-2xl font-bold  mb-4">High-Speed Internet</h3>
+                                <p className="text-lg ">
                                     Seamless connectivity with high-speed Wi-Fi and smart home integration.
                                 </p>
                             </div>
 
                             {/* Spacious Parking */}
-                            <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
                                 <FaParking className="text-5xl text-[#0E9F9F] mb-6" /> {/* Teal */}
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">Spacious Parking</h3>
-                                <p className="text-lg text-gray-600">
+                                <h3 className="text-2xl font-bold mb-4">Spacious Parking</h3>
+                                <p className="text-lg">
                                     Ample parking space for residents and guests, ensuring convenience.
                                 </p>
                             </div>
@@ -136,21 +131,18 @@ const Home = () => {
                 </section>
                 {/* Coupons Section */}
                 <section className="w-full py-20">
-                    {/* Heading */}
-                    <h2 className="text-4xl font-bold text-gray-900 text-center mb-12">
+                    <h2 className="text-4xl font-bold text-center mb-12">
                         Exclusive Coupons
                     </h2>
-
-                    {/* Coupons Grid */}
                     <div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                             {coupons.map((coupon, index) => (
                                 <div
                                     key={index}
-                                    className="relative bg-white p-8 rounded-xl border border-gray-100 hover:border-gray-200 transition-all duration-300 group"
+                                    className="relative  p-8 rounded-xl border border-gray-100 hover:border-gray-200 transition-all duration-300 group"
                                 >
                                     {/* Coupon Code */}
-                                    <div className="absolute top-4 right-4 bg-[#0E9F9F] text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                    <div className="absolute top-4 right-4 bg-[#0E9F9F] px-3 py-1 rounded-full text-sm font-semibold">
                                         {coupon.code}
                                     </div>
 
@@ -160,13 +152,13 @@ const Home = () => {
                                     </p>
 
                                     {/* Description */}
-                                    <p className="text-lg text-gray-600 mb-6">
+                                    <p className="text-lg mb-6">
                                         {coupon.description}
                                     </p>
 
                                     {/* CTA Button */}
                                     <button
-                                        className="w-full bg-[#0E9F9F] text-white py-3 rounded-lg font-semibold hover:bg-[#14B8B8] transition-colors duration-300"
+                                        className="w-full bg-[#0E9F9F]  py-3 rounded-lg font-semibold hover:bg-[#14B8B8] transition-colors duration-300"
                                         onClick={() => {
                                             navigator.clipboard.writeText(coupon.code); // Copy coupon code
                                             Swal.fire({
@@ -189,13 +181,13 @@ const Home = () => {
 
                 {/* Announcements Section */}
                 <section >
-                    <h2 className="text-3xl font-semibold text-gray-800 text-center">Latest Announcements</h2>
+                    <h2 className="text-3xl font-semibold  text-center">Latest Announcements</h2>
                     <div className="mt-8">
                         {announcements.map((announcement, index) => (
-                            <div key={index} className="bg-white p-8 rounded-xl shadow-lg mb-8">
-                                <h3 className="text-2xl font-semibold text-gray-800">{announcement.title}</h3>
-                                <p className="text-gray-600 mt-4">{announcement.description}</p>
-                                <p className="text-gray-500 text-sm mt-2">Posted on: {new Date(announcement.createdAt).toLocaleDateString()}</p>
+                            <div key={index} className=" p-8 rounded-xl shadow-lg mb-8">
+                                <h3 className="text-2xl font-semibold ">{announcement.title}</h3>
+                                <p className=" mt-4">{announcement.description}</p>
+                                <p className="text-sm mt-2">Posted on: {new Date(announcement.createdAt).toLocaleDateString()}</p>
                             </div>
                         ))}
                     </div>
@@ -203,7 +195,7 @@ const Home = () => {
                 {/* Dynamic Image Gallery Section */}
                 <section className="w-full py-20">
                     <div>
-                        <h2 className="text-4xl font-bold text-gray-900 text-center mb-12">
+                        <h2 className="text-4xl font-bold text-center mb-12">
                             Explore Our Spaces
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -274,7 +266,7 @@ const Home = () => {
                 {/* Apartment Location Map Section */}
                 <section className="relative ">
                     <div>
-                        <h2 className="text-3xl font-semibold text-gray-800 text-center">
+                        <h2 className="text-3xl font-semibold text-center">
                             Apartment Location
                         </h2>
                         <div className="mt-8 relative z-0">
@@ -303,46 +295,46 @@ const Home = () => {
                     </div>
                 </section>
                 <section className="w-full py-20">
-                    <h2 className="text-4xl font-bold text-gray-900 text-center mb-8">
+                    <h2 className="text-4xl font-bold  text-center mb-8">
                         Community Guidelines
                     </h2>
-                    <p className="text-xl font-medium text-gray-700 leading-relaxed max-w-2xl mx-auto text-center">
+                    <p className="text-xl font-medium  leading-relaxed max-w-2xl mx-auto text-center">
                         To ensure a safe and pleasant living experience for everyone, we kindly ask all residents and guests to adhere to the following community guidelines:
                     </p>
                     <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Respect for All</h3>
-                            <p className="text-lg text-gray-600">
+                        <div className=" p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold  mb-4">Respect for All</h3>
+                            <p className="text-lg">
                                 Treat all residents and guests with respect and kindness, fostering a positive and inclusive environment.
                             </p>
                         </div>
-                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Noise Consideration</h3>
-                            <p className="text-lg text-gray-600">
+                        <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold  mb-4">Noise Consideration</h3>
+                            <p className="text-lg ">
                                 Maintain a reasonable noise level to ensure that everyone can enjoy their living spaces in peace and comfort.
                             </p>
                         </div>
-                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Waste Management</h3>
-                            <p className="text-lg text-gray-600">
+                        <div className=" p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold  mb-4">Waste Management</h3>
+                            <p className="text-lg ">
                                 Dispose of waste properly and recycle when possible to maintain a clean and sustainable environment.
                             </p>
                         </div>
-                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Pets Policy</h3>
-                            <p className="text-lg text-gray-600">
+                        <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold mb-4">Pets Policy</h3>
+                            <p className="text-lg ">
                                 Ensure that pets are kept under control and are not disruptive to other residents or common areas.
                             </p>
                         </div>
-                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Safety First</h3>
-                            <p className="text-lg text-gray-600">
+                        <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold  mb-4">Safety First</h3>
+                            <p className="text-lg ">
                                 Follow all building safety protocols, including fire drills, emergency exits, and reporting any hazards immediately.
                             </p>
                         </div>
-                        <div className="bg-white p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Respect Common Areas</h3>
-                            <p className="text-lg text-gray-600">
+                        <div className=" p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                            <h3 className="text-2xl font-bold  mb-4">Respect Common Areas</h3>
+                            <p className="text-lg ">
                                 Take care of common spaces and be considerate when using shared amenities, leaving them clean and in good condition.
                             </p>
                         </div>

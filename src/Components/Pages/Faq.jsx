@@ -23,15 +23,15 @@ const faqs = [
 const Faq = () => {
   return (
     <section className="w-9/12 mx-auto py-12">
-      <h2 className="text-4xl font-bold text-center mb-10 text-gray-900 dark:text-white">Frequently Asked Questions</h2>
+      <h2 className="text-4xl font-bold text-center mb-10 ">Frequently Asked Questions</h2>
       <div className="space-y-4">
         {faqs.map((faq, index) => (
           <div key={index} className="collapse collapse-arrow bg-base-200 border border-gray-300 dark:border-gray-700 rounded-xl shadow-lg">
             <input type="radio" name="faq-accordion" defaultChecked={index === 0} />
-            <div className="collapse-title text-xl font-medium px-6 py-4 cursor-pointer text-gray-800 dark:text-gray-200">
+            <div className="collapse-title text-xl font-medium px-6 py-4 cursor-pointer ">
               {faq.question}
             </div>
-            <div className="collapse-content px-6 pb-4 text-gray-600 dark:text-gray-300">
+            <div className="collapse-content px-6 pb-4">
               <p>{faq.answer}</p>
             </div>
           </div>

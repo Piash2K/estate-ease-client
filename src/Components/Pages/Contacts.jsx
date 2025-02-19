@@ -40,20 +40,20 @@ const Contacts = () => {
 
   return (
     <div className="w-9/12 mx-auto">
-      <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-center text-gray-800 mb-8">
+      <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-center  mb-8">
         Get in Touch
       </h2>
 
-      <p className="text-lg sm:text-xl lg:text-2xl text-center text-gray-700 mb-10 w-8/12 mx-auto">
+      <p className="text-lg sm:text-xl lg:text-2xl text-center  mb-10 w-8/12 mx-auto">
         Feel free to reach out for collaborations, discussions, or just to say hello!
       </p>
 
       <div className="flex flex-col sm:flex-row justify-center gap-8">
         {/* Contact Form Section */}
-        <div className="bg-white p-6 sm:p-10 rounded-lg shadow-xl w-full max-w-md">
+        <div className="p-6 sm:p-10 rounded-lg shadow-xl w-full max-w-md">
           <form onSubmit={handleSubmit}>
             <div className="mb-5 relative">
-              <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
+              <label htmlFor="name" className="block font-medium mb-2">
                 Name
               </label>
               <FaUser className="absolute bottom-4 left-4 transform -translate-y-1/2 text-teal-600" />
@@ -69,7 +69,7 @@ const Contacts = () => {
               />
             </div>
             <div className="mb-5 relative">
-              <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+              <label htmlFor="email" className="block font-medium mb-2">
                 Email
               </label>
               <FaEnvelope className="absolute bottom-4 left-4 transform -translate-y-1/2 text-teal-600" />
@@ -85,7 +85,7 @@ const Contacts = () => {
               />
             </div>
             <div className="mb-5 relative">
-              <label htmlFor="message" className="block text-gray-700 font-medium mb-2">
+              <label htmlFor="message" className="block  font-medium mb-2">
                 Message
               </label>
               <FaPaperPlane className="absolute bottom-36 left-4 transform -translate-y-1/2 text-teal-600" />
@@ -110,12 +110,12 @@ const Contacts = () => {
           </form>
 
           {/* Status message */}
-          {status && <p className="mt-4 text-center text-gray-700">{status}</p>}
+          {status && <p className="mt-4 text-center">{status}</p>}
         </div>
 
         {/* Contact Info Section */}
-        <div className="bg-white p-6 sm:p-10 rounded-lg shadow-xl w-full max-w-md">
-          <h3 className="text-xl sm:text-2xl font-semibold mb-6 text-center text-gray-800">
+        <div className="p-6 sm:p-10 rounded-lg shadow-xl w-full max-w-md">
+          <h3 className="text-xl sm:text-2xl font-semibold mb-6 text-center ">
             Contact Info
           </h3>
           <div className="flex flex-col space-y-6">
