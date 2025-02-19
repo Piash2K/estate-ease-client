@@ -132,7 +132,7 @@ const Apartment = () => {
     return (
         <div className="w-11/12 md:w-9/12 mx-auto py-8">
             <Helmet><title>Apartment | EstateEase </title></Helmet>
-            <h1 className="text-4xl font-bold mb-6 text-center ">Apartments</h1>
+            <h1 className="text-4xl font-bold py-8 mb-6 text-center ">Apartments</h1>
             
             {/* Sorting controls */}
             <div className="mb-6 flex justify-between">
