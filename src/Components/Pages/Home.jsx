@@ -72,7 +72,7 @@ const Home = () => {
                     </Carousel>
                 </div>
             </section>
-            <div className='w-9/12 mx-auto'>
+            <div className='w-11/12 md:w-9/12 mx-auto'>
                 {/* About the Building */}
                 <section className="w-full py-20">
                     <div>

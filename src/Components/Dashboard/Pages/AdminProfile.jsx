@@ -86,16 +86,18 @@ const AdminProfile = () => {
       </Helmet>
 
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-        <div className="flex items-center space-x-4">
-          <img src={user.photoURL} alt="Admin Avatar" className="w-12 h-12 rounded-full" />
-          <div>
-            <p className="text-lg font-semibold">{adminInfo.name}</p>
-            <p className="text-sm text-gray-500">{adminInfo.email}</p>
-          </div>
-        </div>
-      </div>
+      {/* Header */}
+<div className="flex justify-between items-center mb-8 flex-col sm:flex-row">
+  <h1 className="text-3xl font-bold text-gray-800 mb-4 sm:mb-0">Admin Dashboard</h1>
+  <div className="flex items-center sm:space-x-4">
+    <img src={user.photoURL} alt="Admin Avatar" className="w-12 h-12 rounded-full" />
+    <div className="flex flex-col sm:flex-row">
+      <p className="text-lg font-semibold text-gray-800 truncate max-w-[200px]">{adminInfo.name}</p>
+      <p className="text-sm text-gray-500">{adminInfo.email}</p>
+    </div>
+  </div>
+</div>
+
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -118,39 +120,43 @@ const AdminProfile = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Room Availability Chart */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Room Availability</h2>
-          <BarChart width={500} height={300} data={roomData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" fill="#8884d8" />
-          </BarChart>
+          <div className="overflow-x-auto">
+            <BarChart width={300} height={250} data={roomData} className="w-full sm:w-[450px] lg:w-[500px]">
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" fill="#8884d8" />
+            </BarChart>
+          </div>
         </div>
 
         {/* User Distribution Chart */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">User Distribution</h2>
-          <PieChart width={500} height={300}>
-            <Pie
-              data={userData}
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              fill="#8884d8"
-              dataKey="value"
-              label
-            >
-              {userData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
+          <div className="overflow-x-auto">
+            <PieChart width={300} height={250} className="w-full sm:w-[450px] lg:w-[500px]">
+              <Pie
+                data={userData}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                fill="#8884d8"
+                dataKey="value"
+                label
+              >
+                {userData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </div>
         </div>
       </div>
     </div>

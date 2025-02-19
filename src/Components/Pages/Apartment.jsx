@@ -11,6 +11,7 @@ const Apartment = () => {
     const [minRent, setMinRent] = useState('');
     const [maxRent, setMaxRent] = useState('');
     const [filteredApartments, setFilteredApartments] = useState([]);
+    const [sortCriteria, setSortCriteria] = useState(''); // Added state for sorting
     const { user } = useContext(AuthContext);
     const [userRole, setUserRole] = useState(null);
 
@@ -37,6 +38,7 @@ const Apartment = () => {
                 });
         }
     }, [user]);
+
     const indexOfLastApartment = currentPage * apartmentsPerPage;
     const indexOfFirstApartment = indexOfLastApartment - apartmentsPerPage;
     const currentApartments = filteredApartments.slice(indexOfFirstApartment, indexOfLastApartment);
@@ -95,10 +97,32 @@ const Apartment = () => {
             const isMaxRentValid = maxRent ? rent <= maxRent : true;
             return isMinRentValid && isMaxRentValid;
         });
-        
+
         setFilteredApartments(filtered);
         setCurrentPage(1);
     };
+
+    // Handle sorting
+    const handleSort = (criteria) => {
+        setSortCriteria(criteria);
+
+        const sorted = [...filteredApartments].sort((a, b) => {
+            if (criteria === 'rentAsc') {
+                return a.rent - b.rent;
+            } else if (criteria === 'rentDesc') {
+                return b.rent - a.rent;
+            } else if (criteria === 'apartmentNoAsc') {
+                return a.apartmentNo - b.apartmentNo;
+            } else if (criteria === 'apartmentNoDesc') {
+                return b.apartmentNo - a.apartmentNo;
+            } else {
+                return 0; // No sorting
+            }
+        });
+
+        setFilteredApartments(sorted);
+    };
+
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -106,10 +130,27 @@ const Apartment = () => {
     const totalPages = Math.ceil(filteredApartments.length / apartmentsPerPage);
 
     return (
-        <div className="w-9/12 mx-auto py-8">
+        <div className="w-11/12 md:w-9/12 mx-auto py-8">
             <Helmet><title>Apartment | EstateEase </title></Helmet>
             <h1 className="text-4xl font-bold mb-6 text-center ">Apartments</h1>
-            <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            {/* Sorting controls */}
+            <div className="mb-6 flex justify-between">
+                <div className="flex items-center">
+                    <label className="mr-2 text-lg font-semibold">Sort by:</label>
+                    <select
+                        value={sortCriteria}
+                        onChange={(e) => handleSort(e.target.value)}
+                        className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="">Select</option>
+                        <option value="rentAsc">Rent: Low to High</option>
+                        <option value="rentDesc">Rent: High to Low</option>
+                        <option value="apartmentNoAsc">Apartment No: Ascending</option>
+                        <option value="apartmentNoDesc">Apartment No: Descending</option>
+                    </select>
+                </div>
+
                 <div className="flex items-center">
                     <label className="mr-2 text-lg font-semibold ">Min Rent:</label>
                     <input 
@@ -140,7 +181,7 @@ const Apartment = () => {
             {currentApartments.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {currentApartments.map((apt, index) => (
-                        <div key={index} className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow transform hover:scale-105 border border-gray-100">
+                        <div key={index} className=" p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow transform hover:scale-105 border border-gray-100">
                             <img 
                                 src={apt.image} 
                                 alt={`Apartment ${apt.apartmentNo}`} 
@@ -148,8 +189,8 @@ const Apartment = () => {
                             />
                             <div className="mt-4">
                                 <h3 className="text-xl font-semibold text-gray-800">{apt.apartmentNo}</h3>
-                                <p className="text-sm text-gray-600">Floor: {apt.floorNo}</p>
-                                <p className="text-sm text-gray-600">Block: {apt.blockName}</p>
+                                <p className="text-sm ">Floor: {apt.floorNo}</p>
+                                <p className="text-sm ">Block: {apt.blockName}</p>
                                 <p className="text-lg font-semibold text-teal-600 mt-2">Rent: ${apt.rent}</p>
                                 <button
                                     className="mt-4 px-4 py-2 bg-teal-600 text-white font-bold rounded-md w-full hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -163,6 +204,7 @@ const Apartment = () => {
             ) : (
                 <p className="text-center text-gray-600">No apartments match the search criteria.</p>
             )}
+
             <div className="mt-6 flex justify-center">
                 <button 
                     onClick={() => handlePageChange(currentPage - 1)} 

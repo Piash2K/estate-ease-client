@@ -39,7 +39,7 @@ const Contacts = () => {
   };
 
   return (
-    <div className="w-9/12 mx-auto">
+    <div className="w-11/12 md:w-9/12 mx-auto">
       <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-center  mb-8">
         Get in Touch
       </h2>

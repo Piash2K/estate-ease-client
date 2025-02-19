@@ -22,7 +22,7 @@ const faqs = [
 
 const Faq = () => {
   return (
-    <section className="w-9/12 mx-auto py-12">
+    <section className="w-11/12 md:w-9/12 mx-auto py-12">
       <h2 className="text-4xl font-bold text-center mb-10 ">Frequently Asked Questions</h2>
       <div className="space-y-4">
         {faqs.map((faq, index) => (

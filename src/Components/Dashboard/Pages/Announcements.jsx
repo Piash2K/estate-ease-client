@@ -38,7 +38,7 @@ const Announcements = () => {
     return (
         <div className="p-6">
             <Helmet><title>Announcements | EstateEase</title></Helmet>
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">All Announcements</h2>
+            <h2 className="text-3xl font-bold mb-6 ">All Announcements</h2>
             {announcements.length === 0 ? (
                 <p className="text-center text-lg text-gray-600">No announcements available.</p>
             ) : (

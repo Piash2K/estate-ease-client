@@ -37,15 +37,23 @@ const ReviewsList = () => {
                 {reviews.length > 0 ? (
                     <Swiper
                         spaceBetween={30}
-                        slidesPerView={3}
+                        slidesPerView={1} // default for mobile
                         loop={true}
                         pagination={{ clickable: true }}
                         navigation
-                        autoplay={{ delay: 3000 }} 
+                        autoplay={{ delay: 3000 }}
+                        breakpoints={{
+                            640: {
+                                slidesPerView: 2, // for small devices
+                            },
+                            1024: {
+                                slidesPerView: 3, // for larger screens
+                            },
+                        }}
                     >
                         {reviews.map((review) => (
                             <SwiperSlide key={review._id}>
-                                <div className=" p-4 rounded-md shadow-md h-full flex flex-col justify-between">
+                                <div className="p-4 rounded-md shadow-md h-full flex flex-col justify-between">
                                     <div className="flex items-center space-x-4">
                                         <img
                                             src={review.userImage}
@@ -53,12 +61,12 @@ const ReviewsList = () => {
                                             className="w-12 h-12 rounded-full"
                                         />
                                         <div>
-                                            <h3 className="font-semibold">{review.userName}</h3>
-                                            <p className="text-sm ">{new Date(review.createdAt).toLocaleDateString()}</p>
+                                            <h3 className="font-semibold text-sm sm:text-base">{review.userName}</h3>
+                                            <p className="text-xs sm:text-sm">{new Date(review.createdAt).toLocaleDateString()}</p>
                                         </div>
                                     </div>
                                     <div className="mt-2 flex-grow">
-                                        <p>{review.comment}</p>
+                                        <p className="text-xs sm:text-sm">{review.comment}</p>
                                     </div>
                                     <div className="mt-2 flex items-center">
                                         <span className="text-yellow-500">
