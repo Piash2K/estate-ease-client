@@ -179,7 +179,7 @@ const Home = () => {
                 </section>
                 {/* Announcements Section */}
                 <section >
-                    <h2 className="text-4xl font-semibold  text-center">Latest Announcements</h2>
+                    <h2 className="text-4xl font-bold  text-center">Latest Announcements</h2>
                     <div className="mt-8">
                         {announcements.map((announcement, index) => (
                             <div key={index} className=" p-8 rounded-xl shadow-lg mb-8">
@@ -264,7 +264,7 @@ const Home = () => {
                 {/* Apartment Location Map Section */}
                 <section className="relative ">
                     <div>
-                        <h2 className="text-4xl font-semibold text-center">
+                        <h2 className="text-4xl font-bold  text-center">
                             Apartment Location
                         </h2>
                         <div className="mt-8 relative z-0">
