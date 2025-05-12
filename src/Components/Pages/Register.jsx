@@ -82,20 +82,17 @@ const Register = () => {
         setPasswordError('');
         createNewUser(email, password)
             .then((result) => {
-                setUser(result.user); // Set the user immediately after creating the account
+                setUser(result.user); 
                 updateUserProfile({
                     photoURL: photo,
                     displayName: name,
                 })
                     .then(() => {
-                        // Directly update the state to reflect the new displayName and photoURL
                         setUser((prevUser) => ({
                             ...prevUser,
                             displayName: name,
                             photoURL: photo,
                         }));
-
-                        // Send user data to the backend
                         sendUserDataToBackend(result.user.email, name, 'user');
 
                         Swal.fire({
@@ -123,9 +120,9 @@ const Register = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+        <div className="flex justify-center items-center min-h-screen  px-4">
             <Helmet><title>Register | EstateEase</title></Helmet>
-            <div className="w-full max-w-md bg-white border border-gray-200 shadow-lg rounded-lg p-6">
+            <div className="w-full max-w-md  border border-gray-200 shadow-lg rounded-lg p-6">
                 <h2 className="text-2xl lg:text-4xl font-bold text-center mb-6">Register Now!</h2>
                 <form onSubmit={handleRegister} className="space-y-4">
                     <div className="form-control">
@@ -186,12 +183,12 @@ const Register = () => {
                     </div>
                     {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                     <div className="form-control mt-6">
-                        <button className="btn btn-primary w-full">Register</button>
+                        <button className="btn bg-teal-600 w-full">Register</button>
                     </div>
                 </form>
                 <p className="mt-4 text-sm text-center">
                     Already have an account?{' '}
-                    <Link to="/login" className="text-indigo-600 font-medium">
+                    <Link to="/login" className="text-teal-600 font-medium">
                         Login
                     </Link>
                 </p>

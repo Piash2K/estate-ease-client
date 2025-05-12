@@ -24,7 +24,6 @@ import ErrorPage from './Components/Pages/ErrorPage';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import DashboardLayout from './Components/Dashboard/Layouts/DashboardLayout';
-import Dashboard from './Components/Dashboard/Pages/Dashboard';
 import Faq from './Components/Pages/Faq';
 import Contacts from './Components/Pages/Contacts';
 
@@ -66,10 +65,6 @@ const router = createBrowserRouter([
     element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
     errorElement: <ErrorPage></ErrorPage>,
     children: [
-      {
-        path: '/dashboard',
-        element: <Dashboard></Dashboard>
-      },
       {
         path: 'my-profile',
         element: <MyProfile></MyProfile>

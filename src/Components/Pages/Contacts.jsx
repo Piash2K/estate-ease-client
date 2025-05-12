@@ -1,6 +1,7 @@
 import { useState } from "react";
 import emailjs from "emailjs-com";
 import { FaEnvelope, FaPhone, FaWhatsapp, FaUser, FaPaperPlane } from "react-icons/fa";
+import { Bars } from 'react-loader-spinner'; // Import the Bars spinner
 
 const Contacts = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Contacts = () => {
   });
 
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false); // Added loading state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,6 +23,7 @@ const Contacts = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when the form is submitted
 
     const serviceID = "service_v5mcj52";
     const templateID = "template_883xjqt";
@@ -31,18 +34,33 @@ const Contacts = () => {
       .then((response) => {
         console.log("Email sent successfully:", response);
         setStatus("Your message has been sent successfully!");
+        setLoading(false); // Set loading to false after successful submission
       })
       .catch((error) => {
         console.error("Error sending email:", error);
         setStatus(`Something went wrong: ${error.text}`);
+        setLoading(false); // Set loading to false even if there's an error
       });
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Bars
+          height="80"
+          width="80"
+          color="#14B8A6"
+          ariaLabel="bars-loading"
+          wrapperStyle={{}}
+          visible={true}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="w-11/12 md:w-9/12 mx-auto py-16">
-      <h2 className="text-4xl  font-bold text-center  mb-8">
-        Get in Touch
-      </h2>
+      <h2 className="text-4xl  font-bold text-center  mb-8">Get in Touch</h2>
 
       <p className="text-lg sm:text-xl lg:text-2xl text-center  mb-10 w-8/12 mx-auto">
         Feel free to reach out for collaborations, discussions, or just to say hello!

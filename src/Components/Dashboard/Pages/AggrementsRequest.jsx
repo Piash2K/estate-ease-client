@@ -39,11 +39,17 @@ const AgreementRequests = () => {
             Swal.fire("Error", "Failed to update agreement status.", "error");
         },
     });
-
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <Bars height="80" width="80" color="#4fa94d" ariaLabel="bars-loading" visible={true} />
+                <Bars 
+                    height="80" 
+                    width="80" 
+                    color="#14B8A6" 
+                    ariaLabel="bars-loading" 
+                    wrapperStyle={{}}
+                    visible={true} 
+                />
             </div>
         );
     }

@@ -32,4 +32,4 @@ const useTheme = () => {
   return { theme, toggleTheme };
 };
 
-export default useTheme;
+export default useTheme;

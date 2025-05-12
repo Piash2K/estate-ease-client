@@ -1,7 +1,31 @@
 import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Footer = () => {
+    const handleSubscribe = () => {
+        const emailInput = document.getElementById('newsletter-email').value.trim();
+
+        // Regular expression for email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (emailPattern.test(emailInput)) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Subscribed Successfully!',
+                text: 'You have been added to our newsletter.',
+                confirmButtonColor: '#0E9F9F',
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Email!',
+                text: 'Please enter a valid email address.',
+                confirmButtonColor: '#FF4C4C',
+            });
+        }
+    };
+
     return (
         <footer className="py-16 mt-20 bg-[#1A1A1A]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,12 +65,14 @@ const Footer = () => {
                         </p>
 
                         <input
+                            id="newsletter-email"
                             type="email"
                             placeholder="Enter your email"
                             className="w-full bg-[#333333] text-sm text-[#A3A3A3] p-2 rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-[#0E9F9F]"
                         />
                         <button
-                            type="submit"
+                            type="button"
+                            onClick={handleSubscribe}
                             className="w-full bg-[#0E9F9F] hover:bg-[#14B8B8] text-white text-sm p-2 rounded-md transition-colors"
                         >
                             Subscribe
@@ -60,6 +86,7 @@ const Footer = () => {
                             <a
                                 href="https://facebook.com"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className="text-[#0E9F9F] hover:text-[#14B8B8] transition-colors"
                             >
                                 <FaFacebook className='text-4xl' />
@@ -67,6 +94,7 @@ const Footer = () => {
                             <a
                                 href="https://twitter.com"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className="text-[#0E9F9F] hover:text-[#14B8B8] transition-colors"
                             >
                                 <FaTwitter className='text-4xl' />
@@ -74,6 +102,7 @@ const Footer = () => {
                             <a
                                 href="https://instagram.com"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className="text-[#0E9F9F] hover:text-[#14B8B8] transition-colors"
                             >
                                 <FaInstagram className='text-4xl' />

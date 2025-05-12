@@ -129,7 +129,7 @@ const ManageCoupons = () => {
                     <Bars 
                         height="80" 
                         width="80" 
-                        color="#4fa94d" 
+                        color="#14B8A6" 
                         ariaLabel="bars-loading" 
                         wrapperStyle={{}}
                         visible={true} 
@@ -167,13 +167,13 @@ const ManageCoupons = () => {
                                 <td>{coupon.expiration}</td>
                                 <td>
                                     <button
-                                        className="btn btn-sm btn-warning mr-2"
+                                        className="btn btn-sm bg-teal-600 mr-2"
                                         onClick={() => handleUpdateClick(coupon)}
                                     >
                                         Update
                                     </button>
                                     <button
-                                        className="btn btn-sm btn-error"
+                                        className="btn btn-sm bg-red-500"
                                         onClick={() => handleDelete(coupon._id)}
                                     >
                                         Delete
@@ -195,7 +195,7 @@ const ManageCoupons = () => {
             {/* Add Coupon Button */}
             <div className="mt-4">
                 <button
-                    className="btn btn-primary"
+                    className="btn bg-[#14B8A6]"
                     onClick={() => {
                         setModalOpen(true);
                         setIsUpdate(false);

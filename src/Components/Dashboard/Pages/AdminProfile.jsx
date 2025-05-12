@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Helmet } from "react-helmet";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
+import { Bars } from "react-loader-spinner"; // Import the loader spinner
 
 const AdminProfile = () => {
   const { user } = useContext(AuthContext);
@@ -18,6 +19,7 @@ const AdminProfile = () => {
     totalUsers: 0,
     totalMembers: 0,
   });
+  const [loading, setLoading] = useState(true); // State for loading
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -55,11 +57,28 @@ const AdminProfile = () => {
         totalUsers: users.length,
         totalMembers,
       });
+
+      setLoading(false); // Data is loaded, set loading to false
     };
 
     fetchAdminData();
     fetchStats();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Bars 
+          height="80" 
+          width="80" 
+          color="#14B8A6" 
+          ariaLabel="bars-loading" 
+          wrapperStyle={{}}
+          visible={true} 
+        />
+      </div>
+    );
+  }
 
   if (!isAdmin) {
     return <div className="text-center text-red-500">Unauthorized: You must be an admin to view this page.</div>;
@@ -80,41 +99,39 @@ const AdminProfile = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6  min-h-screen">
       <Helmet>
         <title>Admin Profile | EstateEase</title>
       </Helmet>
 
       {/* Header */}
-      {/* Header */}
-<div className="flex justify-between items-center mb-8 flex-col sm:flex-row">
-  <h1 className="text-3xl font-bold text-gray-800 mb-4 sm:mb-0">Admin Dashboard</h1>
-  <div className="flex items-center sm:space-x-4">
-    <img src={user.photoURL} alt="Admin Avatar" className="w-12 h-12 rounded-full" />
-    <div className="flex flex-col sm:flex-row">
-      <p className="text-lg font-semibold text-gray-800 truncate max-w-[200px]">{adminInfo.name}</p>
-      <p className="text-sm text-gray-500">{adminInfo.email}</p>
-    </div>
-  </div>
-</div>
-
+      <div className="flex justify-between items-center mb-8 flex-col sm:flex-row">
+        <h1 className="text-3xl font-bold  mb-4 sm:mb-0">Admin Dashboard</h1>
+        <div className="flex items-center sm:space-x-4">
+          <img src={user.photoURL} alt="Admin Avatar" className="w-12 h-12 rounded-full" />
+          <div className="flex flex-col sm:flex-row">
+            <p className="text-lg font-semibold truncate max-w-[200px]">{user.name}</p>
+            <p className="text-sm">{user.email}</p>
+          </div>
+        </div>
+      </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <p className="text-gray-500">Total Rooms</p>
+        <div className="p-6 rounded-lg shadow-md">
+          <p >Total Rooms</p>
           <p className="text-2xl font-bold">{stats.totalRooms}</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <p className="text-gray-500">Available Rooms</p>
+        <div className="p-6 rounded-lg shadow-md">
+          <p >Available Rooms</p>
           <p className="text-2xl font-bold">{stats.availableRooms}</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <p className="text-gray-500">Unavailable Rooms</p>
+        <div className="p-6 rounded-lg shadow-md">
+          <p >Unavailable Rooms</p>
           <p className="text-2xl font-bold">{stats.agreements}</p>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <p className="text-gray-500">Total Users</p>
+        <div className=" p-6 rounded-lg shadow-md">
+          <p >Total Users</p>
           <p className="text-2xl font-bold">{stats.totalUsers}</p>
         </div>
       </div>
@@ -122,7 +139,7 @@ const AdminProfile = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Room Availability Chart */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className=" p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">Room Availability</h2>
           <div className="overflow-x-auto">
             <BarChart width={300} height={250} data={roomData} className="w-full sm:w-[450px] lg:w-[500px]">
@@ -136,7 +153,7 @@ const AdminProfile = () => {
         </div>
 
         {/* User Distribution Chart */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="p-6 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-4">User Distribution</h2>
           <div className="overflow-x-auto">
             <PieChart width={300} height={250} className="w-full sm:w-[450px] lg:w-[500px]">

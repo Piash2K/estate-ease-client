@@ -54,24 +54,26 @@ const Home = () => {
             <Helmet><title>Home | EstateEase </title></Helmet>
             {/* Fancy Banner */}
             <section className="relative">
-                <div className="carousel-wrapper">
-                    <Carousel
-                        selectedItem={currentImageIndex}
-                        autoPlay
-                        interval={5000}
-                        infiniteLoop
-                        showArrows={false}
-                        showStatus={false}
-                        showThumbs={false}
-                    >
-                        {bannerImages.map((image, index) => (
-                            <div key={index} className="w-full h-[300px] sm:h-[450px] lg:h-[600px]">
-                                <img src={image} alt={`banner-${index}`} className="w-full h-full object-cover" />
-                            </div>
-                        ))}
-                    </Carousel>
+    <div className="carousel-wrapper">
+        <Carousel
+            selectedItem={currentImageIndex}
+            autoPlay
+            interval={5000}
+            infiniteLoop
+            showArrows={false}
+            showStatus={false}
+            showThumbs={false}
+        >
+            {bannerImages.map((image, index) => (
+                <div key={index} className="w-full h-[300px] sm:h-[450px] lg:h-[760px]">
+                    <img src={image} alt={`banner-${index}`} className="w-full h-full object-fill" />
                 </div>
-            </section>
+            ))}
+        </Carousel>
+    </div>
+</section>
+
+
             <div className='w-11/12 md:w-9/12 mx-auto'>
                 {/* About the Building */}
                 <section className="w-full py-20">

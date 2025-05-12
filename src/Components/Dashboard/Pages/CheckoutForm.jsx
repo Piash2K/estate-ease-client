@@ -90,7 +90,7 @@ const CheckoutForm = ({ finalRent, month, agreement }) => {
   };
 
   return (
-    <div className="bg-white shadow-lg p-6 rounded-xl border border-gray-200">
+    <div className="shadow-lg p-6 rounded-xl border border-gray-200">
       <h3 className="text-2xl font-semibold text-gray-800 text-center mb-4">Payment Details</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="p-4 border border-gray-300 rounded-md">

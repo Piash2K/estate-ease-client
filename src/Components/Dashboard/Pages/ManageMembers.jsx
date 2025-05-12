@@ -47,7 +47,7 @@ const ManageMembers = () => {
                 <Bars 
                     height="80" 
                     width="80" 
-                    color="#4fa94d" 
+                    color="#14B8A6" 
                     ariaLabel="bars-loading" 
                     wrapperStyle={{}}
                     visible={true} 
@@ -66,7 +66,7 @@ const ManageMembers = () => {
                 <div className="overflow-x-auto mt-4">
                     <table className="table-auto w-full border-collapse">
                         <thead>
-                            <tr className="bg-gray-100">
+                            <tr >
                                 <th className="px-4 py-2 border-b text-left">User Name</th>
                                 <th className="px-4 py-2 border-b text-left">User Email</th>
                                 <th className="px-4 py-2 border-b text-left">Role</th>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { Bars } from "react-loader-spinner"; // Import the loader spinner
 
 const MakeAnnouncement = () => {
     const [title, setTitle] = useState('');
@@ -55,13 +56,28 @@ const MakeAnnouncement = () => {
             });
     };
 
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Bars
+                    height="80"
+                    width="80"
+                    color="#14B8A6"
+                    ariaLabel="bars-loading"
+                    wrapperStyle={{}}
+                    visible={true}
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="p-4">
             <Helmet><title>Make Announcement | EstateEase </title></Helmet>
             <h2 className="text-xl mb-4">Make Announcement</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label htmlFor="title" className="block text-gray-700">
+                    <label htmlFor="title" className="block ">
                         Title:
                     </label>
                     <input
@@ -76,7 +92,7 @@ const MakeAnnouncement = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="description" className="block text-gray-700">
+                    <label htmlFor="description" className="block">
                         Description:
                     </label>
                     <textarea
@@ -92,7 +108,7 @@ const MakeAnnouncement = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white p-2 rounded-md"
+                    className="w-full bg-teal-600 text-white p-2 rounded-md"
                     disabled={loading}
                 >
                     {loading ? "Creating..." : "Create Announcement"}
