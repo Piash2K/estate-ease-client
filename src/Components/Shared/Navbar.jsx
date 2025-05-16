@@ -58,7 +58,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="py-6 bg-[#1A1A1A] shadow-lg sticky top-0 z-50">
+    <nav className="bg-[#1A1A1A] shadow-lg sticky top-0 z-50">
       <div className="px-4 py-3 flex items-center justify-between">
         {/* Navbar Start */}
         <div className="flex items-center">
