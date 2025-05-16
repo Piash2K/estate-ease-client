@@ -1,66 +1,181 @@
-Building Management System: EstateEase
 
-Project Purpose
-Building Management System: EstateEase is a web-based platform designed to facilitate apartment rentals, manage tenants and members, handle payments, and enable admin-level functionalities. It ensures a smooth process for apartment agreements, payment history tracking, and coupon-based discounts.
+---
 
-Live Site URL: https://estate-ease-2k25.web.app/
+# 🏢 EstateEase – Building Management System
 
-Admin Credentials
+**Live Site**: [https://estate-ease-2k25.web.app/](https://estate-ease-2k25.web.app/)
 
-Username: admin@gmail.com
+EstateEase is a modern, web-based Building Management System designed to streamline apartment rentals, tenant/member management, payment handling, and administrative control. With built-in features like secure authentication, role-based dashboards, and Stripe-powered payments, EstateEase brings efficiency and ease to property management.
 
-Password: 1234aA@
+---
 
-Key Features
+## 📑 Table of Contents
 
-User Authentication: Email/password login and Google OAuth authentication.
+* [Features](#features)
+* [Tech Stack](#tech-stack)
+* [Installation](#installation)
+* [Environment Variables](#environment-variables)
+* [Usage](#usage)
+* [Admin Access](#admin-access)
+* [Examples](#examples)
+* [Troubleshooting](#troubleshooting)
+* [Contributors](#contributors)
+* [License](#license)
 
-Role-Based Dashboard: Separate dashboards for Users, Members, and Admins.
+---
 
-Apartment Listings: View available apartments with pagination and search functionality.
+## ✨ Features
 
-Agreement Requests: Users can submit requests to rent apartments.
+* 🔐 **User Authentication**
+  Supports secure login via email/password and Google OAuth.
 
-Payment System: Members can pay rent and apply coupons for discounts.
+* 👥 **Role-Based Dashboards**
+  Custom dashboards for **Users**, **Members**, and **Admins**.
 
-Announcements: Admins can make announcements visible to users.
+* 🏠 **Apartment Listings**
+  View available units with search and pagination.
 
-Coupon Management: Admins can create and modify discount coupons.
+* 📝 **Rental Agreements**
+  Users can request to rent apartments through an agreement process.
 
-Member Management: Admins can approve/reject agreements and manage members.
+* 💳 **Payment System**
+  Members can pay rent via Stripe and apply coupon codes for discounts.
 
-Environment Variables: Firebase configuration and MongoDB credentials are stored securely.
+* 📣 **Announcements**
+  Admins can post important notices viewable by all users.
 
-Fully Responsive: Works seamlessly on mobile, tablet, and desktop devices.
+* 🎟️ **Coupon Management**
+  Admins can create and manage discount codes.
 
-Tech Stack
+* 👤 **Member Management**
+  Admins can approve/reject tenant agreements and manage resident data.
 
-Frontend: React, Tailwind CSS, TanStack Query, Firebase Authentication
+* 🌐 **Responsive Design**
+  Fully optimized for mobile, tablet, and desktop screens.
 
-Backend: Node.js, Express.js, MongoDB
+---
 
-Database Management: MongoDB 
+## 🛠️ Tech Stack
 
-Payment Integration: Stripe API
+### Frontend
 
-Authentication: JWT for secure user authentication
+* **React**
+* **Tailwind CSS**
+* **TanStack React Query**
+* **Firebase Authentication**
 
-Notable NPM Packages Used
+### Backend
 
-react-router-dom: For routing functionalities
+* **Node.js**
+* **Express.js**
+* **MongoDB**
+* **JWT (JSON Web Tokens)**
 
-firebase: For authentication
+### Payments
 
-tanstack/react-query: For efficient data fetching
+* **Stripe API**
 
-axios: For API calls
+---
 
-react-toastify: For user-friendly notifications
+## 📦 Notable NPM Packages
 
-sweetalert2: For enhanced alert messages
+| Package                | Purpose                          |
+| ---------------------- | -------------------------------- |
+| `react-router-dom`     | Routing                          |
+| `firebase`             | Authentication                   |
+| `tanstack/react-query` | Data fetching & caching          |
+| `axios`                | HTTP requests                    |
+| `react-toastify`       | Toast notifications              |
+| `sweetalert2`          | Beautiful alerts & modals        |
+| `jsonwebtoken`         | Token-based authentication (JWT) |
+| `dotenv`               | Environment variable management  |
+| `stripe`               | Payment integration              |
 
-jsonwebtoken (JWT): For authentication security
+---
 
-dotenv: For environment variable management
+## 🧰 Installation
 
-stripe: For handling payments
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/your-username/estateease.git
+   cd estateease
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+> ⚠️ Make sure your backend server is running and connected to MongoDB before using the frontend.
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in both your frontend and backend directories with the following values:
+
+### Frontend `.env`:
+
+```
+VITE_API_URL=http://localhost:5000
+VITE_FIREBASE_API_KEY=your_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+...
+```
+
+### Backend `.env`:
+
+```
+PORT=5000
+MONGO_URI=your_mongo_uri
+JWT_SECRET=your_jwt_secret
+STRIPE_SECRET_KEY=your_stripe_key
+```
+
+---
+
+## 🚀 Usage
+
+Once installed and running:
+
+* Users can **browse apartments** and request to rent them.
+* Members can **pay rent**, **view history**, and **apply coupons**.
+* Admins have full control to **manage users, approve agreements**, and **post announcements**.
+
+---
+
+## 🔑 Admin Access
+
+> Use these credentials to access the admin dashboard:
+
+* **Username:** `admin@gmail.com`
+* **Password:** `1234aA@`
+
+---
+
+## 🧪 Examples
+
+* A **User** requests to rent an apartment → **Admin** approves → **User** becomes a **Member**.
+* A **Member** views an announcement posted by **Admin**.
+* A **Member** enters a coupon code at payment checkout and sees the discounted amount via **Stripe**.
+
+---
+
+## 🛠️ Troubleshooting
+
+| Issue                             | Solution                               |
+| --------------------------------- | -------------------------------------- |
+| Firebase errors                   | Check API keys and auth settings       |
+| Payments not working              | Ensure Stripe keys are valid           |
+| Backend not connecting to MongoDB | Verify `MONGO_URI` and database status |
+| CORS issues                       | Allow frontend origin in backend CORS  |
+
+---
