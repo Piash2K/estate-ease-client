@@ -1,6 +1,3 @@
-
----
-
 # 🏢 EstateEase – Building Management System
 
 **Live Site**: [https://estate-ease-2k25.web.app/](https://estate-ease-2k25.web.app/)
