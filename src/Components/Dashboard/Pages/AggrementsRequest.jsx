@@ -56,7 +56,7 @@ const AgreementRequests = () => {
     if (isError) return <div>Error loading agreements</div>;
 
     return (
-        <div className="p-4 w-full">
+        <div className="p-4 w-full ml-72">
             <Helmet>
                 <title>Agreement Requests | EstateEase</title>
             </Helmet>

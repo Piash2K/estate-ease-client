@@ -63,7 +63,7 @@ const ManageMembers = () => {
             {members.length === 0 ? (
                 <p>No members available.</p>
             ) : (
-                <div className="overflow-x-auto mt-4">
+                <div className="overflow-x-auto mt-4 ml-72">
                     <table className="table-auto w-full border-collapse">
                         <thead>
                             <tr >

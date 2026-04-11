@@ -22,7 +22,7 @@ const Announcements = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className="flex justify-center items-center h-screen ml-72">
                 <Bars 
                     height="80" 
                     width="80" 

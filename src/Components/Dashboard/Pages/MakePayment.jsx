@@ -97,7 +97,7 @@ const MakePayment = () => {
   }
 
   return (
-    <div className="p-6 border border-gray-200 rounded-lg shadow-lg ">
+    <div className="p-6 border border-gray-200 rounded-lg shadow-lg ml-72 ">
       <Helmet>
         <title>Make Payment | EstateEase</title>
       </Helmet>

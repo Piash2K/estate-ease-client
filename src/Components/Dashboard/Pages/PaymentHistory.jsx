@@ -35,7 +35,7 @@ const PaymentHistory = () => {
     }
 
     return (
-        <div className="min-h-screen  py-8 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen  py-8 px-4 sm:px-6 lg:px-8 ml-72">
             <Helmet>
                 <title>Payment History | EstateEase</title>
             </Helmet>

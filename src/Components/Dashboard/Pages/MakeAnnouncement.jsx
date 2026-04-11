@@ -72,7 +72,7 @@ const MakeAnnouncement = () => {
     }
 
     return (
-        <div className="p-4">
+        <div className="p-4 ml-72">
             <Helmet><title>Make Announcement | EstateEase </title></Helmet>
             <h2 className="text-xl mb-4">Make Announcement</h2>
             <form onSubmit={handleSubmit} className="space-y-4">

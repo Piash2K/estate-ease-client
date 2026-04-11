@@ -140,7 +140,7 @@ const ManageCoupons = () => {
     if (isError) return <div>Error loading coupons</div>;
 
     return (
-        <div className="p-4">
+        <div className="p-4 ml-72">
             <Helmet>
                 <title>Manage Coupons | EstateEase</title>
             </Helmet>
