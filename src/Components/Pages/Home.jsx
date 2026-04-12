@@ -453,6 +453,25 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
+                {/* Call To Action */}
+                <section className="w-full pb-20">
+                    <div className="rounded-2xl bg-[#1A1A1A] px-6 py-12 text-center text-white sm:px-10">
+                        <h2 className="text-4xl font-bold mb-4">
+                            Ready to Find Your Next Home?
+                        </h2>
+                        <p className="text-xl leading-relaxed max-w-2xl mx-auto text-[#D1D5DB]">
+                            Explore available apartments, review the booking flow, and contact us if you need help choosing the right unit.
+                        </p>
+                        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                            <Link to="/apartment" className="rounded-lg bg-[#0E9F9F] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#14B8B8]">
+                                Browse Apartments
+                            </Link>
+                            <Link to="/contacts" className="rounded-lg border border-white px-6 py-3 font-semibold text-white transition-colors hover:bg-white hover:text-[#1A1A1A]">
+                                Contact Support
+                            </Link>
+                        </div>
+                    </div>
+                </section>
                 <section>
                     <ReviewsList></ReviewsList>
                 </section>
