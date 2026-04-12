@@ -2,159 +2,90 @@ import { useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import { ThemeToggle } from "../DarkMode/ThemeToggle";
+import { FaChevronDown } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const navLinkClass = ({ isActive }) =>
+    isActive
+      ? "text-white bg-[#0E9F9F] px-3 py-2 rounded-lg font-semibold transition-colors"
+      : "text-[#A3A3A3] hover:text-white hover:bg-[#0E9F9F] px-3 py-2 rounded-lg transition-colors duration-300";
 
   const links = (
     <>
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          isActive
-            ? "text-white bg-[#0E9F9F] px-4 py-2 rounded-lg font-semibold shadow-md"
-            : "text-[#A3A3A3] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-lg transition-colors duration-300"
-        }
-      >
-        Home
-      </NavLink>
-      <NavLink
-        to="/appartment"
-        className={({ isActive }) =>
-          isActive
-            ? "text-white bg-[#0E9F9F] px-4 py-2 rounded-lg font-semibold shadow-md"
-            : "text-[#A3A3A3] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-lg transition-colors duration-300"
-        }
-      >
-        Apartment
-      </NavLink>
-      <NavLink
-        to="/contacts"
-        className={({ isActive }) =>
-          isActive
-            ? "text-white bg-[#0E9F9F] px-4 py-2 rounded-lg font-semibold shadow-md"
-            : "text-[#A3A3A3] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-lg transition-colors duration-300"
-        }
-      >
-        Contacts
-      </NavLink>
-      <NavLink
-        to="/FAQ"
-        className={({ isActive }) =>
-          isActive
-            ? "text-white bg-[#0E9F9F] px-4 py-2 rounded-lg font-semibold shadow-md"
-            : "text-[#A3A3A3] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-lg transition-colors duration-300"
-        }
-      >
-        FAQ
-      </NavLink>
+      <NavLink to="/" className={navLinkClass}>Home</NavLink>
       
+      <div className="relative group">
+        <button className="flex items-center text-[#A3A3A3] hover:text-white hover:bg-[#0E9F9F] px-3 py-2 rounded-lg transition-colors">
+          Apartments <FaChevronDown className="ml-1 text-xs" />
+        </button>
+        <div className="hidden group-hover:block absolute left-0 mt-0 w-48 bg-[#2A2A2A] rounded-lg shadow-xl py-2 z-50">
+          <NavLink to="/apartment" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition">All Apartments</NavLink>
+          <a href="/apartment" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition text-sm">By Budget</a>
+          <a href="/apartment" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition text-sm">By Location</a>
+        </div>
+      </div>
+
+      <NavLink to="/contacts" className={navLinkClass}>Contact</NavLink>
+      <NavLink to="/FAQ" className={navLinkClass}>FAQ</NavLink>
     </>
   );
 
   return (
-    <nav className="bg-[#1A1A1A] shadow-lg sticky top-0 z-50">
-      <div className="px-4 py-3 flex items-center justify-between">
-        {/* Navbar Start */}
-        <div className="flex items-center">
-          <div className="dropdown lg:hidden relative z-50">
-            <button
-              tabIndex={0}
-              className="text-[#A3A3A3] focus:outline-none"
-              aria-label="Menu"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
+    <nav className="bg-[#1A1A1A] shadow-lg sticky top-0 z-50 border-b border-[#0E9F9F]">
+      <div className="px-4 md:px-8 py-3 flex items-center justify-between">
+        {/* Logo/Brand */}
+        <Link to="/" className="flex items-center space-x-2">
+          <span className="text-2xl md:text-3xl font-bold tracking-wide hidden sm:block">
+            <span className="text-[#0E9F9F]">Estate</span><span className="text-white">Ease</span>
+          </span>
+          <span className="text-xl md:text-2xl font-bold text-[#0E9F9F] sm:hidden">EE</span>
+        </Link>
+
+        {/* Desktop Links */}
+        <div className="hidden lg:flex lg:space-x-2 items-center">{links}</div>
+
+        {/* Mobile Menu */}
+        <div className="lg:hidden">
+          <details className="dropdown dropdown-end">
+            <summary className="text-[#A3A3A3] hover:text-white cursor-pointer">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
-            </button>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-[#1A1A1A] rounded-lg shadow-lg mt-3 w-52 space-y-2 p-3 absolute top-full left-0 z-50"
-            >
+            </summary>
+            <ul className="dropdown-content bg-[#2A2A2A] rounded-lg shadow-xl p-3 space-y-2 w-52">
               {links}
             </ul>
-          </div>
-          <Link
-            to="/"
-            className="text-3xl font-bold hidden lg:block tracking-wide"
-          >
-            <span className="text-[#A3A3A3]">Estate</span>
-            <span className="text-white">Ease</span>
-          </Link>
+          </details>
         </div>
 
-        {/* Navbar Center */}
-        <div className="hidden lg:flex lg:space-x-6">{links}</div>
-
-        {/* Navbar End */}
-        <div className="flex items-center space-x-4 relative">
+        {/* User / Auth */}
+        <div className="flex items-center space-x-3">
           {user ? (
-            <div className="relative z-50">
+            <div className="relative">
               <img
                 src={user.photoURL}
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover border-2 border-[#0E9F9F] shadow-sm cursor-pointer"
-                onClick={handleDropdownToggle}
+                alt={user.displayName}
+                className="w-10 h-10 rounded-full border-2 border-[#0E9F9F] cursor-pointer hover:border-white transition"
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
               />
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 bg-[#1A1A1A] text-[#A3A3A3] rounded-lg shadow-lg w-48 z-50">
-                  <div className="p-4 border-b border-[#333333]">
-                    <p className="text-sm font-semibold">{user.displayName}</p>
-                  </div>
-                  <ul className="space-y-2 py-2">
-                    <li>
-                      <Link
-                        to="/dashboard"
-                        className="block px-4 py-2 hover:bg-[#333333] hover:text-white transition-colors"
-                      >
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li>
-                      <button
-                        onClick={logOut}
-                        className="w-full text-left px-4 py-2 hover:bg-[#333333] hover:text-white transition-colors"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
+              {isProfileDropdownOpen && (
+                <div className="absolute right-0 mt-2 bg-[#2A2A2A] rounded-lg shadow-xl w-48 py-2 z-50">
+                  <div className="px-4 py-2 font-semibold text-white border-b border-[#0E9F9F]">{user.displayName}</div>
+                  <Link to="/dashboard" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition">Dashboard</Link>
+                  <button onClick={logOut} className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition">Logout</button>
                 </div>
               )}
             </div>
           ) : (
-            <div className="space-x-3">
-              <Link
-                to="/login"
-                className="bg-[#0E9F9F] hover:bg-[#14B8B8] text-white px-4 py-2 rounded-lg shadow-md transition-all"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="bg-[#0E9F9F] hover:bg-[#14B8B8] text-white px-4 py-2 rounded-lg shadow-md transition-all"
-              >
-                Register
-              </Link>
+            <div className="flex space-x-2">
+              <Link to="/login" className="bg-[#0E9F9F] hover:bg-[#0a7f7f] text-white px-3 py-2 rounded-lg text-sm transition">Login</Link>
+              <Link to="/register" className="border border-[#0E9F9F] text-[#0E9F9F] hover:bg-[#0E9F9F] hover:text-white px-3 py-2 rounded-lg text-sm transition">Sign Up</Link>
             </div>
           )}
-          <ThemeToggle></ThemeToggle>
+          <ThemeToggle />
         </div>
       </div>
     </nav>
