@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // For carousel styling
+import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -415,6 +416,40 @@ const Home = () => {
                             <p className="text-lg ">
                                 Take care of common spaces and be considerate when using shared amenities, leaving them clean and in good condition.
                             </p>
+                        </div>
+                    </div>
+                </section>
+                {/* FAQ Preview */}
+                <section className="w-full pb-20">
+                    <div className="rounded-2xl border border-gray-100 p-8 sm:p-10">
+                        <h2 className="text-4xl font-bold text-center mb-4">
+                            Frequently Asked Questions
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            Quick answers to the most common questions about rent, maintenance, amenities, and moving in or out.
+                        </p>
+                        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+                            <div className="rounded-xl border border-gray-100 p-6">
+                                <h3 className="text-xl font-semibold mb-3">How do I pay my rent online?</h3>
+                                <p className="text-lg">Log in to your account and visit the payments section to complete your rent payment securely.</p>
+                            </div>
+                            <div className="rounded-xl border border-gray-100 p-6">
+                                <h3 className="text-xl font-semibold mb-3">What should I do for maintenance issues?</h3>
+                                <p className="text-lg">Use the support flow for general requests, and contact emergency support for urgent problems.</p>
+                            </div>
+                            <div className="rounded-xl border border-gray-100 p-6">
+                                <h3 className="text-xl font-semibold mb-3">Can I book amenities online?</h3>
+                                <p className="text-lg">Yes, common facilities like the gym or clubhouse can be booked through the platform.</p>
+                            </div>
+                            <div className="rounded-xl border border-gray-100 p-6">
+                                <h3 className="text-xl font-semibold mb-3">What is the move-in or move-out process?</h3>
+                                <p className="text-lg">Residents should notify management in advance and follow the inspection process.</p>
+                            </div>
+                        </div>
+                        <div className="mt-8 flex justify-center">
+                            <Link to="/FAQ" className="inline-flex items-center rounded-lg bg-[#0E9F9F] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#14B8B8]">
+                                View All FAQs
+                            </Link>
                         </div>
                     </div>
                 </section>
