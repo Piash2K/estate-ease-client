@@ -184,6 +184,35 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
+                {/* Trust Section */}
+                <section className="w-full pb-20">
+                    <div className="rounded-2xl border border-[#0E9F9F]/20 bg-[#0E9F9F]/5 px-6 py-10 sm:px-10">
+                        <h2 className="text-4xl font-bold text-center mb-4">
+                            Built for a Better Resident Experience
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            A clean booking flow, secure payment handling, and timely updates keep everything organized in one place.
+                        </p>
+                        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                            <div className="rounded-xl bg-white/70 p-6 text-center shadow-sm">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">24/7</p>
+                                <p className="mt-2 text-lg font-semibold">Building Security</p>
+                            </div>
+                            <div className="rounded-xl bg-white/70 p-6 text-center shadow-sm">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">100%</p>
+                                <p className="mt-2 text-lg font-semibold">Online Requests</p>
+                            </div>
+                            <div className="rounded-xl bg-white/70 p-6 text-center shadow-sm">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">Stripe</p>
+                                <p className="mt-2 text-lg font-semibold">Secure Checkout</p>
+                            </div>
+                            <div className="rounded-xl bg-white/70 p-6 text-center shadow-sm">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">Live</p>
+                                <p className="mt-2 text-lg font-semibold">Announcements</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 {/* Coupons Section */}
                 <section className="w-full pb-20">
                     <h2 className="text-4xl font-bold text-center mb-12">
