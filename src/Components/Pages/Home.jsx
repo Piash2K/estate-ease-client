@@ -11,7 +11,7 @@ import Banner1 from './../../assets/Banner1.jpeg'
 import Banner2 from './../../assets/Banner-2.jpg'
 import Banner3 from './../../assets/Banner3.jpeg'
 import { Helmet } from 'react-helmet';
-import { FaDumbbell, FaParking, FaShieldAlt, FaUmbrellaBeach, FaWifi } from 'react-icons/fa';
+import { FaDumbbell, FaParking, FaShieldAlt, FaUmbrellaBeach, FaWifi, FaBuilding, FaKey, FaCreditCard, FaBullhorn } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import ReviewsList from './ReviewsList';
 import { apiFetch } from '../../api/apiClient';
@@ -138,6 +138,47 @@ const Home = () => {
                                 <h3 className="text-2xl font-bold mb-4">Spacious Parking</h3>
                                 <p className="text-lg">
                                     Ample parking space for residents and guests, ensuring convenience.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {/* Platform Highlights */}
+                <section className="w-full py-20">
+                    <div>
+                        <h2 className="text-4xl font-bold text-center mb-8">
+                            Why Choose EstateEase
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            Everything is set up to make apartment browsing, booking, and living easier for residents, members, and administrators.
+                        </p>
+                        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                                <FaBuilding className="text-5xl text-[#0E9F9F] mb-6" />
+                                <h3 className="text-2xl font-bold mb-4">Apartment Listings</h3>
+                                <p className="text-lg">
+                                    Browse available apartments with a simple, responsive listing experience.
+                                </p>
+                            </div>
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                                <FaKey className="text-5xl text-[#0E9F9F] mb-6" />
+                                <h3 className="text-2xl font-bold mb-4">Rental Agreements</h3>
+                                <p className="text-lg">
+                                    Request apartments through a clear agreement flow handled inside the app.
+                                </p>
+                            </div>
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                                <FaCreditCard className="text-5xl text-[#0E9F9F] mb-6" />
+                                <h3 className="text-2xl font-bold mb-4">Secure Payments</h3>
+                                <p className="text-lg">
+                                    Pay rent with Stripe and apply coupons for a smoother checkout experience.
+                                </p>
+                            </div>
+                            <div className="p-8 rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-300">
+                                <FaBullhorn className="text-5xl text-[#0E9F9F] mb-6" />
+                                <h3 className="text-2xl font-bold mb-4">Announcements</h3>
+                                <p className="text-lg">
+                                    Stay updated with notices and important messages shared by the admin team.
                                 </p>
                             </div>
                         </div>
