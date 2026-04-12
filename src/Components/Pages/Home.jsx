@@ -3,6 +3,9 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // For carousel styling
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Icon } from 'leaflet';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import Banner1 from './../../assets/Banner1.jpeg'
 import Banner2 from './../../assets/Banner-2.jpg'
@@ -16,6 +19,15 @@ import { apiFetch } from '../../api/apiClient';
 const Home = () => {
     const [coupons, setCoupons] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
+    const apartmentLocationIcon = new Icon({
+        iconUrl: markerIcon,
+        iconRetinaUrl: markerIcon2x,
+        shadowUrl: markerShadow,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+    });
 
     const bannerImages = [
         Banner1,
@@ -282,11 +294,7 @@ const Home = () => {
                                 />
                                 <Marker
                                     position={[51.505, -0.09]}
-                                    icon={new Icon({
-                                        iconUrl: "path/to/marker-icon.png",
-                                        iconSize: [25, 41],
-                                        iconAnchor: [12, 41],
-                                    })}
+                                    icon={apartmentLocationIcon}
                                 >
                                     <Popup>Apartment Location</Popup>
                                 </Marker>
