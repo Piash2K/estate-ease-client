@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider';
 import { Helmet } from 'react-helmet';
 import { Bars } from 'react-loader-spinner';
+import { apiFetch } from '../../../api/apiClient';
 
 const PaymentHistory = () => {
     const { user } = useContext(AuthContext);
@@ -10,11 +11,11 @@ const PaymentHistory = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`https://estate-ease-server.vercel.app/payments/${user.email}`)
-                .then(response => response.json())
+            apiFetch(`/payments/${user.email}`)
                 .then(data => {
-                    setPayments(data);
+                    setPayments(Array.isArray(data) ? data : data.data || []);
                 })
+                .catch(error => console.error('Error fetching payments:', error))
                 .finally(() => setLoading(false));
         }
     }, [user?.email]);

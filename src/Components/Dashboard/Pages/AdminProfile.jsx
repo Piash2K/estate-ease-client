@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
 import { Bars } from "react-loader-spinner";
+import { apiFetch } from "../../../api/apiClient";
 
 const AdminProfile = () => {
   const { user } = useContext(AuthContext);
@@ -23,42 +24,46 @@ const AdminProfile = () => {
 
   useEffect(() => {
     const fetchAdminData = async () => {
-      const res = await fetch("https://estate-ease-server.vercel.app/users");
-      const users = await res.json();
-
-      const admin = users.find((user) => user.role === "admin");
-      if (admin) {
-        setIsAdmin(true);
-        setAdminInfo({
-          name: admin.displayName,
-          email: admin.email,
-          image: admin.image,
-        });
+      try {
+        const users = await apiFetch('/users');
+        const usersArray = Array.isArray(users) ? users : users.data || [];
+        const admin = usersArray.find((user) => user.role === "admin");
+        if (admin) {
+          setIsAdmin(true);
+          setAdminInfo({
+            name: admin.displayName,
+            email: admin.email,
+            image: admin.image,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
       }
     };
 
     const fetchStats = async () => {
-      const roomsRes = await fetch("https://estate-ease-server.vercel.app/apartments");
-      const rooms = await roomsRes.json();
-
-      const agreementsRes = await fetch("https://estate-ease-server.vercel.app/agreements");
-      const agreements = await agreementsRes.json();
-      console.log(agreements)
-
-      const usersRes = await fetch("https://estate-ease-server.vercel.app/users");
-      const users = await usersRes.json();
-
-      const totalMembers = users.filter((user) => user.role === "member").length;
-
-      setStats({
-        totalRooms: rooms.length,
-        availableRooms: rooms.length - totalMembers,
-        agreements: totalMembers,
-        totalUsers: users.length,
-        totalMembers,
-      });
-
-      setLoading(false); // Data is loaded, set loading to false
+      try {
+        const [roomsData, agreementsData, usersData] = await Promise.all([
+          apiFetch('/apartments'),
+          apiFetch('/agreements'),
+          apiFetch('/users')
+        ]);
+        const rooms = Array.isArray(roomsData) ? roomsData : roomsData.data || [];
+        const agreements = Array.isArray(agreementsData) ? agreementsData : agreementsData.data || [];
+        const users = Array.isArray(usersData) ? usersData : usersData.data || [];
+        const totalMembers = users.filter((user) => user.role === "member").length;
+        setStats({
+          totalRooms: rooms.length,
+          availableRooms: rooms.length - totalMembers,
+          agreements: totalMembers,
+          totalUsers: users.length,
+          totalMembers,
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+        setLoading(false);
+      }
     };
 
     fetchAdminData();

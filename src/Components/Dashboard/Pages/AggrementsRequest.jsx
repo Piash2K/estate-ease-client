@@ -2,19 +2,17 @@ import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bars } from "react-loader-spinner";
+import { apiFetch } from "../../../api/apiClient";
 
 const fetchAgreements = async () => {
-    const res = await fetch("https://estate-ease-server.vercel.app/agreements");
-    return res.json();
+    return apiFetch('/agreements');
 };
 
 const updateAgreement = async (agreementId, status, role = "") => {
-    const res = await fetch(`https://estate-ease-server.vercel.app/agreements/${agreementId}/update`, {
+    return apiFetch(`/agreements/${agreementId}/update`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status, role }),
+        body: JSON.stringify({ status, role })
     });
-    return res.json();
 };
 
 const AgreementRequests = () => {

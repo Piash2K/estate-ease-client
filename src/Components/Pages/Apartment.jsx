@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from "react";
-import axios from "axios";
 import { AuthContext } from "../Provider/AuthProvider";
 import { Helmet } from "react-helmet";
 import Swal from 'sweetalert2';
-import { Bars } from 'react-loader-spinner'; // Add the Bars spinner import
+import { Bars } from 'react-loader-spinner';
+import { apiFetch } from '../../api/apiClient';
 
 const Apartment = () => {
     const [apartments, setApartments] = useState([]);
@@ -18,28 +18,24 @@ const Apartment = () => {
     const [loading, setLoading] = useState(true); // Added loading state
 
     useEffect(() => {
-        axios.get('https://estate-ease-server.vercel.app/apartments')
-            .then(response => {
-                setApartments(response.data);
-                setFilteredApartments(response.data);
-                setLoading(false); // Set loading to false once data is fetched
-            })
-            .catch(error => {
-                console.error('Error fetching apartments data:', error);
-                setLoading(false); // Ensure loading is false even if there's an error
-            });
+        const fetchData = async () => {
+            try {
+                const data = await apiFetch('/apartments');
+                const apartmentsArray = Array.isArray(data) ? data : data.data || [];
+                setApartments(apartmentsArray);
+                setFilteredApartments(apartmentsArray);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching apartments:', error);
+                setLoading(false);
+            }
+        };
+        fetchData();
 
-        if (user) {
-            axios.get(`https://estate-ease-server.vercel.app/users?email=${user.email}`)
-                .then(response => {
-                    const userData = response.data.find(u => u.email === user.email);
-                    if (userData) {
-                        setUserRole(userData.role);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching user data:', error);
-                });
+        if (user?.email) {
+            apiFetch(`/users/${user.email}`).then(userData => {
+                if (userData) setUserRole(userData.role);
+            }).catch(error => console.error('Error fetching user:', error));
         }
     }, [user]);
 
@@ -75,22 +71,23 @@ const Apartment = () => {
             rent: apartment.rent
         };
 
-        axios.post('https://estate-ease-server.vercel.app/agreements', agreementData)
+        apiFetch('/agreements', {
+            method: 'POST',
+            body: JSON.stringify(agreementData)
+        })
             .then(response => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success!',
                     text: 'Agreement created successfully',
                 });
-                console.log(response.data);
             })
             .catch(error => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Each user is limited to one agreement. Please check your existing agreements.',
+                    text: error.message || 'Each user is limited to one agreement. Please check your existing agreements.',
                 });
-                console.error(error);
             });
     };
 

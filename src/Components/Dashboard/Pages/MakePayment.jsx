@@ -1,13 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
 import { Helmet } from "react-helmet";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import Swal from "sweetalert2";
-import { Bars } from "react-loader-spinner";  // Import the spinner
+import { Bars } from "react-loader-spinner";
+import { apiFetch } from "../../../api/apiClient";
 
 const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK);
 
@@ -16,30 +15,27 @@ const MakePayment = () => {
   const [agreement, setAgreement] = useState(null);
   const [month, setMonth] = useState("");
   const [coupon, setCoupon] = useState("");
-  const [discount, setDiscount] = useState(0);
   const [finalRent, setFinalRent] = useState(0);
-  const [loading, setLoading] = useState(true);  // Loading state
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user?.email) {
-      axios
-        .get(`https://estate-ease-server.vercel.app/agreements/${user.email}`)
-        .then((response) => {
-          if (response.data) {
-            setAgreement(response.data);
-            setFinalRent(response.data.rent);
+      apiFetch(`/agreements/${user.email}`)
+        .then(data => {
+          if (data) {
+            setAgreement(data);
+            setFinalRent(data.rent);
           }
-          setLoading(false);  // Set loading to false once the data is fetched
+          setLoading(false);
         })
-        .catch((error) => {
-          console.error("Error fetching agreement:", error);
-          setLoading(false);  // Set loading to false in case of error
+        .catch(error => {
+          console.error('Error fetching agreement:', error);
+          setLoading(false);
         });
     }
   }, [user?.email]);
 
-  const handleApplyCoupon = () => {
+  const handleApplyCoupon = async () => {
     if (!coupon) {
       Swal.fire({
         icon: "warning",
@@ -50,31 +46,36 @@ const MakePayment = () => {
       return;
     }
 
-    axios
-      .get(`https://estate-ease-server.vercel.app/coupons/${coupon}`)
-      .then((response) => {
-        if (response.data?.discount) {
-          const discountAmount = (agreement.rent * response.data.discount) / 100;
-          setDiscount(response.data.discount);
-          setFinalRent(agreement.rent - discountAmount);
-          Swal.fire({
-            icon: "success",
-            title: "Coupon Applied!",
-            text: `You got ${response.data.discount}% off!`,
-            confirmButtonColor: "#14B8A6",
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Invalid Coupon",
-            text: "This coupon is not valid.",
-            confirmButtonColor: "#EF4444",
-          });
-          setDiscount(0);
-          setFinalRent(agreement.rent);
-        }
-      })
-      .catch((error) => console.error("Error applying coupon:", error));
+    try {
+      const data = await apiFetch(`/coupons/${coupon}`);
+      if (data?.discount) {
+        const discountAmount = (agreement.rent * data.discount) / 100;
+        setFinalRent(agreement.rent - discountAmount);
+        Swal.fire({
+          icon: "success",
+          title: "Coupon Applied!",
+          text: `You got ${data.discount}% off!`,
+          confirmButtonColor: "#14B8A6",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Coupon",
+          text: "This coupon is not valid.",
+          confirmButtonColor: "#EF4444",
+        });
+        setFinalRent(agreement.rent);
+      }
+    } catch (error) {
+      console.error("Error applying coupon:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Coupon",
+        text: "This coupon is not valid.",
+        confirmButtonColor: "#EF4444",
+      });
+      setFinalRent(agreement.rent);
+    }
   };
 
   if (loading) {

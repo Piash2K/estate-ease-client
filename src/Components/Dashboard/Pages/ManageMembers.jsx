@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Bars } from 'react-loader-spinner'; // Importing the spinner
+import { Bars } from 'react-loader-spinner';
+import { apiFetch } from '../../../api/apiClient';
 
 const ManageMembers = () => {
     const [members, setMembers] = useState([]);
@@ -8,32 +9,26 @@ const ManageMembers = () => {
 
     // Fetch the list of members when the component mounts
     useEffect(() => {
-        fetch('https://estate-ease-server.vercel.app/users')
-            .then((response) => response.json())
-            .then((data) => {
-                setMembers(data);
+        apiFetch('/users')
+            .then(data => {
+                setMembers(Array.isArray(data) ? data : data.data || []);
             })
-            .catch((error) => console.error('Error fetching members:', error))
+            .catch(error => console.error('Error fetching members:', error))
             .finally(() => setLoading(false));
     }, []);
 
     const handleRemoveMember = (userId) => {
-        fetch(`https://estate-ease-server.vercel.app/users/${userId}`, {
+        apiFetch(`/users/${userId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ role: 'user' }),
+            body: JSON.stringify({ role: 'user' })
         })
-            .then((response) => {
-                if (response.ok) {
-                    setMembers((prevMembers) =>
-                        prevMembers.map((member) =>
-                            member._id === userId ? { ...member, role: 'user' } : member
-                        )
-                    );
-                    alert('Member role updated to user successfully!');
-                } else {
-                    alert('Failed to update member role.');
-                }
+            .then(() => {
+                setMembers((prevMembers) =>
+                    prevMembers.map((member) =>
+                        member._id === userId ? { ...member, role: 'user' } : member
+                    )
+                );
+                alert('Member role updated to user successfully!');
             })
             .catch((error) => {
                 console.error('Error updating member role:', error);

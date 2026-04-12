@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { apiFetch } from '../../api/apiClient';
 
 const ReviewsList = () => {
     const [reviews, setReviews] = useState([]);
@@ -12,18 +12,16 @@ const ReviewsList = () => {
         const fetchReviews = async () => {
             setLoading(true);
             setError(null);
-
-            axios.get('https://estate-ease-server.vercel.app/reviews')
-                .then(response => {
-                    setReviews(response.data);
-                    setLoading(false);
-                })
-                .catch(() => {
-                    setError('Failed to fetch reviews');
-                    setLoading(false);
-                });
+            try {
+                const data = await apiFetch('/reviews');
+                setReviews(Array.isArray(data) ? data : data.data || []);
+            } catch (err) {
+                setError('Failed to fetch reviews');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
         };
-
         fetchReviews();
     }, []);
 

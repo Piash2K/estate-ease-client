@@ -14,6 +14,7 @@ import {
   FaTags,
   FaHome,
 } from "react-icons/fa";
+import { apiFetch } from "../../../api/apiClient";
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
@@ -24,46 +25,27 @@ const DashboardLayout = () => {
 
   useEffect(() => {
     if (user?.email) {
-      fetch(`https://estate-ease-server.vercel.app/agreements/${user.email}`)
-        .then((response) => {
-          if (!response.ok) {
-            return null;
-          }
-          return response.json();
+      apiFetch(`/agreements/${user.email}`)
+        .then(data => {
+          if (data) setHasAgreement(true);
+          else setHasAgreement(false);
         })
-        .then((data) => {
-          if (data) {
-            setHasAgreement(true);
-          } else {
-            setHasAgreement(false);
-            // navigate("/dashboard");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching agreement:", error);
+        .catch(error => {
+          console.error('Error fetching agreement:', error);
+          setHasAgreement(false);
         });
 
-      fetch(`https://estate-ease-server.vercel.app/users/${user.email}`)
-        .then((response) => {
-          if (!response.ok) {
-            return null;
-          }
-          return response.json();
-        })
-        .then((data) => {
-          if (data) {
-            if (data.role === "admin") {
-              setIsAdmin(true);
-            } else if (data.role === "member") {
-              setIsMember(true);
-            }
+      apiFetch(`/users/${user.email}`)
+        .then(data => {
+          if (data?.role === 'admin' || data?.role === 'manager') {
+            setIsAdmin(true);
+          } else if (data?.role === 'member') {
+            setIsMember(true);
           }
         })
-        .catch((error) => {
-          console.error("Error fetching user role:", error);
-        });
+        .catch(error => console.error('Error fetching user:', error));
     }
-  }, [user?.email, navigate]);
+  }, [user?.email]);
 
   return (
     <div className="flex flex-col md:flex-row">

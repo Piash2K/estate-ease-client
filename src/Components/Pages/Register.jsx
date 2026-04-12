@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../Provider/AuthProvider';
 import Swal from 'sweetalert2';
 import { Helmet } from 'react-helmet';
+import { apiFetch } from '../../api/apiClient';
 
 const Register = () => {
     const { createNewUser, setUser, updateUserProfile } = useContext(AuthContext);
@@ -34,34 +35,10 @@ const Register = () => {
 
     // Function to send user data to the backend
     const sendUserDataToBackend = async (email, displayName, role) => {
-        const userInfo = {
-            email,
-            displayName,
-            lastLogin: new Date().toISOString(),
-            role
-        };
         try {
-            const response = await fetch('https://estate-ease-server.vercel.app/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userInfo),
-            });
-
-            if (response.insertedId) {
-                Swal.fire({
-                    title: 'User Info',
-                    text: 'User info updated/created successfully in the backend.',
-                    icon: 'success'
-                });
-            }
+            const userInfo = { email, displayName, lastLogin: new Date().toISOString(), role };
+            await apiFetch('/users', { method: 'POST', body: JSON.stringify(userInfo) });
         } catch (error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Error connecting to backend.',
-                icon: 'error'
-            });
             console.error(error);
         }
     };

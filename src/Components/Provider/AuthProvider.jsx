@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import auth from '../Firebase/firebase.config';
 import 'react-toastify/dist/ReactToastify.css';
 import { RotatingLines } from 'react-loader-spinner';
+import { apiFetch } from '../../api/apiClient';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
@@ -50,27 +51,11 @@ const AuthProvider = ({ children }) => {
 
     // Function to send user data to the backend using fetch
     const sendUserDataToBackend = async (email, displayName, role) => {
-        const userInfo = {
-            email,
-            displayName,
-            lastLogin: new Date().toISOString(),
-            role
-        };
-        console.log(userInfo)
         try {
-            const response = await fetch('https://estate-ease-server.vercel.app/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userInfo),
-            });
-
-            if (response.insertedId) {
-                toast.success('User info updated/created successfully in the backend.');
-            }
+            const userInfo = { email, displayName, lastLogin: new Date().toISOString(), role };
+            await apiFetch('/users', { method: 'POST', body: JSON.stringify(userInfo) });
+            toast.success('User info synced with backend.');
         } catch (error) {
-            toast.error('Error connecting to backend.');
             console.error(error);
         }
     };

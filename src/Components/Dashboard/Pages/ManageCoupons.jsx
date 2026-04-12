@@ -3,32 +3,22 @@ import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bars } from "react-loader-spinner";
+import { apiFetch } from "../../../api/apiClient";
 
-// Fetch all coupons
 const fetchCoupons = async () => {
-    const res = await fetch("https://estate-ease-server.vercel.app/coupons");
-    return res.json();
+    return apiFetch('/coupons');
 };
+
 const saveCoupon = async (couponData, isUpdate, couponId) => {
-    const endpoint = isUpdate
-        ? `https://estate-ease-server.vercel.app/coupons/${couponId}`
-        : "https://estate-ease-server.vercel.app/coupons";
-    const method = isUpdate ? "PUT" : "POST";
-
-    const res = await fetch(endpoint, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(couponData),
+    const endpoint = isUpdate ? `/coupons/${couponId}` : '/coupons';
+    return apiFetch(endpoint, {
+        method: isUpdate ? "PUT" : "POST",
+        body: JSON.stringify(couponData)
     });
-    return res.json();
 };
 
-// Delete coupon
 const deleteCoupon = async (id) => {
-    const res = await fetch(`https://estate-ease-server.vercel.app/coupons/${id}`, {
-        method: "DELETE",
-    });
-    return res.json();
+    return apiFetch(`/coupons/${id}`, { method: "DELETE" });
 };
 
 const ManageCoupons = () => {

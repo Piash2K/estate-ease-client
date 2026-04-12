@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet';
 import { FaDumbbell, FaParking, FaShieldAlt, FaUmbrellaBeach, FaWifi } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import ReviewsList from './ReviewsList';
+import { apiFetch } from '../../api/apiClient';
 
 const Home = () => {
     const [coupons, setCoupons] = useState([]);
@@ -24,20 +25,19 @@ const Home = () => {
 
     // Fetch data from backend
     useEffect(() => {
-        const fetchCoupons = async () => {
-            const res = await fetch('https://estate-ease-server.vercel.app/coupons');
-            const data = await res.json();
-            setCoupons(data);
+        const fetchData = async () => {
+            try {
+                const [couponsData, announcementsData] = await Promise.all([
+                    apiFetch('/coupons'),
+                    apiFetch('/announcements')
+                ]);
+                setCoupons(Array.isArray(couponsData) ? couponsData : couponsData.data || []);
+                setAnnouncements(Array.isArray(announcementsData) ? announcementsData : announcementsData.data || []);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
-
-        const fetchAnnouncements = async () => {
-            const res = await fetch('https://estate-ease-server.vercel.app/announcements');
-            const data = await res.json();
-            setAnnouncements(data);
-        };
-
-        fetchCoupons();
-        fetchAnnouncements();
+        fetchData();
     }, []);
 
     // Automatic slider feature

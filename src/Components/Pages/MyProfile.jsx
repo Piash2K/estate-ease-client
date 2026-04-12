@@ -2,7 +2,8 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import { Bars } from "react-loader-spinner";  // Import the spinner
+import { Bars } from "react-loader-spinner";
+import { apiFetch } from "../../api/apiClient";
 
 const MyProfile = () => {
     const { user } = useContext(AuthContext);
@@ -10,18 +11,18 @@ const MyProfile = () => {
     const [loading, setLoading] = useState(true);  // Loading state
 
     useEffect(() => {
-        axios.get(`https://estate-ease-server.vercel.app/agreements/${user.email}`)
-            .then(response => {
-                if (response.data) {
-                    setAgreement(response.data);
-                }
-                setLoading(false);  // Set loading to false once data is fetched
-            })
-            .catch(error => {
-                console.error("Error fetching agreement data:", error);
-                setLoading(false);  // Set loading to false in case of error
-            });
-    }, [user.email]);
+        if (user?.email) {
+            apiFetch(`/agreements/${user.email}`)
+                .then(data => {
+                    setAgreement(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error fetching agreement:', error);
+                    setLoading(false);
+                });
+        }
+    }, [user?.email]);
 
     if (loading) {
         return (

@@ -1,8 +1,8 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import { apiFetch } from "../../../api/apiClient";
 
 const CheckoutForm = ({ finalRent, month, agreement }) => {
   const { user } = useContext(AuthContext);
@@ -13,10 +13,14 @@ const CheckoutForm = ({ finalRent, month, agreement }) => {
   const elements = useElements();
 
   useEffect(() => {
-    axios.post('https://estate-ease-server.vercel.app/create-payment-intent', { price: finalRent })
+    apiFetch('/create-payment-intent', {
+      method: 'POST',
+      body: JSON.stringify({ price: finalRent })
+    })
       .then(res => {
-        setClientSecret(res.data.clientSecret);
-      });
+        setClientSecret(res.clientSecret);
+      })
+      .catch(error => console.error('Error fetching client secret:', error));
   }, [finalRent]);
 
   const handleSubmit = async (event) => {

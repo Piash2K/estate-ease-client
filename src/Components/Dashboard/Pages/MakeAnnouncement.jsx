@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
-import { Bars } from "react-loader-spinner"; // Import the loader spinner
+import { Bars } from "react-loader-spinner";
+import { apiFetch } from "../../../api/apiClient";
 
 const MakeAnnouncement = () => {
     const [title, setTitle] = useState('');
@@ -20,11 +21,8 @@ const MakeAnnouncement = () => {
             createdAt: new Date(),
         };
 
-        fetch('https://estate-ease-server.vercel.app/announcements', {
+        apiFetch('/announcements', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(announcementData),
         })
             .then((response) => {

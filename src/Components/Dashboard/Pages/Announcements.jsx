@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Bars } from "react-loader-spinner";
+import { apiFetch } from "../../../api/apiClient";
 
 const Announcements = () => {
     const [announcements, setAnnouncements] = useState([]);
@@ -8,16 +9,17 @@ const Announcements = () => {
 
     // Fetch announcements from the backend
     useEffect(() => {
-        fetch('https://estate-ease-server.vercel.app/announcements')
-            .then((response) => response.json())
-            .then((data) => {
-                setAnnouncements(data); // Set fetched announcements
-                setLoading(false); // Set loading to false when data is fetched
-            })
-            .catch((error) => {
-                console.error("Error fetching announcements:", error);
-                setLoading(false); // Set loading to false on error
-            });
+        const fetchData = async () => {
+            try {
+                const data = await apiFetch('/announcements');
+                setAnnouncements(Array.isArray(data) ? data : data.data || []);
+            } catch (error) {
+                console.error('Error fetching announcements:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
     if (loading) {
