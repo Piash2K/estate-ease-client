@@ -12,8 +12,13 @@ const Apartment = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [minRent, setMinRent] = useState('');
     const [maxRent, setMaxRent] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedLocation, setSelectedLocation] = useState('');
+    const [selectedType, setSelectedType] = useState('');
+    const [selectedRating, setSelectedRating] = useState('');
     const [filteredApartments, setFilteredApartments] = useState([]);
     const [sortCriteria, setSortCriteria] = useState('');
+    const [filterOptions, setFilterOptions] = useState({ statuses: [], locations: [], types: [] });
     const { user } = useContext(AuthContext);
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true); // Added loading state
@@ -21,10 +26,18 @@ const Apartment = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await apiFetch('/apartments');
+                const [data, optionsData] = await Promise.all([
+                    apiFetch('/apartments'),
+                    apiFetch('/apartments/filters/options'),
+                ]);
                 const apartmentsArray = Array.isArray(data) ? data : data.data || [];
                 setApartments(apartmentsArray);
                 setFilteredApartments(apartmentsArray);
+                setFilterOptions({
+                    statuses: optionsData?.statuses || [],
+                    locations: optionsData?.locations || [],
+                    types: optionsData?.types || [],
+                });
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching apartments:', error);
@@ -43,6 +56,30 @@ const Apartment = () => {
     const indexOfLastApartment = currentPage * apartmentsPerPage;
     const indexOfFirstApartment = indexOfLastApartment - apartmentsPerPage;
     const currentApartments = filteredApartments.slice(indexOfFirstApartment, indexOfLastApartment);
+
+    const applyFilters = () => {
+        const searchValue = searchTerm.trim().toLowerCase();
+        const filtered = apartments.filter((apt) => {
+            const titleMatch = searchValue
+                ? [apt.apartmentNo, apt.blockName, apt.floorNo, apt.rent]
+                    .some(value => String(value).toLowerCase().includes(searchValue))
+                : true;
+
+            const rent = Number(apt.rent) || 0;
+            const isMinRentValid = minRent ? rent >= Number(minRent) : true;
+            const isMaxRentValid = maxRent ? rent <= Number(maxRent) : true;
+            const statusMatch = selectedStatus ? String(apt.status || apt?.meta?.status || '').toLowerCase() === selectedStatus.toLowerCase() : true;
+            const locationMatch = selectedLocation ? String(apt.location || apt?.meta?.location || '').toLowerCase() === selectedLocation.toLowerCase() : true;
+            const typeMatch = selectedType ? String(apt.type || apt?.meta?.type || '').toLowerCase() === selectedType.toLowerCase() : true;
+            const ratingValue = Number(apt.rating || apt?.meta?.rating || 0);
+            const ratingMatch = selectedRating ? ratingValue >= Number(selectedRating) : true;
+
+            return titleMatch && isMinRentValid && isMaxRentValid && statusMatch && locationMatch && typeMatch && ratingMatch;
+        });
+
+        setFilteredApartments(filtered);
+        setCurrentPage(1);
+    };
 
     const handleAgreementClick = (apartment) => {
         if (!user) {
@@ -93,19 +130,19 @@ const Apartment = () => {
     };
 
     const handleSearch = () => {
-        const filtered = apartments.filter(apt => {
-            const searchValue = searchTerm.trim().toLowerCase();
-            const rent = apt.rent;
-            const titleMatch = searchValue
-                ? [apt.apartmentNo, apt.blockName, apt.floorNo, apt.rent]
-                    .some(value => String(value).toLowerCase().includes(searchValue))
-                : true;
-            const isMinRentValid = minRent ? rent >= minRent : true;
-            const isMaxRentValid = maxRent ? rent <= maxRent : true;
-            return titleMatch && isMinRentValid && isMaxRentValid;
-        });
+        applyFilters();
+    };
 
-        setFilteredApartments(filtered);
+    const handleResetFilters = () => {
+        setSearchTerm('');
+        setMinRent('');
+        setMaxRent('');
+        setSelectedStatus('');
+        setSelectedLocation('');
+        setSelectedType('');
+        setSelectedRating('');
+        setSortCriteria('');
+        setFilteredApartments(apartments);
         setCurrentPage(1);
     };
 
@@ -134,6 +171,10 @@ const Apartment = () => {
     };
 
     const totalPages = Math.ceil(filteredApartments.length / apartmentsPerPage);
+
+    const uniqueStatusOptions = filterOptions.statuses.length > 0 ? filterOptions.statuses : ['available', 'pending', 'sold'];
+    const uniqueLocationOptions = filterOptions.locations.length > 0 ? filterOptions.locations : [];
+    const uniqueTypeOptions = filterOptions.types.length > 0 ? filterOptions.types : [];
 
     if (loading) {
         return (
@@ -165,6 +206,91 @@ const Apartment = () => {
                     placeholder="Search by apartment no, block, floor, or rent"
                     className="w-full rounded border p-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
+            </div>
+
+            {/* Filters */}
+            <div className="mb-6 rounded-xl border border-gray-200 p-4">
+                <div className="mb-4 flex items-center justify-between gap-4 flex-wrap">
+                    <h2 className="text-xl font-bold">Filters</h2>
+                    <button
+                        type="button"
+                        onClick={handleResetFilters}
+                        className="rounded-md border border-teal-600 px-4 py-2 text-sm font-semibold text-teal-600 transition-colors hover:bg-teal-50"
+                    >
+                        Reset Filters
+                    </button>
+                </div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <div>
+                        <label className="mb-2 block text-sm font-semibold">Status</label>
+                        <select
+                            value={selectedStatus}
+                            onChange={(e) => setSelectedStatus(e.target.value)}
+                            className="w-full rounded border p-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        >
+                            <option value="">All Status</option>
+                            {uniqueStatusOptions.map((status) => (
+                                <option key={status} value={status}>
+                                    {status}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="mb-2 block text-sm font-semibold">Location</label>
+                        <select
+                            value={selectedLocation}
+                            onChange={(e) => setSelectedLocation(e.target.value)}
+                            className="w-full rounded border p-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        >
+                            <option value="">All Locations</option>
+                            {uniqueLocationOptions.map((location) => (
+                                <option key={location} value={location}>
+                                    {location}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="mb-2 block text-sm font-semibold">Type</label>
+                        <select
+                            value={selectedType}
+                            onChange={(e) => setSelectedType(e.target.value)}
+                            className="w-full rounded border p-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        >
+                            <option value="">All Types</option>
+                            {uniqueTypeOptions.map((type) => (
+                                <option key={type} value={type}>
+                                    {type}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="mb-2 block text-sm font-semibold">Minimum Rating</label>
+                        <select
+                            value={selectedRating}
+                            onChange={(e) => setSelectedRating(e.target.value)}
+                            className="w-full rounded border p-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        >
+                            <option value="">Any Rating</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+                <div className="mt-4 flex justify-end">
+                    <button
+                        type="button"
+                        onClick={handleSearch}
+                        className="rounded-md bg-teal-600 px-5 py-2 font-semibold text-white transition-colors hover:bg-teal-700"
+                    >
+                        Apply Filters
+                    </button>
+                </div>
             </div>
 
             {/* Sorting controls */}
