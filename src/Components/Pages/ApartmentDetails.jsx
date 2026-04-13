@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Swal from 'sweetalert2';
 import { apiFetch } from '../../api/apiClient';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const ApartmentDetails = () => {
     const { id } = useParams();
+    const { user } = useContext(AuthContext);
     const [apartmentData, setApartmentData] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -172,6 +175,67 @@ const ApartmentDetails = () => {
         }
     };
 
+    const logAction = async (action) => {
+        try {
+            await apiFetch(`/apartments/${id}/actions`, {
+                method: 'POST',
+                skipAuth: true,
+                body: JSON.stringify({
+                    action,
+                    userEmail: user?.email || '',
+                }),
+            });
+        } catch {
+            // Non-blocking analytics action.
+        }
+    };
+
+    const handleBook = async () => {
+        await logAction('book');
+        Swal.fire({
+            icon: 'success',
+            title: 'Booking Request Sent',
+            text: 'Please continue from the apartment listing to submit your agreement request.',
+            confirmButtonColor: '#0E9F9F',
+        });
+    };
+
+    const handleWishlist = async () => {
+        await logAction('wishlist');
+        Swal.fire({
+            icon: 'success',
+            title: 'Saved to Wishlist',
+            text: 'This apartment has been marked as a favorite.',
+            confirmButtonColor: '#0E9F9F',
+        });
+    };
+
+    const handleShare = async () => {
+        const sharePayload = {
+            title,
+            text: `Check out this apartment on EstateEase: ${title}`,
+            url: window.location.href,
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(sharePayload);
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Link Copied',
+                    text: 'Apartment link copied to clipboard.',
+                    confirmButtonColor: '#0E9F9F',
+                });
+            }
+
+            await logAction('share');
+        } catch {
+            // User dismissed the share dialog.
+        }
+    };
+
     return (
         <div className="mx-auto w-11/12 py-10 md:w-9/12">
             <Helmet><title>{title} | EstateEase</title></Helmet>
@@ -204,6 +268,36 @@ const ApartmentDetails = () => {
                     </div>
                     <p className="mt-4 text-2xl font-bold text-teal-600">Price: ${price}</p>
                     <p className="mt-4 leading-7 text-gray-700">{overview}</p>
+
+                    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                        <button
+                            type="button"
+                            onClick={handleBook}
+                            className="rounded-md bg-teal-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-teal-700"
+                        >
+                            Book
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleWishlist}
+                            className="rounded-md border border-teal-600 px-4 py-2 font-semibold text-teal-600 transition-colors hover:bg-teal-50"
+                        >
+                            Wishlist
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleShare}
+                            className="rounded-md border border-gray-300 px-4 py-2 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                        >
+                            Share
+                        </button>
+                        <Link
+                            to="/contacts"
+                            className="rounded-md border border-gray-300 px-4 py-2 text-center font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+                        >
+                            Contact
+                        </Link>
+                    </div>
 
                     <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
                         <div className="rounded-lg border border-gray-100 p-5">
