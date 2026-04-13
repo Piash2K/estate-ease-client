@@ -346,7 +346,7 @@ const Apartment = () => {
 </div>
 
             {currentApartments.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {currentApartments.map((apt, index) => (
                         <div key={index} className=" p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow transform hover:scale-105 border border-gray-100">
                             <img 
