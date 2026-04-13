@@ -2,7 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
 import { Helmet } from "react-helmet";
 import Swal from 'sweetalert2';
-import { Bars } from 'react-loader-spinner';
 import { apiFetch } from '../../api/apiClient';
 import ApartmentCard from './ApartmentCard';
 
@@ -184,15 +183,33 @@ const Apartment = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <Bars
-                    height="80"
-                    width="80"
-                    color="#14B8A6"
-                    ariaLabel="bars-loading"
-                    wrapperStyle={{}}
-                    visible={true}
-                />
+            <div className="w-11/12 md:w-9/12 mx-auto py-8">
+                <div className="h-10 w-56 mx-auto rounded bg-gray-200 animate-pulse" />
+                <div className="mt-8 mb-6 h-12 rounded bg-gray-200 animate-pulse" />
+                <div className="mb-6 grid grid-cols-1 gap-4 rounded-xl border border-gray-200 p-4 md:grid-cols-2 xl:grid-cols-4">
+                    <div className="h-12 rounded bg-gray-200 animate-pulse" />
+                    <div className="h-12 rounded bg-gray-200 animate-pulse" />
+                    <div className="h-12 rounded bg-gray-200 animate-pulse" />
+                    <div className="h-12 rounded bg-gray-200 animate-pulse" />
+                </div>
+                <div className="mb-6 flex flex-col gap-4 sm:flex-row">
+                    <div className="h-11 flex-1 rounded bg-gray-200 animate-pulse" />
+                    <div className="h-11 w-full rounded bg-gray-200 animate-pulse sm:w-40" />
+                </div>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    {Array.from({ length: 8 }).map((_, index) => (
+                        <div key={index} className="rounded-xl border border-gray-100 p-6 shadow-sm">
+                            <div className="h-48 w-full rounded-lg bg-gray-200 animate-pulse" />
+                            <div className="mt-4 h-6 w-3/4 rounded bg-gray-200 animate-pulse" />
+                            <div className="mt-3 space-y-2">
+                                <div className="h-4 w-full rounded bg-gray-200 animate-pulse" />
+                                <div className="h-4 w-5/6 rounded bg-gray-200 animate-pulse" />
+                                <div className="h-4 w-2/3 rounded bg-gray-200 animate-pulse" />
+                            </div>
+                            <div className="mt-4 h-10 w-full rounded bg-gray-200 animate-pulse" />
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }
