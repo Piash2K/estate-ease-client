@@ -74,11 +74,34 @@ const ApartmentDetails = () => {
         .filter(Boolean);
     const galleryImages = mediaImages.length > 0 ? mediaImages : [image].filter(Boolean);
     const overview = apartmentData?.sections?.overview || apartment?.overview || apartment?.description || 'No overview available.';
+    const keyInformation = Array.isArray(apartmentData?.sections?.keyInformation) ? apartmentData.sections.keyInformation : [];
+    const specs = Array.isArray(apartmentData?.sections?.specs) ? apartmentData.sections.specs : [];
+    const rules = Array.isArray(apartmentData?.sections?.rules) ? apartmentData.sections.rules : [];
     const price = apartment?.meta?.price ?? apartment?.rent ?? 0;
     const rating = apartment?.meta?.rating ?? apartment?.rating ?? 0;
     const status = apartment?.meta?.status ?? apartment?.status ?? 'available';
     const location = apartment?.meta?.location ?? apartment?.location ?? 'N/A';
     const type = apartment?.meta?.type ?? apartment?.type ?? 'apartment';
+
+    const renderListItems = (items) =>
+        items.map((item, index) => {
+            if (typeof item === 'string') {
+                return <li key={`${item}-${index}`}>{item}</li>;
+            }
+
+            if (item && typeof item === 'object') {
+                const objectValue = item.label || item.name || item.title || item.key;
+                const objectDetail = item.value || item.detail || item.description;
+                if (objectValue && objectDetail) {
+                    return <li key={`${objectValue}-${index}`}><span className="font-semibold">{objectValue}:</span> {objectDetail}</li>;
+                }
+                if (objectValue) {
+                    return <li key={`${objectValue}-${index}`}>{objectValue}</li>;
+                }
+            }
+
+            return null;
+        });
 
     return (
         <div className="mx-auto w-11/12 py-10 md:w-9/12">
@@ -112,6 +135,41 @@ const ApartmentDetails = () => {
                     </div>
                     <p className="mt-4 text-2xl font-bold text-teal-600">Price: ${price}</p>
                     <p className="mt-4 leading-7 text-gray-700">{overview}</p>
+
+                    <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+                        <div className="rounded-lg border border-gray-100 p-5">
+                            <h2 className="text-xl font-bold text-gray-900">Key Information</h2>
+                            {keyInformation.length > 0 ? (
+                                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-700">
+                                    {renderListItems(keyInformation)}
+                                </ul>
+                            ) : (
+                                <p className="mt-3 text-sm text-gray-600">No key information provided.</p>
+                            )}
+                        </div>
+
+                        <div className="rounded-lg border border-gray-100 p-5">
+                            <h2 className="text-xl font-bold text-gray-900">Specs</h2>
+                            {specs.length > 0 ? (
+                                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-700">
+                                    {renderListItems(specs)}
+                                </ul>
+                            ) : (
+                                <p className="mt-3 text-sm text-gray-600">No specs provided.</p>
+                            )}
+                        </div>
+
+                        <div className="rounded-lg border border-gray-100 p-5">
+                            <h2 className="text-xl font-bold text-gray-900">Rules</h2>
+                            {rules.length > 0 ? (
+                                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-700">
+                                    {renderListItems(rules)}
+                                </ul>
+                            ) : (
+                                <p className="mt-3 text-sm text-gray-600">No rules provided.</p>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
