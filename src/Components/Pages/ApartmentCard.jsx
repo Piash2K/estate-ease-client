@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const ApartmentCard = ({ apartment, onAgreementClick }) => {
     const title = apartment?.title || `Apartment ${apartment?.apartmentNo || ''}`;
     const shortDescription = apartment?.shortDescription || apartment?.overview || apartment?.description || 'Comfortable apartment with modern amenities.';
@@ -30,12 +32,20 @@ const ApartmentCard = ({ apartment, onAgreementClick }) => {
 
                 <p className="mt-3 text-lg font-semibold text-teal-600">Price: ${price}</p>
 
-                <button
-                    className="mt-4 w-full rounded-md bg-teal-600 px-4 py-2 font-bold text-white transition-colors hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    onClick={() => onAgreementClick(apartment)}
-                >
-                    Agreement
-                </button>
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <Link
+                        to={`/apartment/${apartment?._id}`}
+                        className="w-full rounded-md border border-teal-600 px-4 py-2 text-center font-bold text-teal-600 transition-colors hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    >
+                        View Details
+                    </Link>
+                    <button
+                        className="w-full rounded-md bg-teal-600 px-4 py-2 font-bold text-white transition-colors hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        onClick={() => onAgreementClick(apartment)}
+                    >
+                        Agreement
+                    </button>
+                </div>
             </div>
         </div>
     );

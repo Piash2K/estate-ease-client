@@ -26,6 +26,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import DashboardLayout from './Components/Dashboard/Layouts/DashboardLayout';
 import Faq from './Components/Pages/Faq';
 import Contacts from './Components/Pages/Contacts';
+import ApartmentDetails from './Components/Pages/ApartmentDetails';
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: '/apartment',
         element: <Apartment></Apartment>
+      },
+      {
+        path: '/apartment/:id',
+        element: <ApartmentDetails></ApartmentDetails>
       },
       {
         path: '/contacts',
