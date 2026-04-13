@@ -47,27 +47,33 @@ const Home = () => {
         const fetchData = async () => {
             try {
                 const [couponsData, announcementsData, apartmentsData, reviewsData, blogsData] = await Promise.all([
-                    apiFetch('/coupons'),
-                    apiFetch('/announcements'),
-                    apiFetch('/apartments'),
-                    apiFetch('/reviews'),
-                    apiFetch('/blogs?limit=3'),
+                    apiFetch('/coupons', { skipAuth: true }),
+                    apiFetch('/announcements', { skipAuth: true }),
+                    apiFetch('/apartments', { skipAuth: true }),
+                    apiFetch('/reviews', { skipAuth: true }),
+                    apiFetch('/blogs?limit=3', { skipAuth: true }),
                 ]);
-                const filterOptionsData = await apiFetch('/apartments/filters/options');
-                setCoupons(Array.isArray(couponsData) ? couponsData : couponsData.data || []);
-                setAnnouncements(Array.isArray(announcementsData) ? announcementsData : announcementsData.data || []);
-                setApartments(Array.isArray(apartmentsData) ? apartmentsData : apartmentsData.data || []);
-                setReviews(Array.isArray(reviewsData) ? reviewsData : reviewsData.data || []);
-                setBlogs(Array.isArray(blogsData?.data) ? blogsData.data : Array.isArray(blogsData) ? blogsData : []);
-                setPropertyTypes(Array.isArray(filterOptionsData?.types) ? filterOptionsData.types : []);
+                const filterOptionsData = await apiFetch('/apartments/filters/options', { skipAuth: true });
+                const overviewData = await apiFetch('/public/overview', { skipAuth: true });
 
-                try {
-                    const overviewData = await apiFetch('/dashboard/overview');
-                    setDashboardOverview(overviewData?.cards || null);
-                } catch {
-                    setDashboardOverview(null);
-                }
+                const apartmentsResult = Array.isArray(apartmentsData?.data) ? apartmentsData.data : [];
+                const blogsResult = Array.isArray(blogsData?.data) ? blogsData.data : [];
+
+                setCoupons(Array.isArray(couponsData) ? couponsData : []);
+                setAnnouncements(Array.isArray(announcementsData) ? announcementsData : []);
+                setApartments(apartmentsResult);
+                setReviews(Array.isArray(reviewsData) ? reviewsData : []);
+                setBlogs(blogsResult);
+                setPropertyTypes(Array.isArray(filterOptionsData?.types) ? filterOptionsData.types : []);
+                setDashboardOverview(overviewData || null);
             } catch (error) {
+                setCoupons([]);
+                setAnnouncements([]);
+                setApartments([]);
+                setReviews([]);
+                setBlogs([]);
+                setPropertyTypes([]);
+                setDashboardOverview(null);
                 console.error('Error fetching data:', error);
             }
         };
@@ -352,16 +358,16 @@ const Home = () => {
                                 <p className="mt-2 text-lg font-semibold">Available Apartments</p>
                             </div>
                             <div className="rounded-xl border border-gray-100 p-6 text-center">
-                                <p className="text-4xl font-bold text-[#0E9F9F]">{dashboardOverview?.pendingAgreements ?? announcements.length}</p>
-                                <p className="mt-2 text-lg font-semibold">Pending Updates</p>
+                                <p className="text-4xl font-bold text-[#0E9F9F]">{dashboardOverview?.totalAnnouncements ?? announcements.length}</p>
+                                <p className="mt-2 text-lg font-semibold">Announcements</p>
                             </div>
                             <div className="rounded-xl border border-gray-100 p-6 text-center">
-                                <p className="text-4xl font-bold text-[#0E9F9F]">{dashboardOverview?.totalPayments ?? coupons.length}</p>
-                                <p className="mt-2 text-lg font-semibold">Active Offers</p>
+                                <p className="text-4xl font-bold text-[#0E9F9F]">{dashboardOverview?.totalPublishedBlogs ?? blogs.length}</p>
+                                <p className="mt-2 text-lg font-semibold">Published Blogs</p>
                             </div>
                             <div className="rounded-xl border border-gray-100 p-6 text-center">
-                                <p className="text-4xl font-bold text-[#0E9F9F]">{reviews.length}</p>
-                                <p className="mt-2 text-lg font-semibold">Reviews Shared</p>
+                                <p className="text-4xl font-bold text-[#0E9F9F]">{Number(dashboardOverview?.averageRating ?? 0).toFixed(1)}</p>
+                                <p className="mt-2 text-lg font-semibold">Average Rating</p>
                             </div>
                         </div>
                     </div>

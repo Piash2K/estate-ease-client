@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import Swal from 'sweetalert2';
 import { Bars } from 'react-loader-spinner';
 import { apiFetch } from '../../api/apiClient';
+import ApartmentCard from './ApartmentCard';
 
 const Apartment = () => {
     const [apartments, setApartments] = useState([]);
@@ -27,10 +28,10 @@ const Apartment = () => {
         const fetchData = async () => {
             try {
                 const [data, optionsData] = await Promise.all([
-                    apiFetch('/apartments'),
-                    apiFetch('/apartments/filters/options'),
+                    apiFetch('/apartments', { skipAuth: true }),
+                    apiFetch('/apartments/filters/options', { skipAuth: true }),
                 ]);
-                const apartmentsArray = Array.isArray(data) ? data : data.data || [];
+                const apartmentsArray = Array.isArray(data?.data) ? data.data : [];
                 setApartments(apartmentsArray);
                 setFilteredApartments(apartmentsArray);
                 setFilterOptions({
@@ -40,6 +41,9 @@ const Apartment = () => {
                 });
                 setLoading(false);
             } catch (error) {
+                setApartments([]);
+                setFilteredApartments([]);
+                setFilterOptions({ statuses: [], locations: [], types: [] });
                 console.error('Error fetching apartments:', error);
                 setLoading(false);
             }
@@ -348,24 +352,11 @@ const Apartment = () => {
             {currentApartments.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {currentApartments.map((apt, index) => (
-                        <div key={index} className=" p-6 rounded-xl shadow-xl hover:shadow-2xl transition-shadow transform hover:scale-105 border border-gray-100">
-                            <img 
-                                src={apt.image} 
-                                alt={`Apartment ${apt.apartmentNo}`} 
-                                className="w-full h-48 object-cover rounded-lg"
-                            />
-                            <div className="mt-4">
-                                <h3 className="text-xl font-semibold text-gray-800">{apt.apartmentNo}</h3>
-                                <p className="text-sm ">Floor: {apt.floorNo}</p>
-                                <p className="text-sm ">Block: {apt.blockName}</p>
-                                <p className="text-lg font-semibold text-teal-600 mt-2">Rent: ${apt.rent}</p>
-                                <button
-                                    className="mt-4 px-4 py-2 bg-teal-600 text-white font-bold rounded-md w-full hover:bg-teal-700 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
-                                    onClick={() => handleAgreementClick(apt)} >
-                                    Agreement
-                                </button>
-                            </div>
-                        </div>
+                        <ApartmentCard
+                            key={apt._id || index}
+                            apartment={apt}
+                            onAgreementClick={handleAgreementClick}
+                        />
                     ))}
                 </div>
             ) : (
