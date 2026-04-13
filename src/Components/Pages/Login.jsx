@@ -1,5 +1,5 @@
 import  { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {  signInWithPopup } from 'firebase/auth';
 
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -19,6 +19,8 @@ const Login = () => {
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
 
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
@@ -31,7 +33,7 @@ const Login = () => {
                 icon: 'success',
                 confirmButtonText: 'Okay',
             });
-            navigate('/'); // Navigate to the home page
+            navigate(from, { replace: true });
         } catch (error) {
             const errorMessage = error.message;
             setError(errorMessage); // Set error message
@@ -58,7 +60,7 @@ const Login = () => {
                 icon: 'success',
                 confirmButtonText: 'Okay',
             });
-            navigate('/');
+            navigate(from, { replace: true });
         } catch (error) {
             const errorMessage = error.message;
             setError(errorMessage);
