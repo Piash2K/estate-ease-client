@@ -22,6 +22,8 @@ const Home = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [apartments, setApartments] = useState([]);
     const [propertyTypes, setPropertyTypes] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [dashboardOverview, setDashboardOverview] = useState(null);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const apartmentLocationIcon = new Icon({
         iconUrl: markerIcon,
@@ -43,16 +45,25 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [couponsData, announcementsData, apartmentsData] = await Promise.all([
+                const [couponsData, announcementsData, apartmentsData, reviewsData] = await Promise.all([
                     apiFetch('/coupons'),
                     apiFetch('/announcements'),
                     apiFetch('/apartments'),
+                    apiFetch('/reviews'),
                 ]);
                 const filterOptionsData = await apiFetch('/apartments/filters/options');
                 setCoupons(Array.isArray(couponsData) ? couponsData : couponsData.data || []);
                 setAnnouncements(Array.isArray(announcementsData) ? announcementsData : announcementsData.data || []);
                 setApartments(Array.isArray(apartmentsData) ? apartmentsData : apartmentsData.data || []);
+                setReviews(Array.isArray(reviewsData) ? reviewsData : reviewsData.data || []);
                 setPropertyTypes(Array.isArray(filterOptionsData?.types) ? filterOptionsData.types : []);
+
+                try {
+                    const overviewData = await apiFetch('/dashboard/overview');
+                    setDashboardOverview(overviewData?.cards || null);
+                } catch {
+                    setDashboardOverview(null);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -321,6 +332,35 @@ const Home = () => {
                                 Property categories will appear here once apartment type data is available.
                             </div>
                         )}
+                    </div>
+                </section>
+                {/* Live Statistics */}
+                <section className="w-full pb-20">
+                    <div className="rounded-2xl border border-gray-100 bg-white px-6 py-10 shadow-sm sm:px-10">
+                        <h2 className="text-4xl font-bold text-center mb-4">
+                            Live Statistics
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            Real-time numbers that reflect current apartments, community activity, and booking updates.
+                        </p>
+                        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                            <div className="rounded-xl border border-gray-100 p-6 text-center">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">{dashboardOverview?.totalApartments ?? apartments.length}</p>
+                                <p className="mt-2 text-lg font-semibold">Available Apartments</p>
+                            </div>
+                            <div className="rounded-xl border border-gray-100 p-6 text-center">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">{dashboardOverview?.pendingAgreements ?? announcements.length}</p>
+                                <p className="mt-2 text-lg font-semibold">Pending Updates</p>
+                            </div>
+                            <div className="rounded-xl border border-gray-100 p-6 text-center">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">{dashboardOverview?.totalPayments ?? coupons.length}</p>
+                                <p className="mt-2 text-lg font-semibold">Active Offers</p>
+                            </div>
+                            <div className="rounded-xl border border-gray-100 p-6 text-center">
+                                <p className="text-4xl font-bold text-[#0E9F9F]">{reviews.length}</p>
+                                <p className="mt-2 text-lg font-semibold">Reviews Shared</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 {/* Coupons Section */}
