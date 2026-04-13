@@ -14,7 +14,6 @@ const Login = () => {
     const { signInWithEmail, googleProvider } = useContext(AuthContext);
     const [, setError] = useState('');
     const [showPassword, setShowPassWord] = useState(false);
-    const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
     const handleGoogleSignIn = () => {
@@ -45,7 +44,6 @@ const Login = () => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-        setEmail(email);
         signInWithEmail(email, password)
             .then((result) => {
                 const user = result.user;
@@ -70,58 +68,61 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen px-4">
+        <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white px-4 py-12">
             <Helmet><title>Login | EstateEase </title></Helmet>
-            <div className="w-full max-w-md p-6 border border-gray-200 shadow-lg rounded-lg">
-                <h1 className="text-2xl lg:text-4xl font-bold text-center mb-6">Login Now!</h1>
+            <div className="mx-auto w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+                <h1 className="text-center text-3xl font-bold text-gray-900">Welcome Back</h1>
+                <p className="mt-2 text-center text-sm text-gray-600">Sign in to continue managing apartments and agreements.</p>
+
                 <form onSubmit={handleLogin} className="space-y-4">
-                    <div className="form-control">
+                    <div className="form-control mt-6">
                         <label className="label">
-                            <span className="label-text text-sm lg:text-base">Email</span>
+                            <span className="label-text text-sm font-semibold text-gray-700">Email</span>
                         </label>
                         <input
                             name="email"
                             type="email"
                             placeholder="Enter your email"
-                            className="input input-bordered w-full"
+                            className="input input-bordered w-full rounded-lg border-gray-300 focus:border-teal-500 focus:outline-none"
                             required
                         />
                     </div>
+
                     <div className="form-control relative">
                         <label className="label">
-                            <span className="label-text text-sm lg:text-base">Password</span>
+                            <span className="label-text text-sm font-semibold text-gray-700">Password</span>
                         </label>
                         <input
                             name="password"
                             type={showPassword ? 'text' : 'password'}
                             placeholder="Enter your password"
-                            className="input input-bordered w-full"
+                            className="input input-bordered w-full rounded-lg border-gray-300 focus:border-teal-500 focus:outline-none"
                             required
                         />
                         <button
                             type="button"
                             onClick={() => setShowPassWord(!showPassword)}
-                            className="absolute right-3 top-9 text-gray-500 text-lg"
+                            className="absolute right-3 top-9 text-lg text-gray-500"
                         >
                             {showPassword ? <FaEye /> : <FaEyeSlash />}
                         </button>
-                        <Link state={{ email }} className="label-text-alt text-sm text-right mt-2 block">
-                            Forgot password?
-                        </Link>
                     </div>
+
                     <div className="form-control mt-6">
-                        <button className="btn bg-teal-600 w-full">Login</button>
+                        <button className="btn w-full rounded-lg border-0 bg-teal-600 text-white hover:bg-teal-700">Login</button>
                     </div>
                 </form>
+
                 <p className="mt-4 text-sm text-center">
                     New here?{' '}
                     <Link to="/register" className="text-teal-600 font-medium">
                         Register now
                     </Link>
                 </p>
+
                 <button
                     onClick={handleGoogleSignIn}
-                    className="btn btn-neutral mt-4 w-full"
+                    className="btn mt-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 hover:bg-gray-50"
                 >
                     Login with Google
                 </button>
