@@ -24,6 +24,7 @@ const Home = () => {
     const [propertyTypes, setPropertyTypes] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [dashboardOverview, setDashboardOverview] = useState(null);
+    const [blogs, setBlogs] = useState([]);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const apartmentLocationIcon = new Icon({
         iconUrl: markerIcon,
@@ -45,17 +46,19 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [couponsData, announcementsData, apartmentsData, reviewsData] = await Promise.all([
+                const [couponsData, announcementsData, apartmentsData, reviewsData, blogsData] = await Promise.all([
                     apiFetch('/coupons'),
                     apiFetch('/announcements'),
                     apiFetch('/apartments'),
                     apiFetch('/reviews'),
+                    apiFetch('/blogs?limit=3'),
                 ]);
                 const filterOptionsData = await apiFetch('/apartments/filters/options');
                 setCoupons(Array.isArray(couponsData) ? couponsData : couponsData.data || []);
                 setAnnouncements(Array.isArray(announcementsData) ? announcementsData : announcementsData.data || []);
                 setApartments(Array.isArray(apartmentsData) ? apartmentsData : apartmentsData.data || []);
                 setReviews(Array.isArray(reviewsData) ? reviewsData : reviewsData.data || []);
+                setBlogs(Array.isArray(blogsData?.data) ? blogsData.data : Array.isArray(blogsData) ? blogsData : []);
                 setPropertyTypes(Array.isArray(filterOptionsData?.types) ? filterOptionsData.types : []);
 
                 try {
@@ -422,6 +425,57 @@ const Home = () => {
                                 <p className="text-sm mt-2">Posted on: {new Date(announcement.createdAt).toLocaleDateString()}</p>
                             </div>
                         ))}
+                    </div>
+                </section>
+                {/* Blog Highlights */}
+                <section className="w-full py-20">
+                    <div>
+                        <h2 className="text-4xl font-bold text-center mb-4">
+                            Blog Highlights
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            A few short updates and helpful articles to keep residents and visitors informed.
+                        </p>
+                        {blogs.length > 0 ? (
+                            <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-3">
+                                {blogs.map((blog, index) => (
+                                    <article
+                                        key={blog._id || index}
+                                        className="overflow-hidden rounded-2xl border border-gray-100 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+                                    >
+                                        {blog.coverImage ? (
+                                            <img
+                                                src={blog.coverImage}
+                                                alt={blog.title || 'Blog post'}
+                                                className="h-52 w-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="flex h-52 w-full items-center justify-center bg-[#0E9F9F]/10 text-2xl font-bold text-[#0E9F9F]">
+                                                EstateEase Blog
+                                            </div>
+                                        )}
+                                        <div className="p-6">
+                                            <p className="text-sm font-semibold uppercase tracking-wide text-[#0E9F9F]">
+                                                {blog.tags?.[0] || 'Update'}
+                                            </p>
+                                            <h3 className="mt-3 text-2xl font-semibold text-gray-900">
+                                                {blog.title}
+                                            </h3>
+                                            <p className="mt-3 text-lg text-gray-700">
+                                                {blog.summary}
+                                            </p>
+                                            <p className="mt-4 text-sm text-gray-500">
+                                                {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : ''}
+                                            </p>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="mt-10 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-lg text-gray-600">
+                                Blog highlights will appear here once published posts are available.
+                            </div>
+                        )}
                     </div>
                 </section>
                 {/* Dynamic Image Gallery Section */}
