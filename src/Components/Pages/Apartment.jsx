@@ -60,6 +60,24 @@ const Apartment = () => {
     const indexOfFirstApartment = indexOfLastApartment - apartmentsPerPage;
     const currentApartments = filteredApartments.slice(indexOfFirstApartment, indexOfLastApartment);
 
+    const sortApartments = (list, criteria) => {
+        const getPrice = (item) => Number(item.rent ?? item?.meta?.price ?? 0);
+        const getRating = (item) => Number(item.rating ?? item?.meta?.rating ?? 0);
+        const getDate = (item) => new Date(item.createdAt ?? item?.meta?.date ?? 0).getTime();
+        const getTitle = (item) => String(item.title ?? item.apartmentNo ?? '').toLowerCase();
+
+        return [...list].sort((a, b) => {
+            if (criteria === 'priceAsc') return getPrice(a) - getPrice(b);
+            if (criteria === 'priceDesc') return getPrice(b) - getPrice(a);
+            if (criteria === 'ratingDesc') return getRating(b) - getRating(a);
+            if (criteria === 'dateDesc') return getDate(b) - getDate(a);
+            if (criteria === 'dateAsc') return getDate(a) - getDate(b);
+            if (criteria === 'titleAsc') return getTitle(a).localeCompare(getTitle(b));
+            if (criteria === 'titleDesc') return getTitle(b).localeCompare(getTitle(a));
+            return 0;
+        });
+    };
+
     const applyFilters = () => {
         const searchValue = searchTerm.trim().toLowerCase();
         const filtered = apartments.filter((apt) => {
@@ -80,7 +98,8 @@ const Apartment = () => {
             return titleMatch && isMinRentValid && isMaxRentValid && statusMatch && locationMatch && typeMatch && ratingMatch;
         });
 
-        setFilteredApartments(filtered);
+        const sortedFiltered = sortApartments(filtered, sortCriteria);
+        setFilteredApartments(sortedFiltered);
         setCurrentPage(1);
     };
 
@@ -151,24 +170,10 @@ const Apartment = () => {
 
     const handleSort = (criteria) => {
         setSortCriteria(criteria);
-
-        const getPrice = (item) => Number(item.rent ?? item?.meta?.price ?? 0);
-        const getRating = (item) => Number(item.rating ?? item?.meta?.rating ?? 0);
-        const getDate = (item) => new Date(item.createdAt ?? item?.meta?.date ?? 0).getTime();
-        const getTitle = (item) => String(item.title ?? item.apartmentNo ?? '').toLowerCase();
-
-        const sorted = [...filteredApartments].sort((a, b) => {
-            if (criteria === 'priceAsc') return getPrice(a) - getPrice(b);
-            if (criteria === 'priceDesc') return getPrice(b) - getPrice(a);
-            if (criteria === 'ratingDesc') return getRating(b) - getRating(a);
-            if (criteria === 'dateDesc') return getDate(b) - getDate(a);
-            if (criteria === 'dateAsc') return getDate(a) - getDate(b);
-            if (criteria === 'titleAsc') return getTitle(a).localeCompare(getTitle(b));
-            if (criteria === 'titleDesc') return getTitle(b).localeCompare(getTitle(a));
-            return 0;
-        });
+        const sorted = sortApartments(filteredApartments, criteria);
 
         setFilteredApartments(sorted);
+        setCurrentPage(1);
     };
 
     const handlePageChange = (pageNumber) => {
