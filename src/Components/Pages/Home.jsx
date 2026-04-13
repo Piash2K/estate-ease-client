@@ -21,6 +21,7 @@ const Home = () => {
     const [coupons, setCoupons] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [apartments, setApartments] = useState([]);
+    const [propertyTypes, setPropertyTypes] = useState([]);
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const apartmentLocationIcon = new Icon({
         iconUrl: markerIcon,
@@ -45,11 +46,13 @@ const Home = () => {
                 const [couponsData, announcementsData, apartmentsData] = await Promise.all([
                     apiFetch('/coupons'),
                     apiFetch('/announcements'),
-                    apiFetch('/apartments')
+                    apiFetch('/apartments'),
                 ]);
+                const filterOptionsData = await apiFetch('/apartments/filters/options');
                 setCoupons(Array.isArray(couponsData) ? couponsData : couponsData.data || []);
                 setAnnouncements(Array.isArray(announcementsData) ? announcementsData : announcementsData.data || []);
                 setApartments(Array.isArray(apartmentsData) ? apartmentsData : apartmentsData.data || []);
+                setPropertyTypes(Array.isArray(filterOptionsData?.types) ? filterOptionsData.types : []);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -272,6 +275,52 @@ const Home = () => {
                                 View All Apartments
                             </Link>
                         </div>
+                    </div>
+                </section>
+                {/* Property Categories */}
+                <section className="w-full pb-20">
+                    <div>
+                        <h2 className="text-4xl font-bold text-center mb-4">
+                            Property Categories
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            Explore apartment types available in the building so visitors can quickly find the option that fits their needs.
+                        </p>
+                        {propertyTypes.length > 0 ? (
+                            <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                                {propertyTypes.slice(0, 8).map((type, index) => {
+                                    const typeName = String(type || 'apartment');
+                                    const displayName = typeName.charAt(0).toUpperCase() + typeName.slice(1);
+
+                                    return (
+                                        <div
+                                            key={`${typeName}-${index}`}
+                                            className="rounded-2xl border border-gray-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                                        >
+                                            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#0E9F9F]/10 text-[#0E9F9F]">
+                                                <FaBuilding className="text-2xl" />
+                                            </div>
+                                            <h3 className="text-2xl font-semibold mb-3">{displayName}</h3>
+                                            <p className="text-lg text-gray-700">
+                                                Browse {displayName.toLowerCase()} options available for residents and new applicants.
+                                            </p>
+                                            <div className="mt-5">
+                                                <Link
+                                                    to="/apartment"
+                                                    className="inline-flex items-center rounded-lg bg-[#0E9F9F] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#14B8B8]"
+                                                >
+                                                    Explore
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="mt-10 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-lg text-gray-600">
+                                Property categories will appear here once apartment type data is available.
+                            </div>
+                        )}
                     </div>
                 </section>
                 {/* Coupons Section */}
