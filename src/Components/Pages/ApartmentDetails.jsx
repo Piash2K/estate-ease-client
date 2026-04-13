@@ -104,6 +104,7 @@ const ApartmentDetails = () => {
     const keyInformation = Array.isArray(apartmentData?.sections?.keyInformation) ? apartmentData.sections.keyInformation : [];
     const specs = Array.isArray(apartmentData?.sections?.specs) ? apartmentData.sections.specs : [];
     const rules = Array.isArray(apartmentData?.sections?.rules) ? apartmentData.sections.rules : [];
+    const relatedItems = Array.isArray(apartmentData?.sections?.relatedItems) ? apartmentData.sections.relatedItems : [];
     const price = apartment?.meta?.price ?? apartment?.rent ?? 0;
     const rating = apartment?.meta?.rating ?? apartment?.rating ?? 0;
     const status = apartment?.meta?.status ?? apartment?.status ?? 'available';
@@ -308,6 +309,40 @@ const ApartmentDetails = () => {
                                 {reviewSubmitting ? 'Submitting...' : 'Submit Review'}
                             </button>
                         </form>
+                    </div>
+
+                    <div className="mt-10 rounded-lg border border-gray-100 p-5">
+                        <h2 className="text-2xl font-bold text-gray-900">Related Apartments</h2>
+
+                        {relatedItems.length > 0 ? (
+                            <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                                {relatedItems.map((related, index) => {
+                                    const relatedTitle = related?.title || `Apartment ${related?.apartmentNo || ''}`;
+                                    const relatedPrice = related?.meta?.price ?? related?.rent ?? 0;
+                                    const relatedRating = related?.meta?.rating ?? related?.rating ?? 0;
+                                    const relatedImage = related?.image || image;
+
+                                    return (
+                                        <div key={`${related?._id || relatedTitle}-${index}`} className="overflow-hidden rounded-lg border border-gray-100">
+                                            <img src={relatedImage} alt={relatedTitle} className="h-40 w-full object-cover" />
+                                            <div className="p-4">
+                                                <h3 className="text-lg font-semibold text-gray-900">{relatedTitle}</h3>
+                                                <p className="mt-2 text-sm text-gray-700">Rating: {Number(relatedRating).toFixed(1)}</p>
+                                                <p className="mt-1 font-semibold text-teal-600">Price: ${relatedPrice}</p>
+                                                <Link
+                                                    to={`/apartment/${related?._id}`}
+                                                    className="mt-3 inline-block rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-700"
+                                                >
+                                                    View Details
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="mt-4 text-sm text-gray-600">No related apartments available.</p>
+                        )}
                     </div>
                 </div>
             </div>
