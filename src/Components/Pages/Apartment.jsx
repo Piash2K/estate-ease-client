@@ -9,6 +9,7 @@ const Apartment = () => {
     const [apartments, setApartments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [apartmentsPerPage] = useState(6);
+    const [searchTerm, setSearchTerm] = useState('');
     const [minRent, setMinRent] = useState('');
     const [maxRent, setMaxRent] = useState('');
     const [filteredApartments, setFilteredApartments] = useState([]);
@@ -93,10 +94,15 @@ const Apartment = () => {
 
     const handleSearch = () => {
         const filtered = apartments.filter(apt => {
+            const searchValue = searchTerm.trim().toLowerCase();
             const rent = apt.rent;
+            const titleMatch = searchValue
+                ? [apt.apartmentNo, apt.blockName, apt.floorNo, apt.rent]
+                    .some(value => String(value).toLowerCase().includes(searchValue))
+                : true;
             const isMinRentValid = minRent ? rent >= minRent : true;
             const isMaxRentValid = maxRent ? rent <= maxRent : true;
-            return isMinRentValid && isMaxRentValid;
+            return titleMatch && isMinRentValid && isMaxRentValid;
         });
 
         setFilteredApartments(filtered);
@@ -149,6 +155,18 @@ const Apartment = () => {
             <Helmet><title>Apartment | EstateEase </title></Helmet>
             <h1 className="text-4xl font-bold py-8 mb-6 text-center ">Apartments</h1>
             
+            {/* Search bar */}
+            <div className="mb-6">
+                <label className="mb-2 block text-lg font-semibold">Search Apartments</label>
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search by apartment no, block, floor, or rent"
+                    className="w-full rounded border p-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
+            </div>
+
             {/* Sorting controls */}
             <div className="mb-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-4">
     <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
