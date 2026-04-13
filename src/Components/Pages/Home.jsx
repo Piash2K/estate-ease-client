@@ -20,6 +20,7 @@ import { apiFetch } from '../../api/apiClient';
 const Home = () => {
     const [coupons, setCoupons] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
+    const [apartments, setApartments] = useState([]);
     const apartmentLocationIcon = new Icon({
         iconUrl: markerIcon,
         iconRetinaUrl: markerIcon2x,
@@ -40,12 +41,14 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [couponsData, announcementsData] = await Promise.all([
+                const [couponsData, announcementsData, apartmentsData] = await Promise.all([
                     apiFetch('/coupons'),
-                    apiFetch('/announcements')
+                    apiFetch('/announcements'),
+                    apiFetch('/apartments')
                 ]);
                 setCoupons(Array.isArray(couponsData) ? couponsData : couponsData.data || []);
                 setAnnouncements(Array.isArray(announcementsData) ? announcementsData : announcementsData.data || []);
+                setApartments(Array.isArray(apartmentsData) ? apartmentsData : apartmentsData.data || []);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -211,6 +214,41 @@ const Home = () => {
                                 <p className="text-4xl font-bold text-[#0E9F9F]">Live</p>
                                 <p className="mt-2 text-lg font-semibold">Announcements</p>
                             </div>
+                        </div>
+                    </div>
+                </section>
+                {/* Featured Apartments */}
+                <section className="w-full pb-20">
+                    <div>
+                        <h2 className="text-4xl font-bold text-center mb-4">
+                            Featured Apartments
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            A quick look at some available units so visitors can move from browsing to booking faster.
+                        </p>
+                        {apartments.length > 0 ? (
+                            <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                                {apartments.slice(0, 3).map((apartment, index) => (
+                                    <div key={apartment._id || index} className="overflow-hidden rounded-2xl border border-gray-100 shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                        <img
+                                            src={apartment.image}
+                                            alt={`Apartment ${apartment.apartmentNo}`}
+                                            className="h-56 w-full object-cover"
+                                        />
+                                        <div className="p-6">
+                                            <h3 className="text-2xl font-semibold text-gray-900">Apartment {apartment.apartmentNo}</h3>
+                                            <p className="mt-2 text-lg text-gray-700">Floor: {apartment.floorNo}</p>
+                                            <p className="text-lg text-gray-700">Block: {apartment.blockName}</p>
+                                            <p className="mt-4 text-2xl font-bold text-[#0E9F9F]">${apartment.rent}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : null}
+                        <div className="mt-8 flex justify-center">
+                            <Link to="/apartment" className="inline-flex items-center rounded-lg bg-[#0E9F9F] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#14B8B8]">
+                                View All Apartments
+                            </Link>
                         </div>
                     </div>
                 </section>
