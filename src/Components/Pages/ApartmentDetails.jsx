@@ -1,20 +1,32 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { apiFetch } from '../../api/apiClient';
 
 const ApartmentDetails = () => {
     const { id } = useParams();
     const [apartmentData, setApartmentData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [detailsError, setDetailsError] = useState('');
 
     useEffect(() => {
         const fetchApartmentDetails = async () => {
+            if (!id) {
+                setApartmentData(null);
+                setDetailsError('Invalid apartment id');
+                setLoading(false);
+                return;
+            }
+
             try {
                 const response = await apiFetch(`/apartments/${id}`, { skipAuth: true });
-                setApartmentData(response || null);
+                setApartmentData(response?.item ? response : null);
+                setDetailsError('');
             } catch (error) {
                 setApartmentData(null);
+                setDetailsError(error?.message || 'Failed to load apartment details');
                 console.error('Failed to load apartment details:', error);
             } finally {
                 setLoading(false);
@@ -42,6 +54,7 @@ const ApartmentDetails = () => {
         return (
             <div className="mx-auto w-11/12 py-12 text-center md:w-9/12">
                 <h2 className="text-3xl font-bold">Apartment not found</h2>
+                {detailsError ? <p className="mt-3 text-gray-600">{detailsError}</p> : null}
                 <Link to="/apartment" className="mt-6 inline-block rounded-md bg-teal-600 px-5 py-2 font-semibold text-white hover:bg-teal-700">
                     Back to Apartments
                 </Link>
@@ -51,6 +64,15 @@ const ApartmentDetails = () => {
 
     const title = apartment?.title || `Apartment ${apartment?.apartmentNo || ''}`;
     const image = apartment?.image;
+    const mediaItems = Array.isArray(apartmentData?.sections?.media) ? apartmentData.sections.media : [];
+    const mediaImages = mediaItems
+        .map((item) => {
+            if (typeof item === 'string') return item;
+            if (item && typeof item === 'object') return item.url || item.image || item.src || '';
+            return '';
+        })
+        .filter(Boolean);
+    const galleryImages = mediaImages.length > 0 ? mediaImages : [image].filter(Boolean);
     const overview = apartmentData?.sections?.overview || apartment?.overview || apartment?.description || 'No overview available.';
     const price = apartment?.meta?.price ?? apartment?.rent ?? 0;
     const rating = apartment?.meta?.rating ?? apartment?.rating ?? 0;
@@ -67,7 +89,17 @@ const ApartmentDetails = () => {
             </Link>
 
             <div className="overflow-hidden rounded-xl border border-gray-100 shadow-sm">
-                <img src={image} alt={title} className="h-80 w-full object-cover" />
+                {galleryImages.length > 1 ? (
+                    <Carousel showArrows showStatus={false} showThumbs={false} infiniteLoop swipeable>
+                        {galleryImages.map((mediaUrl, index) => (
+                            <div key={`${mediaUrl}-${index}`} className="h-80">
+                                <img src={mediaUrl} alt={`${title} ${index + 1}`} className="h-full w-full object-cover" />
+                            </div>
+                        ))}
+                    </Carousel>
+                ) : (
+                    <img src={galleryImages[0] || image} alt={title} className="h-80 w-full object-cover" />
+                )}
                 <div className="p-6">
                     <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
                     <div className="mt-4 grid grid-cols-1 gap-2 text-sm text-gray-700 sm:grid-cols-2 lg:grid-cols-3">
