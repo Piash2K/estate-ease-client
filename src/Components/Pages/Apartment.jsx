@@ -149,18 +149,20 @@ const Apartment = () => {
     const handleSort = (criteria) => {
         setSortCriteria(criteria);
 
+        const getPrice = (item) => Number(item.rent ?? item?.meta?.price ?? 0);
+        const getRating = (item) => Number(item.rating ?? item?.meta?.rating ?? 0);
+        const getDate = (item) => new Date(item.createdAt ?? item?.meta?.date ?? 0).getTime();
+        const getTitle = (item) => String(item.title ?? item.apartmentNo ?? '').toLowerCase();
+
         const sorted = [...filteredApartments].sort((a, b) => {
-            if (criteria === 'rentAsc') {
-                return a.rent - b.rent;
-            } else if (criteria === 'rentDesc') {
-                return b.rent - a.rent;
-            } else if (criteria === 'apartmentNoAsc') {
-                return a.apartmentNo - b.apartmentNo;
-            } else if (criteria === 'apartmentNoDesc') {
-                return b.apartmentNo - a.apartmentNo;
-            } else {
-                return 0;
-            }
+            if (criteria === 'priceAsc') return getPrice(a) - getPrice(b);
+            if (criteria === 'priceDesc') return getPrice(b) - getPrice(a);
+            if (criteria === 'ratingDesc') return getRating(b) - getRating(a);
+            if (criteria === 'dateDesc') return getDate(b) - getDate(a);
+            if (criteria === 'dateAsc') return getDate(a) - getDate(b);
+            if (criteria === 'titleAsc') return getTitle(a).localeCompare(getTitle(b));
+            if (criteria === 'titleDesc') return getTitle(b).localeCompare(getTitle(a));
+            return 0;
         });
 
         setFilteredApartments(sorted);
@@ -303,10 +305,13 @@ const Apartment = () => {
             className="p-2 border rounded w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-teal-500 "
         >
             <option value="" className="bg-black text-white">Select</option>
-            <option value="rentAsc" className="bg-black text-white">Rent: Low to High</option>
-            <option value="rentDesc" className="bg-black text-white">Rent: High to Low</option>
-            <option value="apartmentNoAsc" className="bg-black text-white">Apartment No: Ascending</option>
-            <option value="apartmentNoDesc" className="bg-black text-white">Apartment No: Descending</option>
+            <option value="priceAsc" className="bg-black text-white">Price: Low to High</option>
+            <option value="priceDesc" className="bg-black text-white">Price: High to Low</option>
+            <option value="ratingDesc" className="bg-black text-white">Rating: High to Low</option>
+            <option value="dateDesc" className="bg-black text-white">Date: Newest First</option>
+            <option value="dateAsc" className="bg-black text-white">Date: Oldest First</option>
+            <option value="titleAsc" className="bg-black text-white">Title: A to Z</option>
+            <option value="titleDesc" className="bg-black text-white">Title: Z to A</option>
         </select>
     </div>
 
