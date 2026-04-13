@@ -12,7 +12,7 @@ import Banner1 from './../../assets/Banner1.jpeg'
 import Banner2 from './../../assets/Banner-2.jpg'
 import Banner3 from './../../assets/Banner3.jpeg'
 import { Helmet } from 'react-helmet';
-import { FaDumbbell, FaParking, FaShieldAlt, FaUmbrellaBeach, FaWifi, FaBuilding, FaKey, FaCreditCard, FaBullhorn } from 'react-icons/fa';
+import { FaDumbbell, FaParking, FaShieldAlt, FaUmbrellaBeach, FaWifi, FaBuilding, FaKey, FaCreditCard, FaBullhorn, FaPaperPlane } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import ReviewsList from './ReviewsList';
 import { apiFetch } from '../../api/apiClient';
@@ -21,6 +21,7 @@ const Home = () => {
     const [coupons, setCoupons] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [apartments, setApartments] = useState([]);
+    const [newsletterEmail, setNewsletterEmail] = useState('');
     const apartmentLocationIcon = new Icon({
         iconUrl: markerIcon,
         iconRetinaUrl: markerIcon2x,
@@ -64,6 +65,27 @@ const Home = () => {
         }, 5000); // Change image every 5 seconds
         return () => clearInterval(interval);
     }, [bannerImages.length]);
+
+    const handleNewsletterSubscribe = () => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (emailPattern.test(newsletterEmail.trim())) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Subscribed Successfully!',
+                text: 'You will receive apartment updates and announcements.',
+                confirmButtonColor: '#0E9F9F',
+            });
+            setNewsletterEmail('');
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Email!',
+                text: 'Please enter a valid email address.',
+                confirmButtonColor: '#FF4C4C',
+            });
+        }
+    };
 
     return (
         <div>
@@ -507,6 +529,33 @@ const Home = () => {
                             <Link to="/contacts" className="rounded-lg border border-white px-6 py-3 font-semibold text-white transition-colors hover:bg-white hover:text-[#1A1A1A]">
                                 Contact Support
                             </Link>
+                        </div>
+                    </div>
+                </section>
+                {/* Newsletter Section */}
+                <section className="w-full pb-20">
+                    <div className="rounded-2xl border border-[#0E9F9F]/20 bg-[#0E9F9F]/5 px-6 py-12 sm:px-10">
+                        <h2 className="text-4xl font-bold text-center mb-4">
+                            Stay Updated With EstateEase
+                        </h2>
+                        <p className="text-xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
+                            Subscribe for apartment availability, announcements, and helpful booking updates sent directly to your inbox.
+                        </p>
+                        <div className="mt-8 mx-auto flex max-w-2xl flex-col gap-4 md:flex-row">
+                            <input
+                                type="email"
+                                value={newsletterEmail}
+                                onChange={(event) => setNewsletterEmail(event.target.value)}
+                                placeholder="Enter your email"
+                                className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0E9F9F]"
+                            />
+                            <button
+                                type="button"
+                                onClick={handleNewsletterSubscribe}
+                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0E9F9F] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#14B8B8]"
+                            >
+                                <FaPaperPlane /> Subscribe
+                            </button>
                         </div>
                     </div>
                 </section>
