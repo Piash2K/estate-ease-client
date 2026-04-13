@@ -14,57 +14,63 @@ const Login = () => {
     const { signInWithEmail, googleProvider } = useContext(AuthContext);
     const [, setError] = useState('');
     const [showPassword, setShowPassWord] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleGoogleSignIn = () => {
-        signInWithPopup(auth, googleProvider)
-            .then((result) => {
-                const user = result.user;
-                Swal.fire({
-                    title: 'Welcome back!',
-                    text: `Hello, ${user.displayName || user.email}`,
-                    icon: 'success',
-                    confirmButtonText: 'Okay',
-                });
-                navigate('/'); // Navigate to the home page
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                setError(errorMessage); // Set error message
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Google Sign-In failed. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'Retry',
-                });
+    const handleGoogleSignIn = async () => {
+        setIsGoogleLoading(true);
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+            Swal.fire({
+                title: 'Welcome back!',
+                text: `Hello, ${user.displayName || user.email}`,
+                icon: 'success',
+                confirmButtonText: 'Okay',
             });
+            navigate('/'); // Navigate to the home page
+        } catch (error) {
+            const errorMessage = error.message;
+            setError(errorMessage); // Set error message
+            Swal.fire({
+                title: 'Error',
+                text: 'Google Sign-In failed. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'Retry',
+            });
+        } finally {
+            setIsGoogleLoading(false);
+        }
     };
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        signInWithEmail(email, password)
-            .then((result) => {
-                const user = result.user;
-                Swal.fire({
-                    title: 'Login Successful!',
-                    text: `Welcome back, ${user.email}`,
-                    icon: 'success',
-                    confirmButtonText: 'Okay',
-                });
-                navigate('/');
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                setError(errorMessage);
-                Swal.fire({
-                    title: 'Login Failed',
-                    text: 'Please check your email and password.',
-                    icon: 'error',
-                    confirmButtonText: 'Retry',
-                });
+        setIsLoggingIn(true);
+        try {
+            const result = await signInWithEmail(email, password);
+            const user = result.user;
+            Swal.fire({
+                title: 'Login Successful!',
+                text: `Welcome back, ${user.email}`,
+                icon: 'success',
+                confirmButtonText: 'Okay',
             });
+            navigate('/');
+        } catch (error) {
+            const errorMessage = error.message;
+            setError(errorMessage);
+            Swal.fire({
+                title: 'Login Failed',
+                text: 'Please check your email and password.',
+                icon: 'error',
+                confirmButtonText: 'Retry',
+            });
+        } finally {
+            setIsLoggingIn(false);
+        }
     };
 
     return (
@@ -82,6 +88,8 @@ const Login = () => {
                         <input
                             name="email"
                             type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
                             className="input input-bordered w-full rounded-lg border-gray-300 focus:border-teal-500 focus:outline-none"
                             required
@@ -95,6 +103,8 @@ const Login = () => {
                         <input
                             name="password"
                             type={showPassword ? 'text' : 'password'}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
                             className="input input-bordered w-full rounded-lg border-gray-300 focus:border-teal-500 focus:outline-none"
                             required
@@ -109,7 +119,12 @@ const Login = () => {
                     </div>
 
                     <div className="form-control mt-6">
-                        <button className="btn w-full rounded-lg border-0 bg-teal-600 text-white hover:bg-teal-700">Login</button>
+                        <button
+                            className="btn w-full rounded-lg border-0 bg-teal-600 text-white hover:bg-teal-700"
+                            disabled={isLoggingIn || isGoogleLoading}
+                        >
+                            {isLoggingIn ? 'Logging in...' : 'Login'}
+                        </button>
                     </div>
                 </form>
 
@@ -122,9 +137,10 @@ const Login = () => {
 
                 <button
                     onClick={handleGoogleSignIn}
+                    disabled={isLoggingIn || isGoogleLoading}
                     className="btn mt-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 hover:bg-gray-50"
                 >
-                    Login with Google
+                    {isGoogleLoading ? 'Signing in with Google...' : 'Login with Google'}
                 </button>
             </div>
         </div>
