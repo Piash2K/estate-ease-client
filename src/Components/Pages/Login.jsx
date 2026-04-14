@@ -8,6 +8,20 @@ import Swal from 'sweetalert2';
 import { Helmet } from 'react-helmet';
 import auth from '../Firebase/firebase.config';
 
+const getAuthErrorMessage = (errorCode) => {
+    const errorMap = {
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/user-not-found': 'No account found with this email.',
+        'auth/wrong-password': 'Incorrect password. Please try again.',
+        'auth/invalid-credential': 'Incorrect email or password.',
+        'auth/too-many-requests': 'Too many attempts. Please try again later.',
+        'auth/popup-closed-by-user': 'Google sign-in was canceled before completion.',
+        'auth/popup-blocked': 'Popup was blocked. Please allow popups and try again.',
+    };
+
+    return errorMap[errorCode] || 'Authentication failed. Please try again.';
+};
+
 
 
 const Login = () => {
@@ -35,11 +49,11 @@ const Login = () => {
             });
             navigate(from, { replace: true });
         } catch (error) {
-            const errorMessage = error.message;
+            const errorMessage = getAuthErrorMessage(error.code);
             setError(errorMessage); // Set error message
             Swal.fire({
                 title: 'Error',
-                text: 'Google Sign-In failed. Please try again.',
+                text: errorMessage,
                 icon: 'error',
                 confirmButtonText: 'Retry',
             });
@@ -62,11 +76,11 @@ const Login = () => {
             });
             navigate(from, { replace: true });
         } catch (error) {
-            const errorMessage = error.message;
+            const errorMessage = getAuthErrorMessage(error.code);
             setError(errorMessage);
             Swal.fire({
                 title: 'Login Failed',
-                text: 'Please check your email and password.',
+                text: errorMessage,
                 icon: 'error',
                 confirmButtonText: 'Retry',
             });
