@@ -20,6 +20,8 @@ export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [userRole, setUserRole] = useState(null);
+    const [roleLoading, setRoleLoading] = useState(true);
 
     const createNewUser = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password);
@@ -63,6 +65,8 @@ const AuthProvider = ({ children }) => {
     const authInfo = {
         user,
         setUser,
+        userRole,
+        roleLoading,
         createNewUser,
         logOut,
         signInWithEmail,
@@ -76,9 +80,27 @@ const AuthProvider = ({ children }) => {
             console.log(currentUser)
             if (currentUser) {
                 setUser(currentUser);
+                setUserRole('user');
+                setRoleLoading(true);
+
+                apiFetch(`/users/${currentUser.email}`)
+                    .then((data) => {
+                        if (data?.role) {
+                            setUserRole(data.role);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching user role:', error);
+                    })
+                    .finally(() => {
+                        setRoleLoading(false);
+                    });
+
                 sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
             } else {
                 setUser(null);
+                setUserRole(null);
+                setRoleLoading(false);
             }
             setLoading(false);
         });
@@ -86,7 +108,7 @@ const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
-    if (loading) {
+    if (loading || roleLoading) {
         return (
             <div style={{
                 display: 'flex',

@@ -17,10 +17,8 @@ import {
 import { apiFetch } from "../../../api/apiClient";
 
 const DashboardLayout = () => {
-  const { user } = useContext(AuthContext);
+  const { user, userRole } = useContext(AuthContext);
   const [hasAgreement, setHasAgreement] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isMember, setIsMember] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,18 +32,11 @@ const DashboardLayout = () => {
           console.error('Error fetching agreement:', error);
           setHasAgreement(false);
         });
-
-      apiFetch(`/users/${user.email}`)
-        .then(data => {
-          if (data?.role === 'admin' || data?.role === 'manager') {
-            setIsAdmin(true);
-          } else if (data?.role === 'member') {
-            setIsMember(true);
-          }
-        })
-        .catch(error => console.error('Error fetching user:', error));
     }
   }, [user?.email]);
+
+  const isAdmin = userRole === 'admin' || userRole === 'manager';
+  const isMember = userRole === 'member';
 
   return (
     <div className="flex flex-col md:flex-row">

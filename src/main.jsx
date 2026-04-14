@@ -72,39 +72,39 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'my-profile',
-        element: <MyProfile></MyProfile>
+        element: <PrivateRoute allowedRoles={['member', 'admin', 'manager']}><MyProfile></MyProfile></PrivateRoute>
       },
       {
         path: 'announcements',
-        element: <Announcements></Announcements>
+        element: <PrivateRoute allowedRoles={['member', 'admin', 'manager']}><Announcements></Announcements></PrivateRoute>
       },
       {
         path: 'make-payment',
-        element: <MakePayment></MakePayment>
+        element: <PrivateRoute allowedRoles={['member']}><MakePayment></MakePayment></PrivateRoute>
       },
       {
         path: 'payment-history',
-        element: <PaymentHistory></PaymentHistory>
+        element: <PrivateRoute allowedRoles={['member']}><PaymentHistory></PaymentHistory></PrivateRoute>
       },
       {
         path: 'manage-members',
-        element: <ManageMembers></ManageMembers>
+        element: <PrivateRoute allowedRoles={['admin', 'manager']}><ManageMembers></ManageMembers></PrivateRoute>
       },
       {
         path: 'make-announcement',
-        element: <MakeAnnouncement></MakeAnnouncement>
+        element: <PrivateRoute allowedRoles={['admin', 'manager']}><MakeAnnouncement></MakeAnnouncement></PrivateRoute>
       },
       {
         path: 'agrements-request',
-        element: <AgreementRequests></AgreementRequests>
+        element: <PrivateRoute allowedRoles={['admin', 'manager']}><AgreementRequests></AgreementRequests></PrivateRoute>
       },
       {
         path: 'manage-coupons',
-        element: <ManageCoupons></ManageCoupons>
+        element: <PrivateRoute allowedRoles={['admin', 'manager']}><ManageCoupons></ManageCoupons></PrivateRoute>
       },
       {
         path: 'admin-profile',
-        element: <AdminProfile></AdminProfile>
+        element: <PrivateRoute allowedRoles={['admin', 'manager']}><AdminProfile></AdminProfile></PrivateRoute>
       }
     ]
   }
