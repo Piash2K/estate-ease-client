@@ -6,6 +6,18 @@ import Swal from 'sweetalert2';
 import { Helmet } from 'react-helmet';
 import { apiFetch } from '../../api/apiClient';
 
+const getAuthErrorMessage = (errorCode) => {
+    const errorMap = {
+        'auth/email-already-in-use': 'An account with this email already exists.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/weak-password': 'Password is too weak. Please choose a stronger one.',
+        'auth/operation-not-allowed': 'Email/password sign-up is not enabled right now.',
+        'auth/too-many-requests': 'Too many attempts. Please try again later.',
+    };
+
+    return errorMap[errorCode] || 'Registration failed. Please try again.';
+};
+
 const Register = () => {
     const { createNewUser, setUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -13,6 +25,7 @@ const Register = () => {
     const [passwordError, setPasswordError] = useState('');
     const [showPassword, setShowPassWord] = useState(false);
     const [error, setError] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
 
     const validatePassword = (password) => {
         if (password.length < 6) {
@@ -43,7 +56,7 @@ const Register = () => {
         }
     };
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         const name = e.target.name.value;
         const email = e.target.email.value;
@@ -57,43 +70,42 @@ const Register = () => {
         }
 
         setPasswordError('');
-        createNewUser(email, password)
-            .then((result) => {
-                setUser(result.user); 
-                updateUserProfile({
-                    photoURL: photo,
-                    displayName: name,
-                })
-                    .then(() => {
-                        setUser((prevUser) => ({
-                            ...prevUser,
-                            displayName: name,
-                            photoURL: photo,
-                        }));
-                        sendUserDataToBackend(result.user.email, name, 'user');
+        setIsRegistering(true);
+        try {
+            const result = await createNewUser(email, password);
+            setUser(result.user);
 
-                        Swal.fire({
-                            title: 'Registration Successful!',
-                            text: `Welcome ${name}! Your account has been created successfully.`,
-                            icon: 'success'
-                        }).then(() => {
-                            navigate('/');
-                        });
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            })
-            .catch((error) => {
-                const errorMessage = error.message;
-                setError(errorMessage);
-                Swal.fire({
-                    title: 'Registration Failed',
-                    text: 'There was an error creating your account. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'Retry',
-                });
+            await updateUserProfile({
+                photoURL: photo,
+                displayName: name,
             });
+
+            setUser((prevUser) => ({
+                ...prevUser,
+                displayName: name,
+                photoURL: photo,
+            }));
+            sendUserDataToBackend(result.user.email, name, 'user');
+
+            Swal.fire({
+                title: 'Registration Successful!',
+                text: `Welcome ${name}! Your account has been created successfully.`,
+                icon: 'success'
+            }).then(() => {
+                navigate('/');
+            });
+        } catch (error) {
+            const errorMessage = getAuthErrorMessage(error.code);
+            setError(errorMessage);
+            Swal.fire({
+                title: 'Registration Failed',
+                text: errorMessage,
+                icon: 'error',
+                confirmButtonText: 'Retry',
+            });
+        } finally {
+            setIsRegistering(false);
+        }
     };
 
     return (
@@ -160,7 +172,9 @@ const Register = () => {
                     </div>
                     {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                     <div className="form-control mt-6">
-                        <button className="btn bg-teal-600 w-full">Register</button>
+                        <button className="btn bg-teal-600 w-full" disabled={isRegistering}>
+                            {isRegistering ? 'Registering...' : 'Register'}
+                        </button>
                     </div>
                 </form>
                 <p className="mt-4 text-sm text-center">
