@@ -1,17 +1,44 @@
 import { useState, useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import { ThemeToggle } from "../DarkMode/ThemeToggle";
 import { FaChevronDown } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const navigate = useNavigate();
 
   const navLinkClass = ({ isActive }) =>
     isActive
       ? "text-white bg-[#0E9F9F] px-3 py-2 rounded-lg font-semibold transition-colors"
       : "text-[#A3A3A3] hover:text-white hover:bg-[#0E9F9F] px-3 py-2 rounded-lg transition-colors duration-300";
+
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: 'Log out of EstateEase?',
+      text: 'You will need to sign in again to access protected pages.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Logout',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    setIsLoggingOut(true);
+    try {
+      await logOut();
+      setIsProfileDropdownOpen(false);
+      navigate('/login', { replace: true });
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   const links = (
     <>
@@ -75,7 +102,13 @@ const Navbar = () => {
                 <div className="absolute right-0 mt-2 bg-[#2A2A2A] rounded-lg shadow-xl w-48 py-2 z-50">
                   <div className="px-4 py-2 font-semibold text-white border-b border-[#0E9F9F]">{user.displayName}</div>
                   <Link to="/dashboard" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition">Dashboard</Link>
-                  <button onClick={logOut} className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition">Logout</button>
+                  <button
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isLoggingOut ? 'Logging out...' : 'Logout'}
+                  </button>
                 </div>
               )}
             </div>
