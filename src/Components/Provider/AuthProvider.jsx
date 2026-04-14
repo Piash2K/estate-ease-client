@@ -87,6 +87,8 @@ const AuthProvider = ({ children }) => {
                     .then((data) => {
                         if (data?.role) {
                             setUserRole(data.role);
+                        } else {
+                            return sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
                         }
                     })
                     .catch((error) => {
@@ -95,8 +97,6 @@ const AuthProvider = ({ children }) => {
                     .finally(() => {
                         setRoleLoading(false);
                     });
-
-                sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
             } else {
                 setUser(null);
                 setUserRole(null);
