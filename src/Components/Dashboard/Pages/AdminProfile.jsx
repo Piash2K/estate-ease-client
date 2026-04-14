@@ -6,13 +6,7 @@ import { Bars } from "react-loader-spinner";
 import { apiFetch } from "../../../api/apiClient";
 
 const AdminProfile = () => {
-  const { user } = useContext(AuthContext);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [adminInfo, setAdminInfo] = useState({
-    name: "",
-    email: "",
-    image: "",
-  });
+  const { user, userRole } = useContext(AuthContext);
   const [stats, setStats] = useState({
     totalRooms: 0,
     availableRooms: 0,
@@ -23,24 +17,6 @@ const AdminProfile = () => {
   const [loading, setLoading] = useState(true); // State for loading
 
   useEffect(() => {
-    const fetchAdminData = async () => {
-      try {
-        const users = await apiFetch('/users');
-        const usersArray = Array.isArray(users) ? users : users.data || [];
-        const admin = usersArray.find((user) => user.role === "admin");
-        if (admin) {
-          setIsAdmin(true);
-          setAdminInfo({
-            name: admin.displayName,
-            email: admin.email,
-            image: admin.image,
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching admin data:', error);
-      }
-    };
-
     const fetchStats = async () => {
       try {
         const [roomsData, agreementsData, usersData] = await Promise.all([
@@ -54,8 +30,8 @@ const AdminProfile = () => {
         const totalMembers = users.filter((user) => user.role === "member").length;
         setStats({
           totalRooms: rooms.length,
-          availableRooms: rooms.length - totalMembers,
-          agreements: totalMembers,
+          availableRooms: rooms.length - agreements.length,
+          agreements: agreements.length,
           totalUsers: users.length,
           totalMembers,
         });
@@ -66,7 +42,6 @@ const AdminProfile = () => {
       }
     };
 
-    fetchAdminData();
     fetchStats();
   }, []);
 
@@ -85,7 +60,7 @@ const AdminProfile = () => {
     );
   }
 
-  if (!isAdmin) {
+  if (userRole !== "admin" && userRole !== "manager") {
     return <div className="text-center text-red-500">Unauthorized: You must be an admin to view this page.</div>;
   }
 
@@ -132,7 +107,7 @@ const AdminProfile = () => {
         <div className="flex items-center sm:space-x-4">
           <img src={user.photoURL} alt="Admin Avatar" className="w-12 h-12 rounded-full" />
           <div className="flex flex-col sm:flex-row">
-            <p className="text-lg font-semibold truncate max-w-[200px]">{user.name}</p>
+            <p className="text-lg font-semibold truncate max-w-[200px]">{user.displayName}</p>
             <p className="text-sm">{user.email}</p>
           </div>
         </div>
