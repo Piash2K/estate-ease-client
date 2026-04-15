@@ -98,7 +98,7 @@ const AdminProfile = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
   return (
-    <div className="p-4 md:p-6 min-h-screen max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 min-h-screen  mx-auto">
       <Helmet>
         <title>Admin Profile | EstateEase</title>
       </Helmet>

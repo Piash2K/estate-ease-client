@@ -37,7 +37,7 @@ const ManageMembers = () => {
 
     if (loading) {
         return (
-            <div className="ml-0 p-4 md:ml-72 md:p-6">
+            <div className="p-4 md:p-8">
                 <div className="h-8 w-56 animate-pulse rounded bg-gray-200" />
                 <div className="mt-4 overflow-hidden rounded-lg border border-base-300 bg-base-100 p-4">
                     <div className="mb-3 h-12 w-full animate-pulse rounded bg-gray-200" />
@@ -53,7 +53,7 @@ const ManageMembers = () => {
     }
 
     return (
-        <div className="ml-0 p-4 md:ml-72 md:p-6">
+        <div className="p-4 md:p-8">
             <Helmet><title>Manage Members | EstateEase </title></Helmet>
             <h2 className="text-2xl font-bold mb-4">Manage Members</h2>
             {members.length === 0 ? (

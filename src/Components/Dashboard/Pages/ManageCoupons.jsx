@@ -114,7 +114,7 @@ const ManageCoupons = () => {
 
     if (isLoading) {
             return (
-                <div className="ml-0 p-4 md:ml-72 md:p-6">
+                <div className="p-4 md:p-8">
                     <div className="h-8 w-56 animate-pulse rounded bg-gray-200" />
                     <div className="mt-4 overflow-hidden rounded-lg border border-base-300 bg-base-100 p-4">
                         <div className="mb-3 h-12 w-full animate-pulse rounded bg-gray-200" />
@@ -130,7 +130,7 @@ const ManageCoupons = () => {
     if (isError) return <div>Error loading coupons</div>;
 
     return (
-        <div className="ml-0 p-4 md:ml-72 md:p-6">
+        <div className="p-4 md:p-8">
             <Helmet>
                 <title>Manage Coupons | EstateEase</title>
             </Helmet>
