@@ -2,7 +2,6 @@ import { useState, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import { ThemeToggle } from "../DarkMode/ThemeToggle";
-import { FaChevronDown } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
@@ -43,17 +42,8 @@ const Navbar = () => {
   const links = (
     <>
       <NavLink to="/" className={navLinkClass}>Home</NavLink>
-      
-      <div className="relative group">
-        <button className="flex items-center text-[#A3A3A3] hover:text-white hover:bg-[#0E9F9F] px-3 py-2 rounded-lg transition-colors">
-          Apartments <FaChevronDown className="ml-1 text-xs" />
-        </button>
-        <div className="hidden group-hover:block absolute left-0 mt-0 w-48 bg-[#2A2A2A] rounded-lg shadow-xl py-2 z-50">
-          <NavLink to="/apartment" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition">All Apartments</NavLink>
-          <a href="/apartment" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition text-sm">By Budget</a>
-          <a href="/apartment" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition text-sm">By Location</a>
-        </div>
-      </div>
+
+      <NavLink to="/apartment" className={navLinkClass}>Apartments</NavLink>
 
       <NavLink to="/contacts" className={navLinkClass}>Contact</NavLink>
       <NavLink to="/FAQ" className={navLinkClass}>FAQ</NavLink>
