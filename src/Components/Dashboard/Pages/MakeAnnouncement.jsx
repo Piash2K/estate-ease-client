@@ -11,7 +11,7 @@ const MakeAnnouncement = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -21,37 +21,29 @@ const MakeAnnouncement = () => {
             createdAt: new Date(),
         };
 
-        apiFetch('/announcements', {
-            method: 'POST',
-            body: JSON.stringify(announcementData),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Error creating announcement');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log(data);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Announcement created successfully!',
-                    confirmButtonText: 'OK'
-                });
-                navigate('/dashboard');
-            })
-            .catch((error) => {
-                console.error(error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Failed to create announcement',
-                    text: error.message,
-                    confirmButtonText: 'Try Again'
-                });
-            })
-            .finally(() => {
-                setLoading(false);
+        try {
+            await apiFetch('/announcements', {
+                method: 'POST',
+                body: JSON.stringify(announcementData),
             });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Announcement created successfully!',
+                confirmButtonText: 'OK'
+            });
+            navigate('/dashboard/announcements');
+        } catch (error) {
+            console.error(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to create announcement',
+                text: error.message,
+                confirmButtonText: 'Try Again'
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (loading) {
