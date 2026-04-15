@@ -62,6 +62,27 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    const syncUserRole = async (currentUser) => {
+        try {
+            const data = await apiFetch(`/users/${currentUser.email}`);
+            if (data?.role) {
+                setUserRole(data.role);
+                return;
+            }
+
+            await sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
+            setUserRole('user');
+        } catch (error) {
+            if (error?.status === 404) {
+                await sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
+                setUserRole('user');
+                return;
+            }
+
+            console.error('Error fetching user role:', error);
+        }
+    };
+
     const authInfo = {
         user,
         setUser,
@@ -83,17 +104,7 @@ const AuthProvider = ({ children }) => {
                 setUserRole('user');
                 setRoleLoading(true);
 
-                apiFetch(`/users/${currentUser.email}`)
-                    .then((data) => {
-                        if (data?.role) {
-                            setUserRole(data.role);
-                        } else {
-                            return sendUserDataToBackend(currentUser.email, currentUser.displayName, 'user');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error fetching user role:', error);
-                    })
+                syncUserRole(currentUser)
                     .finally(() => {
                         setRoleLoading(false);
                     });
