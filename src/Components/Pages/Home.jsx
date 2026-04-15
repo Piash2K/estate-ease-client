@@ -345,7 +345,7 @@ const Home = () => {
                 </section>
                 {/* Live Statistics */}
                 <section className="w-full pb-20">
-                    <div className="rounded-2xl border border-gray-100 bg-white px-6 py-10 shadow-sm sm:px-10">
+                    <div className="rounded-2xl border border-gray-100 px-6 py-10 shadow-sm sm:px-10">
                         <h2 className="text-4xl font-bold text-center mb-4">
                             Live Statistics
                         </h2>
