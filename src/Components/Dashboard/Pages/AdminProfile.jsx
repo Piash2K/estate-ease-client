@@ -98,17 +98,17 @@ const AdminProfile = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
   return (
-    <div className="p-6 min-h-screen ml-72">
+    <div className="p-4 md:p-6 min-h-screen max-w-7xl mx-auto">
       <Helmet>
         <title>Admin Profile | EstateEase</title>
       </Helmet>
 
       {/* Header */}
-      <div className="flex justify-between items-center mb-8 flex-col sm:flex-row">
-        <h1 className="text-3xl font-bold mb-4 sm:mb-0">Admin Dashboard</h1>
-        <div className="flex items-center sm:space-x-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <div className="flex items-center gap-4">
           <img src={user.photoURL} alt="Admin Avatar" className="w-12 h-12 rounded-full" />
-          <div className="flex flex-col sm:flex-row">
+          <div className="flex flex-col sm:flex-row gap-1 sm:gap-4">
             <p className="text-lg font-semibold truncate max-w-[200px]">{user.displayName}</p>
             <p className="text-sm">{user.email}</p>
           </div>

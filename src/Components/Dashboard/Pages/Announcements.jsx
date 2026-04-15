@@ -23,7 +23,7 @@ const Announcements = () => {
 
     if (loading) {
         return (
-            <div className="ml-0 p-4 md:ml-72 md:p-6">
+            <div className="p-4 md:p-6">
                 <div className="h-8 w-56 animate-pulse rounded bg-gray-200" />
                 <div className="mt-6 space-y-4">
                     <div className="h-28 w-full animate-pulse rounded-xl bg-gray-200" />
@@ -35,7 +35,7 @@ const Announcements = () => {
     }
 
     return (
-        <div className="ml-0 p-4 md:ml-72 md:p-6">
+        <div className="p-4 md:p-6 max-w-4xl mx-auto">
             <Helmet><title>Announcements | EstateEase</title></Helmet>
             <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-3xl">All Announcements</h2>
             {announcements.length === 0 ? (

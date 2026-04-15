@@ -54,14 +54,14 @@ const AgreementRequests = () => {
     if (isError) return <div>Error loading agreements</div>;
 
     return (
-        <div className="ml-0 w-full p-4 md:ml-72 md:p-6">
+        <div className="p-4 md:p-6 max-w-6xl mx-auto w-full">
             <Helmet>
                 <title>Agreement Requests | EstateEase</title>
             </Helmet>
             <h2 className="text-2xl font-bold mb-4">Manage Agreement Requests</h2>
 
             <div className="overflow-x-auto">
-                <table className="table w-full min-w-[920px] border">
+                <table className="table w-full min-w-[720px] border text-sm md:text-base">
                     <thead>
                         <tr>
                             <th>User Name</th>
@@ -78,7 +78,7 @@ const AgreementRequests = () => {
                         {agreements.map((agreement) => (
                             <tr key={agreement._id}>
                                 <td>{agreement.userName}</td>
-                                <td>{agreement.userEmail}</td>
+                                <td className="break-all max-w-[120px]">{agreement.userEmail}</td>
                                 <td>{agreement.floorNo}</td>
                                 <td>{agreement.blockName}</td>
                                 <td>{agreement.apartmentNo}</td>

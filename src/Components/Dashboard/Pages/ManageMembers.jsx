@@ -59,9 +59,9 @@ const ManageMembers = () => {
             {members.length === 0 ? (
                 <p className="text-gray-600">No users available.</p>
             ) : (
-                <div className="mt-4 overflow-hidden rounded-lg border border-base-300 bg-base-100">
+                <div className="mt-4 rounded-lg border border-base-300 bg-base-100">
                     <div className="overflow-x-auto">
-                    <table className="table w-full min-w-[680px]">
+                        <table className="table w-full min-w-[680px]">
                         <thead className="bg-base-200/70">
                             <tr >
                                 <th className="px-4 py-2 border-b text-left">User Name</th>
@@ -91,7 +91,7 @@ const ManageMembers = () => {
                                 </tr>
                             ))}
                         </tbody>
-                    </table>
+                        </table>
                     </div>
                 </div>
             )}

@@ -137,8 +137,9 @@ const ManageCoupons = () => {
             <h2 className="text-2xl font-bold mb-4">Manage Coupons</h2>
 
             {/* Coupon Table */}
-            <div className="overflow-x-auto">
-                <table className="table w-full min-w-[760px] border">
+            <div className="mt-4 rounded-lg border border-base-300 bg-base-100">
+                <div className="overflow-x-auto">
+                    <table className="table w-full min-w-[760px] border">
                     <thead>
                         <tr>
                             <th>Coupon Code</th>
@@ -181,7 +182,8 @@ const ManageCoupons = () => {
                             </tr>
                         )}
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
 
             {/* Add Coupon Button */}

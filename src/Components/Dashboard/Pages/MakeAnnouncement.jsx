@@ -62,10 +62,10 @@ const MakeAnnouncement = () => {
     }
 
     return (
-        <div className="ml-0 p-4 md:ml-72 md:p-6">
+        <div className="p-4 md:p-6 max-w-2xl mx-auto w-full">
             <Helmet><title>Make Announcement | EstateEase </title></Helmet>
             <h2 className="mb-4 text-2xl font-bold">Make Announcement</h2>
-            <form onSubmit={handleSubmit} className="max-w-3xl space-y-4 rounded-lg border border-base-300 bg-base-100 p-4 md:p-6">
+            <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-base-300 bg-base-100 p-4 md:p-6">
                 <div>
                     <label htmlFor="title" className="mb-1 block font-medium">
                         Title:

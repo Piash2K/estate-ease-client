@@ -78,7 +78,7 @@ const PaymentHistory = () => {
                         </div>
 
                         {/* Desktop Layout */}
-                        <div className="hidden overflow-hidden rounded-lg border border-base-300 bg-base-100 shadow-sm lg:block">
+                        <div className="hidden rounded-lg border border-base-300 bg-base-100 shadow-sm lg:block">
                             <div className="overflow-x-auto">
                                 <table className="table w-full min-w-[900px]">
                                     <thead className="bg-base-200/60">
