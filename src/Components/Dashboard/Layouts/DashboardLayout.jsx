@@ -49,16 +49,16 @@ const DashboardLayout = () => {
       {/* Sidebar Overlay for Mobile */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden transition-opacity duration-300"
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden transition-opacity duration-300"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
       
       {/* Sidebar - Fixed position for all devices */}
       <aside
-        className={`fixed top-0 left-0 z-50 h-screen w-72 bg-[#23252b] shadow-2xl transform transition-transform duration-300 ease-in-out overflow-y-auto ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        className={`fixed top-0 left-0 z-50 h-screen w-72 bg-[#23252b] shadow-2xl transform transition-transform duration-300 ease-in-out overflow-y-auto
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:translate-x-0`}
         style={{ willChange: 'transform' }}
         aria-label="Sidebar"
       >
@@ -66,7 +66,7 @@ const DashboardLayout = () => {
         <div className="flex justify-between items-center p-5 border-b border-gray-700 sticky top-0 bg-[#23252b] z-10">
           <h2 className="text-xl font-bold text-white">Dashboard Menu</h2>
           <button
-            className="text-white text-2xl p-2 bg-[#4F46E5] rounded-lg hover:bg-[#6366F1] transition-all md:hidden"
+            className="text-white text-2xl p-2 bg-[#4F46E5] rounded-lg hover:bg-[#6366F1] transition-all lg:hidden"
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
           >
@@ -187,9 +187,9 @@ const DashboardLayout = () => {
       </aside>
 
       {/* Main Content Area - with left margin on desktop to account for fixed sidebar */}
-      <div className="flex-1 flex flex-col min-h-screen w-full md:ml-72">
-        {/* Mobile Topbar */}
-        <div className="md:hidden sticky top-0 z-30 bg-[#2C2F36] shadow-lg">
+      <div className="flex-1 flex flex-col min-h-screen w-full lg:ml-72">
+        {/* Topbar for sm and md */}
+        <div className="lg:hidden sticky top-0 z-30 bg-[#2C2F36] shadow-lg">
           <div className="flex items-center justify-between px-4 py-3">
             <button
               className="text-white p-2 bg-[#4F46E5] rounded-lg hover:bg-[#6366F1] transition-all"
