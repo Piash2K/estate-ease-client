@@ -17,7 +17,7 @@ const updateAgreement = async (agreementId, status, role = "") => {
 
 const AgreementRequests = () => {
     const queryClient = useQueryClient();
-    const { data: agreements, isLoading, isError } = useQuery({
+    const { data: agreements = [], isLoading, isError } = useQuery({
         queryKey: ["agreements"],
         queryFn: fetchAgreements,
     });
@@ -39,7 +39,7 @@ const AgreementRequests = () => {
     });
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className="ml-0 flex min-h-[60vh] items-center justify-center p-4 md:ml-72 md:p-6">
                 <Bars 
                     height="80" 
                     width="80" 
@@ -54,14 +54,14 @@ const AgreementRequests = () => {
     if (isError) return <div>Error loading agreements</div>;
 
     return (
-        <div className="p-4 w-full ml-72">
+        <div className="ml-0 w-full p-4 md:ml-72 md:p-6">
             <Helmet>
                 <title>Agreement Requests | EstateEase</title>
             </Helmet>
             <h2 className="text-2xl font-bold mb-4">Manage Agreement Requests</h2>
 
             <div className="overflow-x-auto">
-                <table className="table w-full border">
+                <table className="table w-full min-w-[920px] border">
                     <thead>
                         <tr>
                             <th>User Name</th>
@@ -85,18 +85,22 @@ const AgreementRequests = () => {
                                 <td>${agreement.rent}</td>
                                 <td>{new Date(agreement.createdAt).toLocaleDateString()}</td>
                                 <td>
-                                    <button
-                                        className="btn btn-sm btn-success mr-2"
-                                        onClick={() => updateMutation.mutate({ agreementId: agreement._id, status: "accepted", role: "member" })}
-                                    >
-                                        Accept
-                                    </button>
-                                    <button
-                                        className="btn btn-sm btn-error"
-                                        onClick={() => updateMutation.mutate({ agreementId: agreement._id, status: "rejected" })}
-                                    >
-                                        Reject
-                                    </button>
+                                    <div className="flex flex-col gap-2 sm:flex-row">
+                                        <button
+                                            className="btn btn-sm btn-success"
+                                            disabled={updateMutation.isPending}
+                                            onClick={() => updateMutation.mutate({ agreementId: agreement._id, status: "accepted", role: "member" })}
+                                        >
+                                            Accept
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-error"
+                                            disabled={updateMutation.isPending}
+                                            onClick={() => updateMutation.mutate({ agreementId: agreement._id, status: "rejected" })}
+                                        >
+                                            Reject
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
