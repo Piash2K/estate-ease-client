@@ -34,7 +34,7 @@ const ManageCoupons = () => {
 
     const queryClient = useQueryClient();
 
-    const { data: coupons, isLoading, isError } = useQuery({
+    const { data: coupons = [], isLoading, isError } = useQuery({
         queryKey: ["coupons"],
         queryFn: fetchCoupons,
     });
@@ -115,7 +115,7 @@ const ManageCoupons = () => {
 
     if (isLoading) {
             return (
-                <div className="flex justify-center items-center h-screen">
+                <div className="ml-0 flex min-h-[60vh] items-center justify-center p-4 md:ml-72 md:p-6">
                     <Bars 
                         height="80" 
                         width="80" 
@@ -130,7 +130,7 @@ const ManageCoupons = () => {
     if (isError) return <div>Error loading coupons</div>;
 
     return (
-        <div className="p-4 ml-72">
+        <div className="ml-0 p-4 md:ml-72 md:p-6">
             <Helmet>
                 <title>Manage Coupons | EstateEase</title>
             </Helmet>
@@ -138,7 +138,7 @@ const ManageCoupons = () => {
 
             {/* Coupon Table */}
             <div className="overflow-x-auto">
-                <table className="table w-full border">
+                <table className="table w-full min-w-[760px] border">
                     <thead>
                         <tr>
                             <th>Coupon Code</th>
@@ -156,18 +156,20 @@ const ManageCoupons = () => {
                                 <td>{coupon.description}</td>
                                 <td>{coupon.expiration}</td>
                                 <td>
-                                    <button
-                                        className="btn btn-sm bg-teal-600 mr-2"
-                                        onClick={() => handleUpdateClick(coupon)}
-                                    >
-                                        Update
-                                    </button>
-                                    <button
-                                        className="btn btn-sm bg-red-500"
-                                        onClick={() => handleDelete(coupon._id)}
-                                    >
-                                        Delete
-                                    </button>
+                                    <div className="flex flex-col gap-2 sm:flex-row">
+                                        <button
+                                            className="btn btn-sm bg-teal-600 text-white hover:bg-teal-700"
+                                            onClick={() => handleUpdateClick(coupon)}
+                                        >
+                                            Update
+                                        </button>
+                                        <button
+                                            className="btn btn-sm bg-red-500 text-white hover:bg-red-600"
+                                            onClick={() => handleDelete(coupon._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -198,8 +200,8 @@ const ManageCoupons = () => {
 
             {/* Add/Update Coupon Modal */}
             {modalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-lg bg-white p-5 shadow-lg sm:p-6">
                         <h3 className="text-xl font-bold mb-4">
                             {isUpdate ? "Update Coupon" : "Add New Coupon"}
                         </h3>
