@@ -48,7 +48,7 @@ const MakeAnnouncement = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className="ml-0 flex min-h-[60vh] items-center justify-center p-4 md:ml-72 md:p-6">
                 <Bars
                     height="80"
                     width="80"
@@ -62,12 +62,12 @@ const MakeAnnouncement = () => {
     }
 
     return (
-        <div className="p-4 ml-72">
+        <div className="ml-0 p-4 md:ml-72 md:p-6">
             <Helmet><title>Make Announcement | EstateEase </title></Helmet>
-            <h2 className="text-xl mb-4">Make Announcement</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="mb-4 text-2xl font-bold">Make Announcement</h2>
+            <form onSubmit={handleSubmit} className="max-w-3xl space-y-4 rounded-lg border border-base-300 bg-base-100 p-4 md:p-6">
                 <div>
-                    <label htmlFor="title" className="block ">
+                    <label htmlFor="title" className="mb-1 block font-medium">
                         Title:
                     </label>
                     <input
@@ -82,7 +82,7 @@ const MakeAnnouncement = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="description" className="block">
+                    <label htmlFor="description" className="mb-1 block font-medium">
                         Description:
                     </label>
                     <textarea
@@ -98,7 +98,7 @@ const MakeAnnouncement = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-teal-600 text-white p-2 rounded-md"
+                    className="btn w-full bg-teal-600 text-white hover:bg-teal-700"
                     disabled={loading}
                 >
                     {loading ? "Creating..." : "Create Announcement"}
