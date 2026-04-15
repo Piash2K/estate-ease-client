@@ -188,7 +188,7 @@ const Apartment = () => {
 
     if (loading) {
         return (
-            <div className="w-11/12 md:w-9/12 mx-auto py-8">
+            <div className="w-full min-h-screen bg-base-100 text-base-content py-8">
                 <div className="h-10 w-56 mx-auto rounded bg-gray-200 animate-pulse" />
                 <div className="mt-8 mb-6 h-12 rounded bg-gray-200 animate-pulse" />
                 <div className="mb-6 grid grid-cols-1 gap-4 rounded-xl border border-gray-200 p-4 md:grid-cols-2 xl:grid-cols-4">
@@ -201,7 +201,7 @@ const Apartment = () => {
                     <div className="h-11 flex-1 rounded bg-gray-200 animate-pulse" />
                     <div className="h-11 w-full rounded bg-gray-200 animate-pulse sm:w-40" />
                 </div>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {Array.from({ length: 8 }).map((_, index) => (
                         <div key={index} className="rounded-xl border border-gray-100 p-6 shadow-sm">
                             <div className="h-48 w-full rounded-lg bg-gray-200 animate-pulse" />
@@ -220,9 +220,9 @@ const Apartment = () => {
     }
 
     return (
-        <div className="w-11/12 md:w-9/12 mx-auto py-8">
+        <div className="w-full min-h-screen bg-base-100 text-base-content px-2 sm:px-4 md:px-8 max-w-screen-2xl mx-auto">
             <Helmet><title>Apartment | EstateEase </title></Helmet>
-            <h1 className="text-4xl font-bold py-8 mb-6 text-center ">Apartments</h1>
+            <h1 className="text-4xl font-bold py-2 mb-2 text-center ">Apartments</h1>
             
             {/* Search bar */}
             <div className="mb-6">
@@ -237,7 +237,7 @@ const Apartment = () => {
             </div>
 
             {/* Filters */}
-            <div className="mb-6 rounded-xl border border-gray-200 p-4">
+            <div className="mb-6 rounded-xl border border-base-300 bg-base-200 p-4">
                 <div className="mb-4 flex items-center justify-between gap-4 flex-wrap">
                     <h2 className="text-xl font-bold">Filters</h2>
                     <button
@@ -372,7 +372,7 @@ const Apartment = () => {
 </div>
 
             {currentApartments.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {currentApartments.map((apt, index) => (
                         <ApartmentCard
                             key={apt._id || index}
