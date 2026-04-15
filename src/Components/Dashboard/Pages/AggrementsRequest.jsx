@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Bars } from "react-loader-spinner";
 import { apiFetch } from "../../../api/apiClient";
 
 const fetchAgreements = async () => {
@@ -39,15 +38,16 @@ const AgreementRequests = () => {
     });
     if (isLoading) {
         return (
-            <div className="ml-0 flex min-h-[60vh] items-center justify-center p-4 md:ml-72 md:p-6">
-                <Bars 
-                    height="80" 
-                    width="80" 
-                    color="#14B8A6" 
-                    ariaLabel="bars-loading" 
-                    wrapperStyle={{}}
-                    visible={true} 
-                />
+            <div className="ml-0 p-4 md:ml-72 md:p-6">
+                <div className="h-8 w-64 animate-pulse rounded bg-gray-200" />
+                <div className="mt-4 overflow-hidden rounded-lg border border-base-300 bg-base-100 p-4">
+                    <div className="mb-3 h-12 w-full animate-pulse rounded bg-gray-200" />
+                    <div className="space-y-3">
+                        <div className="h-10 w-full animate-pulse rounded bg-gray-200" />
+                        <div className="h-10 w-full animate-pulse rounded bg-gray-200" />
+                        <div className="h-10 w-full animate-pulse rounded bg-gray-200" />
+                    </div>
+                </div>
             </div>
         );
     }

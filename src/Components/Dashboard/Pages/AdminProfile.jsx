@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import { Helmet } from "react-helmet";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from "recharts";
-import { Bars } from "react-loader-spinner";
 import { apiFetch } from "../../../api/apiClient";
 
 const AdminProfile = () => {
@@ -47,15 +46,18 @@ const AdminProfile = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Bars 
-          height="80" 
-          width="80" 
-          color="#14B8A6" 
-          ariaLabel="bars-loading" 
-          wrapperStyle={{}}
-          visible={true} 
-        />
+      <div className="ml-0 min-h-screen p-4 md:ml-72 md:p-6">
+        <div className="h-10 w-64 animate-pulse rounded bg-gray-200" />
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="h-24 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-24 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-24 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-24 animate-pulse rounded-lg bg-gray-200" />
+        </div>
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="h-72 animate-pulse rounded-lg bg-gray-200" />
+          <div className="h-72 animate-pulse rounded-lg bg-gray-200" />
+        </div>
       </div>
     );
   }

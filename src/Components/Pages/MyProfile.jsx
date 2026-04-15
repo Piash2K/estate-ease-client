@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import { Bars } from "react-loader-spinner";
 import { apiFetch } from "../../api/apiClient";
 
 const MyProfile = () => {
@@ -26,15 +25,23 @@ const MyProfile = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <Bars 
-                    height="80" 
-                    width="80" 
-                    color="#14B8A6" 
-                    ariaLabel="bars-loading" 
-                    wrapperStyle={{}}
-                    visible={true} 
-                />
+            <div className="min-h-screen p-6">
+                <div className="grid grid-cols-1 gap-8 rounded-3xl border border-gray-200 p-6 shadow-2xl sm:grid-cols-2 sm:p-10">
+                    <div className="rounded-2xl p-6 shadow-md sm:p-8">
+                        <div className="mx-auto h-32 w-32 animate-pulse rounded-full bg-gray-200 sm:h-40 sm:w-40" />
+                        <div className="mx-auto mt-4 h-7 w-2/3 animate-pulse rounded bg-gray-200" />
+                        <div className="mx-auto mt-3 h-5 w-1/2 animate-pulse rounded bg-gray-200" />
+                    </div>
+                    <div className="rounded-2xl p-6 shadow-md sm:p-8">
+                        <div className="h-8 w-2/3 animate-pulse rounded bg-gray-200" />
+                        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="h-5 animate-pulse rounded bg-gray-200" />
+                            <div className="h-5 animate-pulse rounded bg-gray-200" />
+                            <div className="h-5 animate-pulse rounded bg-gray-200" />
+                            <div className="h-5 animate-pulse rounded bg-gray-200" />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
