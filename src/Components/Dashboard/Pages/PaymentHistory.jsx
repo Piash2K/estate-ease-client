@@ -22,7 +22,7 @@ const PaymentHistory = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className="ml-0 flex min-h-[60vh] items-center justify-center p-4 md:ml-72 md:p-6">
                 <Bars 
                     height="80" 
                     width="80" 
@@ -36,20 +36,20 @@ const PaymentHistory = () => {
     }
 
     return (
-        <div className="min-h-screen  py-8 px-4 sm:px-6 lg:px-8 ml-72">
+        <div className="ml-0 min-h-screen p-4 md:ml-72 md:p-6">
             <Helmet>
                 <title>Payment History | EstateEase</title>
             </Helmet>
             <div>
-                <h2 className="text-3xl font-extrabold mb-8">Payment History</h2>
+                <h2 className="mb-6 text-2xl font-bold md:mb-8 md:text-3xl">Payment History</h2>
                 {payments.length === 0 ? (
-                    <p >No payment history available.</p>
+                    <p className="text-gray-600">No payment history available.</p>
                 ) : (
                     <>
                         {/* Mobile Layout */}
                         <div className="block lg:hidden">
                             {payments.map((payment) => (
-                                <div key={payment._id} className=" shadow rounded-lg p-4 mb-6">
+                                <div key={payment._id} className="mb-4 rounded-lg border border-base-300 bg-base-100 p-4 shadow-sm">
                                     <div >
                                         <div className="mb-2">
                                             <strong>Floor No:</strong> {payment.floorNo}
@@ -78,56 +78,56 @@ const PaymentHistory = () => {
                         </div>
 
                         {/* Desktop Layout */}
-                        <div className="hidden lg:block shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <div className="hidden overflow-hidden rounded-lg border border-base-300 bg-base-100 shadow-sm lg:block">
                             <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead >
+                                <table className="table w-full min-w-[900px]">
+                                    <thead className="bg-base-200/60">
                                         <tr>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
+                                            <th scope="col" className="text-left text-xs font-medium uppercase tracking-wider">
                                                 Floor No
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
+                                            <th scope="col" className="text-left text-xs font-medium uppercase tracking-wider">
                                                 Block Name
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
+                                            <th scope="col" className="text-left text-xs font-medium uppercase tracking-wider">
                                                 Apartment No
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
+                                            <th scope="col" className="text-left text-xs font-medium uppercase tracking-wider">
                                                 Original Rent
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                            <th scope="col" className="text-left text-xs font-medium uppercase tracking-wider">
                                                 Final Rent
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                            <th scope="col" className="text-left text-xs font-medium uppercase tracking-wider">
                                                 Month
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                            <th scope="col" className="text-left text-xs font-medium uppercase tracking-wider">
                                                 Payment Date
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className=" divide-y divide-gray-200">
+                                    <tbody>
                                         {payments.map((payment) => (
                                             <tr key={payment._id}>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                                                <td className="whitespace-nowrap text-sm">
                                                     {payment.floorNo}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                                                <td className="whitespace-nowrap text-sm">
                                                     {payment.blockName}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                                                <td className="whitespace-nowrap text-sm">
                                                     {payment.apartmentNo}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                                                <td className="whitespace-nowrap text-sm">
                                                     {payment.originalRent}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                                                <td className="whitespace-nowrap text-sm">
                                                     {payment.finalRent}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                                                <td className="whitespace-nowrap text-sm">
                                                     {payment.month}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm ">
+                                                <td className="whitespace-nowrap text-sm">
                                                     {new Date(payment.paymentDate).toLocaleDateString()}
                                                 </td>
                                             </tr>
