@@ -38,7 +38,7 @@ const ManageMembers = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
+            <div className="ml-0 flex min-h-[60vh] items-center justify-center p-4 md:ml-72 md:p-6">
                 <Bars 
                     height="80" 
                     width="80" 
@@ -52,15 +52,16 @@ const ManageMembers = () => {
     }
 
     return (
-        <div className="p-6">
-            <h2 className="text-2xl font-semibold">Manage Members</h2>
+        <div className="ml-0 p-4 md:ml-72 md:p-6">
             <Helmet><title>Manage Members | EstateEase </title></Helmet>
+            <h2 className="text-2xl font-bold mb-4">Manage Members</h2>
             {members.length === 0 ? (
-                <p>No members available.</p>
+                <p className="text-gray-600">No users available.</p>
             ) : (
-                <div className="overflow-x-auto mt-4 ml-72">
-                    <table className="table-auto w-full border-collapse">
-                        <thead>
+                <div className="mt-4 overflow-hidden rounded-lg border border-base-300 bg-base-100">
+                    <div className="overflow-x-auto">
+                    <table className="table w-full min-w-[680px]">
+                        <thead className="bg-base-200/70">
                             <tr >
                                 <th className="px-4 py-2 border-b text-left">User Name</th>
                                 <th className="px-4 py-2 border-b text-left">User Email</th>
@@ -71,13 +72,13 @@ const ManageMembers = () => {
                         <tbody>
                             {members.map((member) => (
                                 <tr key={member._id} className="border-b">
-                                    <td className="px-4 py-2">{member.displayName}</td>
-                                    <td className="px-4 py-2">{member.email}</td>
+                                    <td className="px-4 py-2">{member.displayName || 'Unknown'}</td>
+                                    <td className="px-4 py-2 break-all">{member.email}</td>
                                     <td className="px-4 py-2">{member.role}</td>
                                     <td className="px-4 py-2">
-                                        {member.role === 'member' ? (
+                                        {(member.role || '').toLowerCase() === 'member' ? (
                                             <button
-                                                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                                                className="btn btn-sm btn-error"
                                                 onClick={() => handleRemoveMember(member._id)}
                                             >
                                                 Remove
@@ -90,6 +91,7 @@ const ManageMembers = () => {
                             ))}
                         </tbody>
                     </table>
+                    </div>
                 </div>
             )}
         </div>
