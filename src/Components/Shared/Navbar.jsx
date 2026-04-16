@@ -75,13 +75,13 @@ const Navbar = () => {
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
               />
               {isProfileDropdownOpen && (
-                <div className="absolute right-0 mt-2 bg-[#2A2A2A] rounded-lg shadow-xl w-48 py-2 z-50">
-                  <div className="px-4 py-2 font-semibold text-white border-b border-[#0E9F9F]">{user.displayName}</div>
-                  <Link to="/dashboard" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white transition">Dashboard</Link>
+                <div className="absolute right-0 mt-2 rounded-lg shadow-xl w-48 py-2 z-50 bg-base-200 border border-base-300 text-base-content">
+                  <div className="px-4 py-2 font-semibold border-b border-base-300 text-base-content">{user.displayName}</div>
+                  <Link to="/dashboard" className="block px-4 py-2 hover:bg-[#0E9F9F] hover:text-white dark:hover:bg-[#0E9F9F] dark:hover:text-white transition rounded-md">Dashboard</Link>
                   <button
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white transition disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white dark:hover:bg-red-600 dark:hover:text-white transition disabled:cursor-not-allowed disabled:opacity-60 rounded-md"
                   >
                     {isLoggingOut ? 'Logging out...' : 'Logout'}
                   </button>
