@@ -23,7 +23,7 @@ const DashboardLayout = () => {
 
   useEffect(() => {
     if (user?.email) {
-      apiFetch(`/agreements/${user.email}`)
+      apiFetch(`/agreements/${user.email}`, { allowNotFound: true })
         .then(data => {
           if (data) setHasAgreement(true);
           else setHasAgreement(false);

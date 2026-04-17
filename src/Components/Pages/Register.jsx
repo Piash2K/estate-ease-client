@@ -40,7 +40,7 @@ const Register = () => {
         if (!/(?=.*\d)/.test(password)) {
             return "Password must contain at least one number.";
         }
-        if (!/(?=.[!@#$%^&(),.?":{}|<>])/.test(password)) {
+        if (!/(?=.*[!@#$%^&(),.?":{}|<>])/.test(password)) {
             return "Password must contain at least one special character.";
         }
         return '';
@@ -50,7 +50,11 @@ const Register = () => {
     const sendUserDataToBackend = async (email, displayName, role) => {
         try {
             const userInfo = { email, displayName, lastLogin: new Date().toISOString(), role };
-            await apiFetch('/users', { method: 'POST', body: JSON.stringify(userInfo) });
+            await apiFetch('/users', {
+                method: 'POST',
+                skipAuth: true,
+                body: JSON.stringify(userInfo),
+            });
         } catch (error) {
             console.error(error);
         }
@@ -85,7 +89,7 @@ const Register = () => {
                 displayName: name,
                 photoURL: photo,
             }));
-            sendUserDataToBackend(result.user.email, name, 'user');
+            await sendUserDataToBackend(result.user.email, name, 'user');
 
             Swal.fire({
                 title: 'Registration Successful!',

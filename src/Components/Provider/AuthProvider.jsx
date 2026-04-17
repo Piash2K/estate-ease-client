@@ -1,17 +1,18 @@
 import {
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
+    getIdToken,
     onAuthStateChanged,
     signInWithEmailAndPassword,
     signOut,
     updateProfile
 } from 'firebase/auth';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import auth from '../Firebase/firebase.config';
 import 'react-toastify/dist/ReactToastify.css';
 import { RotatingLines } from 'react-loader-spinner';
-import { apiFetch } from '../../api/apiClient';
+import { apiFetch, extractTokenFromResponse, removeToken, setToken } from '../../api/apiClient';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
@@ -37,10 +38,44 @@ const AuthProvider = ({ children }) => {
 
     const googleProvider = new GoogleAuthProvider();
 
+    const requestBackendToken = useCallback(async (currentUser) => {
+        if (!currentUser?.email) {
+            removeToken();
+            return null;
+        }
+
+        const firebaseToken = await getIdToken(currentUser, true);
+        const authEndpoint = import.meta.env.VITE_AUTH_ENDPOINT || '/jwt';
+
+        try {
+            const tokenResponse = await apiFetch(authEndpoint, {
+                method: 'POST',
+                skipAuth: true,
+                body: JSON.stringify({
+                    email: currentUser.email,
+                    uid: currentUser.uid,
+                    firebaseToken,
+                }),
+            });
+
+            const backendToken = extractTokenFromResponse(tokenResponse);
+            if (backendToken) {
+                setToken(backendToken);
+                return backendToken;
+            }
+        } catch (error) {
+            console.warn(`JWT exchange at "${authEndpoint}" failed. Falling back to the Firebase ID token.`, error);
+        }
+
+        setToken(firebaseToken);
+        return firebaseToken;
+    }, []);
+
     const logOut = () => {
         setLoading(true);
         return signOut(auth)
             .then(() => {
+                removeToken();
                 toast.success('Successfully logged out!');
                 setLoading(false);
             })
@@ -52,17 +87,21 @@ const AuthProvider = ({ children }) => {
     };
 
     // Function to send user data to the backend using fetch
-    const sendUserDataToBackend = async (email, displayName, role) => {
+    const sendUserDataToBackend = useCallback(async (email, displayName, role) => {
         try {
             const userInfo = { email, displayName, lastLogin: new Date().toISOString(), role };
-            await apiFetch('/users', { method: 'POST', body: JSON.stringify(userInfo) });
+            await apiFetch('/users', {
+                method: 'POST',
+                skipAuth: true,
+                body: JSON.stringify(userInfo),
+            });
             toast.success('User info synced with backend.');
         } catch (error) {
             console.error(error);
         }
-    };
+    }, []);
 
-    const syncUserRole = async (currentUser) => {
+    const syncUserRole = useCallback(async (currentUser) => {
         try {
             const data = await apiFetch(`/users/${currentUser.email}`);
             if (data?.role) {
@@ -81,7 +120,7 @@ const AuthProvider = ({ children }) => {
 
             console.error('Error fetching user role:', error);
         }
-    };
+    }, [sendUserDataToBackend]);
 
     const authInfo = {
         user,
@@ -97,18 +136,25 @@ const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log(currentUser)
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
                 setUser(currentUser);
                 setUserRole('user');
                 setRoleLoading(true);
 
-                syncUserRole(currentUser)
-                    .finally(() => {
-                        setRoleLoading(false);
-                    });
+                try {
+                    await requestBackendToken(currentUser);
+                    await syncUserRole(currentUser);
+                } catch (error) {
+                    removeToken();
+                    setUserRole(null);
+                    console.error('Error establishing authenticated session:', error);
+                    toast.error('Could not start your authenticated session right now.');
+                } finally {
+                    setRoleLoading(false);
+                }
             } else {
+                removeToken();
                 setUser(null);
                 setUserRole(null);
                 setRoleLoading(false);
@@ -117,7 +163,7 @@ const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [requestBackendToken, syncUserRole]);
 
     if (loading || roleLoading) {
         return (
