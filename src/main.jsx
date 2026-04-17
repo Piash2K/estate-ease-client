@@ -27,8 +27,10 @@ import DashboardLayout from './Components/Dashboard/Layouts/DashboardLayout';
 import Faq from './Components/Pages/Faq';
 import Contacts from './Components/Pages/Contacts';
 import ApartmentDetails from './Components/Pages/ApartmentDetails';
+import DashboardIndexRedirect from './Components/Dashboard/Layouts/DashboardIndexRedirect';
 
 const queryClient = new QueryClient();
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -71,12 +73,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
+        index: true,
+        element: <DashboardIndexRedirect></DashboardIndexRedirect>
+      },
+      {
         path: 'my-profile',
-        element: <PrivateRoute allowedRoles={['member', 'admin', 'manager']}><MyProfile></MyProfile></PrivateRoute>
+        element: <PrivateRoute allowedRoles={['user', 'member', 'admin', 'manager']}><MyProfile></MyProfile></PrivateRoute>
       },
       {
         path: 'announcements',
-        element: <PrivateRoute allowedRoles={['member', 'admin', 'manager']}><Announcements></Announcements></PrivateRoute>
+        element: <PrivateRoute allowedRoles={['user', 'member', 'admin', 'manager']}><Announcements></Announcements></PrivateRoute>
       },
       {
         path: 'make-payment',
